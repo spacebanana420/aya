@@ -4,6 +4,7 @@ import aya.wrapper.ffmpeg;
 import aya.wrapper.process;
 import aya.cli.parser;
 import java.util.ArrayList;
+import java.io.File;
 
 public class screenshotter {
   //public static int delay = 0;
@@ -26,13 +27,14 @@ class ssoptions {
   public int[] scale = new int[2];
 
   public boolean use_magick = false;
-  public String filename = "Screenshot.png";
+  public String filename = generateFilename();
   
   public void setOpts(String[] args) {
     //String[] conf = reader.openConfig();
     setCrop(args);
     setFormat(args);
     setQuality(args);
+    // setFilename(args);
   }
 
   public ArrayList<String> mkArgs() {
@@ -42,10 +44,11 @@ class ssoptions {
     }
     else {
       args.add("ffmpeg"); args.addAll(ffmpeg.getCaptureArgs());
+      if (format == 0) {
+        args.addAll(ffmpeg.encodeArgs_png(quality));
+      }
     }
-    if (format == 0) {
-      args.addAll(ffmpeg.encodeArgs_png(quality));
-    }
+    
     args.add(filename);
     return args;
   }
@@ -60,10 +63,15 @@ class ssoptions {
   }
   
   private void setFormat(String[] args) {
-    String value = parser.getArgValue(args, "png");
-    if (value != null) {format = 0; return;}
-    value = parser.getArgValue(args, "jpg");
-    if (value != null) {format = 1;}
+    String value = parser.getArgValue(args, "-f");
+    if (value == null) {return;}
+    value = value.toLowerCase();
+    switch (value) {
+      case "png":
+        format = 0; return;
+      case "jpg":
+        format = 1; return;
+    }
   }
 
   private void setQuality(String[] args) {
@@ -73,5 +81,24 @@ class ssoptions {
     if ((format == 0 && pngvalue) || (format == 1 && jpgvalue)) {
       quality = value;
     }
+  }
+
+  // private void setFilename(String[] args) {
+  //   String path = parser.getArgValue(args, "-o");
+  //   if (path == null) {return;}
+  //   filename = path;
+  //   //finish
+  // }
+
+  private String generateFilename() {
+    String name = "Aya-screenshot";
+    int num = 0;
+    String full = name + "-" + num + "." + format;
+
+    while (new File(full).isFile()) {
+      num++;
+      full = name + "-" + num + "." + format;
+    }
+    return full;    
   }
 }

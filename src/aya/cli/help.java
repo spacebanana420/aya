@@ -4,7 +4,7 @@ public class help {
   public static String getHelp() {
     return
       "Aya (version 0.1)"
-      + "\nUsage: Aya [options] [filename]"
+      + "\nUsage: Aya [options]"
       + "\n\nAvailable Options:"
       + "\n  * -h - opens this menu"
       + "\n  * -t [delay] - sets the delay for screenshotting in milliseconds"
