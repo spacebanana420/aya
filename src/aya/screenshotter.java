@@ -14,7 +14,7 @@ public class screenshotter {
     opts.setOpts(args);
     var cmd = opts.mkCommand();
     
-    //if (delay > 0) {misc.sleep(delay);}
+    if (opts.delay > 0) {misc.sleep(opts.delay);}
     return process.run(cmd);
   }
 }
@@ -28,12 +28,14 @@ class ssoptions {
 
   public boolean use_magick = false;
   public String filename = generateFilename();
+  public int delay = 0;
   
   public void setOpts(String[] args) {
     //String[] conf = reader.openConfig();
     setCrop(args);
     setFormat(args);
     setQuality(args);
+    setDelay(args);
     // setFilename(args);
   }
 
@@ -78,6 +80,11 @@ class ssoptions {
     if ((format.equals("png") && pngvalue) || (format.equals("jpg") && jpgvalue)) {
       quality = value;
     }
+  }
+
+  private void setDelay(String[] args) {
+    int value = parser.getArgInt(args, "-t");
+    if (value > 0) {delay = value;}
   }
 
   // private void setFilename(String[] args) {

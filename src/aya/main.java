@@ -4,7 +4,7 @@ import aya.cli.parser;
 import aya.cli.help;
 
 public class main {
-  public static byte verbosity_level;
+  public static byte verbosity_level = 1;
   
   public static void main(String[] args) {
     if (parser.hasArgument(args, "-h")) {
