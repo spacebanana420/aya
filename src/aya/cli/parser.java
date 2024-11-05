@@ -17,4 +17,25 @@ public class parser {
     if (i == -1 || i == args.length-1) {return null;}
     return args[i+1];
   }
+
+  public static int getArgInt(String[] args, String arg) {
+    String value = getArgValue(args, arg);
+    if (value == null) {return -1;}
+    try {return Integer.parseInt(value);}
+    catch (NumberFormatException e) {return -1;}
+  }
+  
+  public static float getArgFloat(String[] args, String arg) {
+    String value = getArgValue(args, arg);
+    if (value == null) {return -1;}
+    try {return Float.parseFloat(value);}
+    catch (NumberFormatException e) {return -1;}
+  }
+  
+  public static byte getArgByte(String[] args, String arg) {
+    String value = getArgValue(args, arg);
+    if (value == null) {return -1;}
+    try {return Byte.parseByte(value);}
+    catch (NumberFormatException e) {return -1;}
+  }
 }

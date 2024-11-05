@@ -10,11 +10,11 @@ public class ffmpeg {
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};
     String q_arg = null;
-    if (quality < 0) {q_arg = "none";}
-    else if (quality > 5) {q_arg = "mixed";}
+    if (quality < 0 || quality > 5) {q_arg = "mixed";}
     else {q_arg = qualities[quality];}
 
     var list = new ArrayList<String>();
+    list.add("-c:v"); list.add("png");
     list.add("-pred"); list.add(q_arg);
     return list;
   }
