@@ -14,7 +14,7 @@ public class screenshotter {
   public void setDelay(int d) {
     if (d >= 0) {delay = d;}
   }
-  public void snap() { //use arraylist later
+  public int snap() { //use arraylist later
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs());
@@ -22,6 +22,6 @@ public class screenshotter {
     cmd.add(filename);
     
     if (delay > 0) {misc.sleep(delay);}
-    process.run(cmd);
+    return process.run(cmd);
   }
 }
