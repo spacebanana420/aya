@@ -1,4 +1,4 @@
-package aya.config;
+package aya.cli;
 
 public class parser {
   public static int argIndex(String[] args, String arg) {
