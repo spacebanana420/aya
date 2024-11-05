@@ -8,12 +8,12 @@ public class main {
   
   public static void main(String[] args) {
     if (parser.hasArgument(args, "-h")) {
-      System.out.println(help.getHelp());
+      stdout.print(help.getHelp());
       return;
     }
     verbosity_level = getVerbosityLevel(args);
     if (!systemSupported()) {
-      System.out.println("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
+      stdout.print("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
       return;
     }
     screenshotter.takeScreenshot(args);

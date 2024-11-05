@@ -12,7 +12,7 @@ public class screenshotter {
   public static int takeScreenshot(String[] args) {
     var opts = new ssoptions();
     opts.setOpts(args);
-    var cmd = opts.mkArgs();
+    var cmd = opts.mkCommand();
     
     //if (delay > 0) {misc.sleep(delay);}
     return process.run(cmd);
@@ -22,7 +22,7 @@ public class screenshotter {
 class ssoptions {
   public int[] crop = new int[4];
   public boolean crop_enabled = false;
-  public byte format = 0;
+  public String format = "png";
   public byte quality = -1;
   public int[] scale = new int[2];
 
@@ -37,14 +37,14 @@ class ssoptions {
     // setFilename(args);
   }
 
-  public ArrayList<String> mkArgs() {
+  public ArrayList<String> mkCommand() {
     var args = new ArrayList<String>();
     if (use_magick) {
       args.add("magick"); args.add("import");
     }
     else {
       args.add("ffmpeg"); args.addAll(ffmpeg.getCaptureArgs());
-      if (format == 0) {
+      if (format == "png") {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
     }
@@ -66,19 +66,16 @@ class ssoptions {
     String value = parser.getArgValue(args, "-f");
     if (value == null) {return;}
     value = value.toLowerCase();
-    switch (value) {
-      case "png":
-        format = 0; return;
-      case "jpg":
-        format = 1; return;
+    if (value.equals("png") || value.equals("jpg")) {
+      format = value;
     }
   }
 
   private void setQuality(String[] args) {
     byte value = parser.getArgByte(args, "-q");
-    boolean pngvalue = value >= 0 && value <= 5;
+    boolean pngvalue = value >= 0 && value <= 5; //unnecessary since wrapper assumes a default value
     boolean jpgvalue = value > 0 && value <= 100;
-    if ((format == 0 && pngvalue) || (format == 1 && jpgvalue)) {
+    if ((format.equals("png") && pngvalue) || (format.equals("jpg") && jpgvalue)) {
       quality = value;
     }
   }

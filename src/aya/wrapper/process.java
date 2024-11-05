@@ -2,9 +2,11 @@ package aya.wrapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import aya.stdout;
 
 public class process {
   public static int run(String[] args) {
+    stdout.print_debug("Running command:", args);
     try {
       var p =
         new ProcessBuilder(args)
