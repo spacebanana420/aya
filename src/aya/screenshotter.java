@@ -21,7 +21,7 @@ public class screenshotter {
     cmd.addAll(ffmpeg.encodeArgs_png(quality));
     cmd.add(filename);
     
-    if (delay > 0) {Thread.sleep(delay);}
+    if (delay > 0) {misc.sleep(delay);}
     process.run(cmd);
   }
 }
