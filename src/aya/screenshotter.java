@@ -2,6 +2,7 @@ package aya;
 
 import aya.wrapper.ffmpeg;
 import aya.wrapper.process;
+import java.util.ArrayList;
 
 public class screenshotter {
   private boolean usemagick = false;
@@ -13,11 +14,12 @@ public class screenshotter {
     if (d >= 0) {delay = d;}
   }
   public void snap() { //use arraylist later
-    String[] capture_args = ffmpeg.getCaptureArgs();
-    String[] encode_args = ffmpeg.encodeArgs_png(5);
+    var cmd = new ArrayList<String>();
+    cmd.add("ffmpeg");
+    cmd.addAll(ffmpeg.getCaptureArgs());
+    cmd.addAll(ffmpeg.encodeArgs_png(5));
+    cmd.add(filename);
     
-    String[] cmd = process.concatArgs(capture_args, encode_args);
-    cmd = process.appendArg(cmd, filename);
     if (delay > 0) {Thread.sleep(delay);}
     process.run(cmd);
   }
