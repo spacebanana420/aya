@@ -9,6 +9,15 @@ public class main {
       System.out.println(help.getHelp());
       return;
     }
-    new screenshotter().snap(args);
+    if (!systemSupported()) {
+      System.out.println("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
+      return;
+    }
+    screenshotter.takeScreenshot(args);
+  }
+
+  private static boolean systemSupported() {
+    String os = System.getProperty("os.name").toLowerCase();
+    return (!os.contains("Windows") && !os.contains("mac") && !os.equals("haiku"));
   }
 }
