@@ -14,7 +14,11 @@ public class screenshotter {
     var cmd = opts.mkCommand();
     
     if (opts.delay > 0) {misc.sleep(opts.delay);}
-    return process.run(cmd);
+    int result = process.run(cmd);
+    String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
+    if (result == -1) {stdout.print("Aya failed to take a screenshot! You do not have " + process_name + " installed in your system!");}
+    else if (result == -2) {stdout.print("Aya's process was interrupted while taking a screenshot!");}
+    return result;
   }
 }
 
