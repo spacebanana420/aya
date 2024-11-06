@@ -47,6 +47,7 @@ class ssoptions {
       if (format.equals("png")) {
         args.addAll(magick.encodeArgs_png(quality));
       }
+      else {args.addAll(ffmpeg.encodeArgs_jpg(quality));}
       args.addAll(magick.cropArgs(crop[0], crop[1], crop[2], crop[3]));
       args.addAll(magick.scaleArgs(scale));
     }
@@ -55,6 +56,7 @@ class ssoptions {
       if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
+      else {args.addAll(ffmpeg.encodeArgs_jpg(quality));}
       String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
       String arg_scale = ffmpeg.scaleArgs(scale);
       args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));

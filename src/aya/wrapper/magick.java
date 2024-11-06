@@ -14,6 +14,13 @@ public class magick {
     return list;
   }
 
+  public static ArrayList<String> encodeArgs_jpg(byte quality) {
+    var list = new ArrayList<String>();
+    byte quality_filtered = (quality >= 1 && quality <= 100) ? quality : 92;
+    list.add("-quality"); list.add(""+quality_filtered);
+    return list;
+  }
+
   public static ArrayList<String> cropArgs(int w, int h, int x, int y) {
     var list = new ArrayList<String>();
     if (w <= 0 || h <= 0) {return list;}

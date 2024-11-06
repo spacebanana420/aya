@@ -19,6 +19,15 @@ public class ffmpeg {
     return list;
   }
 
+  public static ArrayList<String> encodeArgs_jpg(byte quality) {
+    var list = new ArrayList<String>();
+    byte quality_filtered = (quality >= 1 && quality <= 100) ? (byte)(101 - quality) : 1; //101-quality reverses the quality value so that 100 is highest quality and 1 is lowest
+    list.add("-qmin"); list.add("1");
+    list.add("-qmax"); list.add("100");
+    list.add("-q:v"); list.add(""+quality_filtered);
+    return list;
+  }
+
   public static String cropArgs(int w, int h, int x, int y) {
     if (w <= 0 && h <= 0) {return "";}
    
