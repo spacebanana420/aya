@@ -19,7 +19,7 @@ public class ffmpeg {
     return list;
   }
 
-  public static String cropArgs(int w, int h, int x, int y) {;
+  public static String cropArgs(int w, int h, int x, int y) {
     if (w <= 0 && h <= 0) {return "";}
    
     String[] args = new String[4];

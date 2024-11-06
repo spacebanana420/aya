@@ -1,6 +1,7 @@
 package aya;
 
 import aya.wrapper.ffmpeg;
+import aya.wrapper.magick;
 import aya.wrapper.process;
 import aya.cli.parser;
 import java.util.ArrayList;
@@ -42,11 +43,16 @@ class ssoptions {
   public ArrayList<String> mkCommand() {
     var args = new ArrayList<String>();
     if (use_magick) {
-      args.add("magick"); args.add("import");
+      args.addAll(magick.getCaptureArgs());
+      if (format.equals("png")) {
+        args.addAll(magick.encodeArgs_png(quality));
+      }
+      args.addAll(magick.cropArgs(crop[0], crop[1], crop[2], crop[3]));
+      args.addAll(magick.scaleArgs(scale));
     }
     else {
       args.add("ffmpeg"); args.addAll(ffmpeg.getCaptureArgs());
-      if (format == "png") {
+      if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
       String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
