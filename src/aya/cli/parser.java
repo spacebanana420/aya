@@ -1,5 +1,7 @@
 package aya.cli;
 
+import aya.misc;
+
 public class parser {
   public static int argIndex(String[] args, String arg) {
     for (int i = 0; i < args.length; i++) {
@@ -16,6 +18,15 @@ public class parser {
     int i = argIndex(args, arg);
     if (i == -1 || i == args.length-1) {return null;}
     return args[i+1];
+  }
+
+  public static String getFilename(String[] args, String extension) {
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].charAt(0) != '-' && misc.hasExtension(args[i], extension)) {
+        return args[i];
+      }
+    }
+    return null;
   }
 
   public static int getArgInt(String[] args, String arg) {

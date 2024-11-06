@@ -41,7 +41,7 @@ class ssoptions {
     setQuality(args);
     setDelay(args);
     setDirectory(args);
-    filename = generateFilename();
+    filename = generateFilename(args);
   }
 
   public ArrayList<String> mkCommand() {
@@ -111,7 +111,9 @@ class ssoptions {
     directory = value;
   }
 
-  private String generateFilename() {
+  private String generateFilename(String[] args) {
+    String argname = parser.getFilename(args, format);
+    if (argname != null) {return argname;}
     String name =
       (misc.isWorkingDirectory(directory)) ? "Aya-screenshot"
       : directory + "Aya-screenshot";

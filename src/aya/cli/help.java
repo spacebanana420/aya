@@ -4,7 +4,7 @@ public class help {
   public static String getHelp() {
     return
       "Aya (version 0.1)"
-      + "\nUsage: Aya [options]"
+      + "\nUsage: Aya [options] [optional filename]"
       + "\n\nAvailable Options:"
       + "\n  * -h - opens this menu"
       + "\n  * -t [delay] - sets the delay for screenshotting in milliseconds"
@@ -16,6 +16,7 @@ public class help {
       + "\n  * -s [factor] - scales the screenshot by a factor (>0 to +inf)"
       + "\n  * -f [format] - sets the image file format (supported: \"png\", \"jpg\")"
       + "\n  * -q [number] - sets the quality level (0-5 for PNG and 1-100 for JPG)"
+      + "\n    (0-5 for PNG with FFmpeg and 1-100 for JPG or PNG with ImageMagick)"
       + "\n  * -magick - uses ImageMagick instead of FFmpeg for taking screenshots"
       + "\n  * -quiet - disables all output messages"
       + "\n  * -verbose - displays more status messages"
