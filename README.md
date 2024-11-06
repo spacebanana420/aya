@@ -14,7 +14,7 @@ Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) 
 
 # Build from source
 
-Download [Yuuka](https://github.comn/spacebanana420/yuuka), open a terminal at the root of the project and run:
+Download [Yuuka](https://github.com/spacebanana420/yuuka), open a terminal at the root of the project and run:
 ```
 yuuka package
 ```
