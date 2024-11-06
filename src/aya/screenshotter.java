@@ -46,6 +46,9 @@ class ssoptions {
       if (format == "png") {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
+      String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
+      String arg_scale = ffmpeg.scaleArgs(scale);
+      args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
     }
     
     args.add(filename);
@@ -53,7 +56,7 @@ class ssoptions {
   }
 
   private void setCrop(String[] args) {
-    String[] opts = new String[]{"-w", "-h", "-x", "-y"};
+    String[] opts = new String[]{"-width", "-height", "-x", "-y"};
     for (int i = 0; i < opts.length; i++) {
       int value = parser.getArgInt(args, opts[i]);
       if (value >= 0) {crop[i] = value;}
@@ -88,13 +91,6 @@ class ssoptions {
     int value = parser.getArgInt(args, "-t");
     if (value > 0) {delay = value;}
   }
-
-  // private void setFilename(String[] args) {
-  //   String path = parser.getArgValue(args, "-o");
-  //   if (path == null) {return;}
-  //   filename = path;
-  //   //finish
-  // }
 
   private String generateFilename() {
     String name = "Aya-screenshot";

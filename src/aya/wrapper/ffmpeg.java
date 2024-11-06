@@ -19,24 +19,47 @@ public class ffmpeg {
     return list;
   }
 
-  //improve later
-  public static ArrayList<String> cropArgs(int w, int h, int x, int y) {
-    var list = new ArrayList<String>();
-    if (w <= 0 || h <= 0) {return list;}
-  
-    String dimensions = w + ":" + h;
-    String offset = "";
-    if (x >= 0 && y >= 0) {
-      offset=":"+x+":"+y;
+  public static String cropArgs(int w, int h, int x, int y) {;
+    if (w <= 0 && h <= 0) {return "";}
+   
+    String[] args = new String[4];
+    args[0] = (w > 0) ? "w="+w : "";
+    args[1] = (h > 0) ? "h="+h : "";
+    args[2] = (x == 0) ? "x="+x : "";
+    args[3] = (y == 0) ? "y="+y : "";
+    
+    String full = "crop=";
+    boolean first = true;
+    for (int i = 0; i < args.length; i++) {
+      if (!args[i].equals("")) {
+        if (first) {full +=args[i]; first = false;}
+        else {full += ":"+args[i];}
+      }
     }
-    list.add("crop="+dimensions+offset);
-    return list;
+    return full;
   }
 
-  public static ArrayList<String> scaleArgs(float factor) {
+  public static String scaleArgs(float factor) {
+    if (factor <= 0) {return "";}
+    return "scale=iw*"+factor+":ih*"+factor;
+  }
+
+  public static ArrayList<String> assembleFilters(String... filters) {
+    boolean hasFilters = false;
     var list = new ArrayList<String>();
-    if (factor <= 0) {return list;}
-    list.add("scale=iw*"+factor+":ih*"+factor);
+    for (String f : filters) {if (!f.equals("")) {hasFilters = true; break;}}
+    if (!hasFilters) {return list;}
+
+    list.add("-filter:v");
+    boolean first = true;
+    String arg = "";
+    for (int i = 0; i < filters.length; i++) {
+      if (!filters[i].equals("")) {
+        if (first) {arg+=filters[i]; first = false;}
+        else {arg+=","+filters[i];}
+      }
+    }
+    list.add(arg);
     return list;
   }
 }
