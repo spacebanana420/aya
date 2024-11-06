@@ -20,7 +20,6 @@ public class screenshotter {
 
 class ssoptions {
   public int[] crop = new int[4];
-  public boolean crop_enabled = false;
   public String format = "png";
   public byte quality = -1;
   public float scale = 0f;
@@ -31,6 +30,7 @@ class ssoptions {
   public int delay = 0;
   
   public void setOpts(String[] args) {
+    use_magick = parser.hasArgument(args, "-magick");
     setCrop(args);
     setScale(args);
     setFormat(args);
@@ -70,7 +70,6 @@ class ssoptions {
       int value = parser.getArgInt(args, opts[i]);
       if (value >= 0) {crop[i] = value;}
     }
-    if (crop[0] > 0 && crop[1] > 0 && crop[2] >= 0 && crop[3] >= 0) {crop_enabled = true;}
   }
 
   private void setScale(String[] args) {

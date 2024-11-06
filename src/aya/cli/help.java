@@ -17,7 +17,6 @@ public class help {
       + "\n  * -f [format] - sets the image file format (supported: \"png\", \"jpg\")"
       + "\n  * -q [number] - sets the quality level (0-5 for PNG and 1-100 for JPG)"
       + "\n  * -magick - uses ImageMagick instead of FFmpeg for taking screenshots"
-      + "\n  * -ffmpeg - uses FFmpeg instead of ImageMagick for taking screenshots (default)"
       + "\n  * -quiet - disables all output messages"
       + "\n  * -verbose - displays more status messages"
       + "\n  * -debug - displays all messages for debugging"
