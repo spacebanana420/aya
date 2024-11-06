@@ -12,12 +12,24 @@ public class screenshotter {
     var opts = new ssoptions();
     opts.setOpts(args);
     var cmd = opts.mkCommand();
+    stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
     
     if (opts.delay > 0) {misc.sleep(opts.delay);}
     int result = process.run(cmd);
     String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
-    if (result == -1) {stdout.print("Aya failed to take a screenshot! You do not have " + process_name + " installed in your system!");}
-    else if (result == -2) {stdout.print("Aya's process was interrupted while taking a screenshot!");}
+    switch (result) {
+      case -1:
+        stdout.print("Aya failed to take a screenshot! You do not have " + process_name + " installed in your system!");
+        break;
+      case -2:
+        stdout.print("Aya's process was interrupted while taking a screenshot!");
+        break;
+      case 0:
+        stdout.print_verbose("Screenshot saved successfully!");
+        break;
+      default:
+        stdout.print("Error capturing/encoding screenshot! Make sure you have permission to write files in the specified directory!");
+    }
     return result;
   }
 }
