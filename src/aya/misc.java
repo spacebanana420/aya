@@ -21,4 +21,14 @@ public class misc {
     }
     return true;
   }
+
+  public static boolean isWorkingDirectory(String dir) {
+    if (dir == null || dir.equals("")) {return true;}
+    if (dir.charAt(0) == '/') {return false;}
+    for (int i = 1; i < dir.length(); i++) {
+      char c = dir.charAt(i);
+      if (c != '.' && c != ' ' && c != '/' && c != '\\') {return false;}
+    }
+    return true;
+  }
 }

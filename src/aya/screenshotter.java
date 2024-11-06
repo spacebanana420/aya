@@ -25,7 +25,8 @@ class ssoptions {
   public float scale = 0f;
 
   public boolean use_magick = false;
-  public String filename = generateFilename();
+  public String directory = "";
+  public String filename = "";
   public int delay = 0;
   
   public void setOpts(String[] args) {
@@ -34,6 +35,8 @@ class ssoptions {
     setFormat(args);
     setQuality(args);
     setDelay(args);
+    setDirectory(args);
+    filename = generateFilename();
   }
 
   public ArrayList<String> mkCommand() {
@@ -91,9 +94,20 @@ class ssoptions {
     int value = parser.getArgInt(args, "-t");
     if (value > 0) {delay = value;}
   }
+  //something is setting it to null
+  private void setDirectory(String[] args) {
+    String value = parser.getArgValue(args, "-d");
+    if (value == null || !new File(value).isDirectory() || value.length() == 0) {return;}
+
+    char final_char = value.charAt(value.length()-1);
+    if (final_char != '/' && final_char != '\\') {value += System.getProperty("file.separator");}
+    directory = value;
+  }
 
   private String generateFilename() {
-    String name = "Aya-screenshot";
+    String name =
+      (misc.isWorkingDirectory(directory)) ? "Aya-screenshot"
+      : directory + "Aya-screenshot";
     int num = 0;
     String full = name + "-" + num + "." + format;
 
