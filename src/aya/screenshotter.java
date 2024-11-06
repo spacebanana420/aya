@@ -90,11 +90,7 @@ class ssoptions {
 
   private void setQuality(String[] args) {
     byte value = parser.getArgByte(args, "-q");
-    boolean pngvalue = value >= 0 && value <= 5; //unnecessary since wrapper assumes a default value
-    boolean jpgvalue = value > 0 && value <= 100;
-    if ((format.equals("png") && pngvalue) || (format.equals("jpg") && jpgvalue)) {
-      quality = value;
-    }
+    if (value >= 0) {quality = value;}
   }
 
   private void setDelay(String[] args) {
