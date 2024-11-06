@@ -3,8 +3,6 @@ Aya is a command-line screenshotter tool for Unix-based systems that run on X11 
 
 Aya implements FFmpeg or ImageMagick as its screen capture and encoding backend. It supports both equally, but differences in picture compression between implementations exist.
 
-**Aya is under very early development**
-
 # Requirements and running
 
 ### Requirements:
