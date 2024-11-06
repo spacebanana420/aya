@@ -18,4 +18,25 @@ public class ffmpeg {
     list.add("-pred"); list.add(q_arg);
     return list;
   }
+
+  //improve later
+  public static ArrayList<String> cropArgs(int w, int h, int x, int y) {
+    var list = new ArrayList<String>();
+    if (w <= 0 || h <= 0) {return list;}
+  
+    String dimensions = w + ":" + h;
+    String offset = "";
+    if (x >= 0 && y >= 0) {
+      offset=":"+x+":"+y;
+    }
+    list.add("crop="+dimensions+offset);
+    return list;
+  }
+
+  public static ArrayList<String> scaleArgs(float factor) {
+    var list = new ArrayList<String>();
+    if (factor <= 0.0) {return list;}
+    list.add("scale=iw*"+factor+":ih*"+factor);
+    return list;
+  }
 }

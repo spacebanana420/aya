@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.io.File;
 
 public class screenshotter {
-  //public static int delay = 0;
-  
   public static int takeScreenshot(String[] args) {
     var opts = new ssoptions();
     opts.setOpts(args);
@@ -31,12 +29,10 @@ class ssoptions {
   public int delay = 0;
   
   public void setOpts(String[] args) {
-    //String[] conf = reader.openConfig();
     setCrop(args);
     setFormat(args);
     setQuality(args);
     setDelay(args);
-    // setFilename(args);
   }
 
   public ArrayList<String> mkCommand() {
