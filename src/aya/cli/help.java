@@ -14,7 +14,7 @@ public class help {
       + "\n  * -y [pixels] - sets the starting vertical point for cropping"
       + "\n  * -f [format] - sets the image file format (supported: \"png\", \"jpg\")"
       + "\n  * -q [number] - sets the quality level (0-5 for PNG and 1-100 for JPG)"
-      + "\n  * -scale [factor] - scales the screenshot by a factor (>0 to +inf)"
+      + "\n  * -s [factor] - scales the screenshot by a factor (>0 to +inf)"
       + "\n  * -magick - uses ImageMagick instead of FFmpeg for taking screenshots"
       + "\n  * -ffmpeg - uses FFmpeg instead of ImageMagick for taking screenshots (default)"
       + "\n  * -quiet - disables all output messages"

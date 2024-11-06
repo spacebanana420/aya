@@ -35,7 +35,7 @@ public class ffmpeg {
 
   public static ArrayList<String> scaleArgs(float factor) {
     var list = new ArrayList<String>();
-    if (factor <= 0.0) {return list;}
+    if (factor <= 0) {return list;}
     list.add("scale=iw*"+factor+":ih*"+factor);
     return list;
   }

@@ -22,7 +22,7 @@ class ssoptions {
   public boolean crop_enabled = false;
   public String format = "png";
   public byte quality = -1;
-  public int[] scale = new int[2];
+  public float scale = 0f;
 
   public boolean use_magick = false;
   public String filename = generateFilename();
@@ -30,6 +30,7 @@ class ssoptions {
   
   public void setOpts(String[] args) {
     setCrop(args);
+    setScale(args);
     setFormat(args);
     setQuality(args);
     setDelay(args);
@@ -58,6 +59,11 @@ class ssoptions {
       if (value >= 0) {crop[i] = value;}
     }
     if (crop[0] > 0 && crop[1] > 0 && crop[2] >= 0 && crop[3] >= 0) {crop_enabled = true;}
+  }
+
+  private void setScale(String[] args) {
+    float value = parser.getArgFloat(args, "-s");
+    if (value > 0.0) {scale = value;}
   }
   
   private void setFormat(String[] args) {
