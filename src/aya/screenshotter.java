@@ -4,6 +4,8 @@ import aya.wrapper.ffmpeg;
 import aya.wrapper.magick;
 import aya.wrapper.process;
 import aya.cli.parser;
+import aya.config.config;
+
 import java.util.ArrayList;
 import java.io.File;
 
@@ -46,6 +48,12 @@ class ssoptions {
   public int delay = 0;
   
   public void setOpts(String[] args) {
+    //Config reading comes first, so CLI arguments override respective settings
+    String[] conf = config.openConfig();
+    delay = config.getDelay(conf);
+    directory = config.getDirectory(conf);
+    use_magick = config.useMagick(conf);
+    
     use_magick = parser.hasArgument(args, "-magick");
     setCrop(args);
     setScale(args);

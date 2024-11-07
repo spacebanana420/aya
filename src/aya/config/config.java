@@ -10,7 +10,8 @@ import aya.stdout;
 
 public class config {
   public static String[] openConfig() {
-    var home = System.getProperty("user.home");
+    confwriter.createConfig();
+    String home = System.getProperty("user.home");
     try {
       var is = new FileInputStream(home + "/.config/aya/aya.conf");
       String conf = new String(is.readAllBytes());
