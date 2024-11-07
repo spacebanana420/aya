@@ -108,9 +108,14 @@ class confwriter {
         "Aya Config"
         + "\nTo enable a setting, uncomment it by removing the initial \"#\" character"
         + "\nCLI arguments override their respective settings here"
-        + "\n"
+        
+        + "\n\nSet an absolute path as the directory to where the screenshots are saved"
         + "\n#screenshot_directory=."
+        
+        + "\n\nSet a default delay in milliseconds for taking screenshots"
         + "\n#screenshot_delay=0"
+        
+        + "\n\nSet to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"
       ).getBytes();
   }
