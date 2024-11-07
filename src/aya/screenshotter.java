@@ -121,11 +121,13 @@ class ssoptions {
     int value = parser.getArgInt(args, "-t");
     if (value > 0) {delay = value;}
   }
-  //something is setting it to null
+
   private void setDirectory(String[] args) {
     String value = parser.getArgValue(args, "-d");
-    if (value == null || !new File(value).isDirectory() || value.length() == 0) {return;}
-
+    if (value == null || value.length() == 0) {return;}
+    if (value.equals("~")) {directory = System.getProperty("user.home"); return;}
+    if (!new File(value).isDirectory()) {return;}
+    
     char final_char = value.charAt(value.length()-1);
     if (final_char != '/' && final_char != '\\') {value += System.getProperty("file.separator");}
     directory = value;

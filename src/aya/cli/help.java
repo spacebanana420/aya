@@ -21,7 +21,7 @@ public class help {
       + "\n  * -quiet - disables all output messages"
       + "\n  * -verbose - displays more status messages"
       + "\n  * -debug - displays all messages for debugging"
-  ;
+    ;
   }
 
   public static String getSmallHelp() {
