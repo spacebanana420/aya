@@ -54,6 +54,11 @@ public class config {
     return fmt;
   }
 
+  public static byte getQuality(String[] config) {
+    byte value = readSetting_byte(config, "screenshot_quality");
+    return (value >= 0 && value < 100) ? value : -1;
+  }
+
   public static boolean useMagick(String[] config) {
     String use_magick = readSetting(config, "use_magick");
     if (use_magick == null) {return false;}
@@ -70,6 +75,15 @@ public class config {
     catch (NumberFormatException e) {return -1;}
   }
 
+  private static byte readSetting_byte(String[] config, String setting) {
+    String svalue = readSetting(config, setting);
+    if (svalue == null) {return -1;}
+    try {
+      return Byte.parseByte(svalue);
+    }
+    catch (NumberFormatException e) {return -1;}
+  }
+  
   private static String readSetting(String[] config, String setting) {
     String full_setting = setting + "=";
     for (String line : config) {
@@ -125,6 +139,9 @@ class confwriter {
 
         + "\n\nSupported formats: \"png\" \"jpg\""
         + "\n#screenshot_format=png"
+
+        + "\n\nFor PNG with FFmpeg (default setup), quality ranges from 0 to 5. For JPG or PNG with ImageMagick, quality ranges from 1 to 100"
+        + "\n#screenshot_quality=5"
         
         + "\n\nSet to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"

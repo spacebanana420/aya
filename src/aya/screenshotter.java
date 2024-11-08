@@ -54,6 +54,7 @@ class ssoptions {
     delay = config.getDelay(conf);
     directory = config.getDirectory(conf);
     format = config.getFormat(conf);
+    quality = config.getQuality(conf);
     use_magick = config.useMagick(conf);
     
     use_magick = parser.hasArgument(args, "-magick");
