@@ -1,9 +1,7 @@
 # Aya
 Aya is a command-line screenshotter tool for Unix-based systems that run on X11 environments such as Linux systems, FreeBSD, OpenBSD and others.
 
-Aya implements FFmpeg or ImageMagick as its screen capture and encoding backend. It supports both equally, but differences in picture compression between implementations exist.
-
-# Requirements and running
+# Requirements and download
 
 ### Requirements:
 
@@ -11,7 +9,22 @@ Aya implements FFmpeg or ImageMagick as its screen capture and encoding backend.
 - Java 11 or newer
 - [FFmpeg](https://ffmpeg.org/) **or** [ImageMagick](https://imagemagick.org/) 
 
-Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) and run with `java -jar aya.jar`.
+Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
+
+Note: ImageMagick support is secondary and lacks some features/support compared to FFmpeg.
+
+# How to use
+
+Once downloaded, you can run Aya with the command `java -jar aya.jar`. Simply running Aya will make it take an immediate screenshot (unless your system is unsupported).
+
+To see a full list of options, run `java -jar aya.jar -h`.
+
+Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`. This config overrides Aya's default behavior, but any CLI argument you pass to it will also override the respective config's settings.
+
+### Supported image formats
+* PNG
+* JPG
+* AVIF (FFmpeg only)
 
 # Build from source
 
