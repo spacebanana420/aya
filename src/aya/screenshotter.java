@@ -51,13 +51,14 @@ class ssoptions {
   public void setOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
     String[] conf = config.openConfig();
+    use_magick = config.useMagick(conf);
+    use_magick = parser.hasArgument(args, "-magick");
+    
     delay = config.getDelay(conf);
     directory = config.getDirectory(conf);
-    format = config.getFormat(conf);
+    format = config.getFormat(conf, use_magick);
     quality = config.getQuality(conf);
-    use_magick = config.useMagick(conf);
-    
-    use_magick = parser.hasArgument(args, "-magick");
+       
     setCrop(args);
     setScale(args);
     setFormat(args);
@@ -82,6 +83,9 @@ class ssoptions {
       args.add("ffmpeg"); args.addAll(ffmpeg.getCaptureArgs());
       if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
+      }
+      else if (format.equals("avif")) {
+        args.addAll(ffmpeg.encodeArgs_avif(quality));
       }
       else {args.addAll(ffmpeg.encodeArgs_jpg(quality));}
       String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
@@ -110,7 +114,7 @@ class ssoptions {
     String value = parser.getArgValue(args, "-f");
     if (value == null) {return;}
     value = value.toLowerCase();
-    if (value.equals("png") || value.equals("jpg")) {
+    if (value.equals("png") || value.equals("jpg") || (value.equals("avif") && !use_magick)) {
       format = value;
     }
   }

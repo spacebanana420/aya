@@ -46,11 +46,11 @@ public class config {
     return (delay < 0) ? 0 : delay;
   }
 
-  public static String getFormat(String[] config) {
+  public static String getFormat(String[] config, boolean use_magick) {
     String fmt = readSetting(config, "screenshot_format");
     if (fmt == null) {return "png";}
     fmt = fmt.toLowerCase();
-    if (!fmt.equals("png") && !fmt.equals("jpg")) {return "png";}  
+    if (!fmt.equals("png") && !fmt.equals("jpg") && (!fmt.equals("avif") || use_magick)) {return "png";}  
     return fmt;
   }
 
@@ -137,10 +137,12 @@ class confwriter {
         + "\n\nSet a default delay in milliseconds for taking screenshots"
         + "\n#screenshot_delay=0"
 
-        + "\n\nSupported formats: \"png\" \"jpg\""
+        + "\n\nSupported formats (FFMpeg): \"png\" \"jpg\" \"avif\""
+        + "\nSupported formats (ImageMagick): \"png\" \"jpg\""
         + "\n#screenshot_format=png"
 
         + "\n\nFor PNG with FFmpeg (default setup), quality ranges from 0 to 5. For JPG or PNG with ImageMagick, quality ranges from 1 to 100"
+        + "\nFor AVIF, quality ranges from 0 (lossless, highest quality) to 63 (worst)"
         + "\n#screenshot_quality=5"
         
         + "\n\nSet to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
