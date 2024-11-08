@@ -53,6 +53,7 @@ class ssoptions {
     String[] conf = config.openConfig();
     delay = config.getDelay(conf);
     directory = config.getDirectory(conf);
+    format = config.getFormat(conf);
     use_magick = config.useMagick(conf);
     
     use_magick = parser.hasArgument(args, "-magick");

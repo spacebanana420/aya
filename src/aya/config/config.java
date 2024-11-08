@@ -46,6 +46,12 @@ public class config {
     return (delay < 0) ? 0 : delay;
   }
 
+  public static String getFormat(String[] config) {
+    String fmt = readSetting(config, "screenshot_format").toLowerCase();
+    if (fmt == null || (!fmt.equals("png") && !fmt.equals("jpg"))) {return "png";}  
+    return fmt;
+  }
+
   public static boolean useMagick(String[] config) {
     String use_magick = readSetting(config, "use_magick");
     if (use_magick == null) {return false;}
@@ -114,6 +120,9 @@ class confwriter {
         
         + "\n\nSet a default delay in milliseconds for taking screenshots"
         + "\n#screenshot_delay=0"
+
+        + "\n\nSupported formats: \"png\" \"jpg\""
+        + "\n#screenshot_format=png"
         
         + "\n\nSet to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"
