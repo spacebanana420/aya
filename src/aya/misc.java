@@ -22,6 +22,18 @@ public class misc {
     return true;
   }
 
+  public static String getExtension(String name) {
+    if (name.length() < 3) {return "";} //1 char name + . + 1 char extension (minimum)
+    int start = -1;
+    for (int i = name.length()-1; i >= 0; i--) {if (name.charAt(i) == '.') {start = i; break;}}
+    if (start == -1 || start == name.length()-1) {return "";}
+   
+     start++; //skips the . character
+    String extension = "";
+    for (int i = start; i < name.length(); i++) {extension += name.charAt(i);}
+    return extension;
+  }
+
   public static boolean isWorkingDirectory(String dir) {
     if (dir == null || dir.equals("")) {return true;}
     if (dir.charAt(0) == '/') {return false;}

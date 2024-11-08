@@ -13,21 +13,29 @@ public class screenshotter {
   public static int takeScreenshot(String[] args) {
     var opts = new ssoptions();
     opts.setOpts(args);
-    var cmd = opts.mkCommand();
-    stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
+    // implement later, requires parser.hasExtension rewrite
+    // if (incorrectFormat(opts.filename, opts.format)) {
+    //   stdout.print("Output file name error! The extension of the filename " + opts.filename + " does not match the image format " + opts.format + "!");
+    //   return -3;
+    // }
     
-    if (opts.delay > 0) {misc.sleep(opts.delay);}
+    var cmd = opts.mkCommand();    
+    if (opts.delay > 0) {
+       stdout.print_verbose("Taking a screenshot in " + opts.delay + " milliseconds");
+       misc.sleep(opts.delay);
+    }
+    stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
     int result = process.run(cmd);
-    String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
     switch (result) {
-      case -1:
+      case 0:
+        stdout.print_verbose("Screenshot saved successfully!");
+        break;
+      case -1:  
+        String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
         stdout.print("Aya failed to take a screenshot! You do not have " + process_name + " installed in your system!");
         break;
       case -2:
         stdout.print("Aya's process was interrupted while taking a screenshot!");
-        break;
-      case 0:
-        stdout.print_verbose("Screenshot saved successfully!");
         break;
       default:
         stdout.print("Error capturing/encoding screenshot! Make sure you have permission to write files in the specified directory!");
@@ -35,6 +43,11 @@ public class screenshotter {
     }
     return result;
   }
+
+  // private static boolean incorrectFormat(String filename, String extension) {
+  //   String fileExtension = misc.getExtension(filename);
+  //   return (!extension.equals(fileExtension));
+  // }
 }
 
 class ssoptions {
