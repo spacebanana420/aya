@@ -47,8 +47,10 @@ public class config {
   }
 
   public static String getFormat(String[] config) {
-    String fmt = readSetting(config, "screenshot_format").toLowerCase();
-    if (fmt == null || (!fmt.equals("png") && !fmt.equals("jpg"))) {return "png";}  
+    String fmt = readSetting(config, "screenshot_format");
+    if (fmt == null) {return "png";}
+    fmt = fmt.toLowerCase();
+    if (!fmt.equals("png") && !fmt.equals("jpg")) {return "png";}  
     return fmt;
   }
 
