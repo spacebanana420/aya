@@ -31,6 +31,7 @@ public class screenshotter {
         break;
       default:
         stdout.print("Error capturing/encoding screenshot! Make sure you have permission to write files in the specified directory!");
+        stdout.print_verbose("Exit status: " + result);
     }
     return result;
   }
