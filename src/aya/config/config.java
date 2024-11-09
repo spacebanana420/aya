@@ -142,8 +142,8 @@ class confwriter {
         + "\nSupported formats (ImageMagick): \"png\" \"jpg\""
         + "\n#screenshot_format=png"
 
-        + "\n\nPNG: quality ranges from 0 to 5 (FFmpeg), or 0 to 100 (ImageMagick). Higher is better"
-        + "\nJPG: quality ranges from 0 to 100. Higher is better"
+        + "\n\nPNG: quality ranges from 0 to 5 (FFmpeg), or 1 to 100 (ImageMagick). Higher is better"
+        + "\nJPG: quality ranges from 1 to 100. Higher is better"
         + "\nAVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
         + "\n#screenshot_quality=5"
         
