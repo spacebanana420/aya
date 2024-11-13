@@ -24,19 +24,14 @@ public class process {
   }
 
   //duplicate code, rewrite later
-  public static String runAndGet(String[] args, boolean silent) {
+  public static String runAndGet(String[] args) {
     stdout.print_debug("Running command:", args);
     try {
-      var pb = new ProcessBuilder(args);
-      pb.inheritIO();
-      if (silent) {
-        pb.redirectOutput(Redirect.DISCARD);
-        pb.redirectError(Redirect.DISCARD);
-      }
-      var p = pb.start();
+      var p = new ProcessBuilder(args).start();
+      var stdout = p.getInputStream();
       p.waitFor();
       if (p.exitValue() != 0) {return null;}
-      return new String(p.getInputStream().readAllBytes());
+      return new String(stdout.readAllBytes());
     }
     catch (IOException e) {return null;}
     catch (InterruptedException e) {return null;}

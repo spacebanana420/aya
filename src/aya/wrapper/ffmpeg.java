@@ -41,8 +41,8 @@ public class ffmpeg {
     String[] args = new String[4];
     args[0] = (w > 0) ? "w="+w : "";
     args[1] = (h > 0) ? "h="+h : "";
-    args[2] = (x == 0) ? "x="+x : "";
-    args[3] = (y == 0) ? "y="+y : "";
+    args[2] = (x > 0) ? "x="+x : "";
+    args[3] = (y > 0) ? "y="+y : "";
     
     String full = "crop=";
     boolean first = true;

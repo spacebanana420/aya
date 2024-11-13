@@ -7,7 +7,7 @@ public class xwininfo {
   public static int[] getWindowCoordinates() {
     stdout.print("Please click on the window to capture");
     String[] cmd = new String[]{"xwininfo"};
-    String result = process.runAndGet(cmd, true);
+    String result = process.runAndGet(cmd);
     if (result == null) {return null;}
 
     return getCoordinates(result);
@@ -29,8 +29,8 @@ public class xwininfo {
     
     String[] settings = new String[]
     {
-      "Absolute upper-left X: ",
-      "Absolute upper-left Y: ",
+      "Absolute upper-left X:  ",
+      "Absolute upper-left Y:  ",
       "Width: ",
       "Height: ",  
     };
@@ -39,6 +39,11 @@ public class xwininfo {
       coordinates[i] = parseLine(list.get(i), settings[i].length());
     }
     reorderCoordinates(coordinates);
+
+    stdout.print_debug("Width:  " + coordinates[0]);
+    stdout.print_debug("Height:  " + coordinates[1]);
+    stdout.print_debug("X:  " + coordinates[2]);
+    stdout.print_debug("Y:  " + coordinates[3]);
     return coordinates;
   }
   
@@ -51,7 +56,7 @@ public class xwininfo {
 
   private static int parseLine(String line, int setting_i) {
     String buf = "";
-    for (int i = setting_i; i < line.length(); i++) {buf+= line.charAt(i);}
+    for (int i = setting_i; i < line.length(); i++) {buf += line.charAt(i);}
     int num = Integer.parseInt(buf);
     if (num < 0) {num = 0;}
     return num;
