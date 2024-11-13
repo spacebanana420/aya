@@ -4,14 +4,12 @@ import aya.cli.parser;
 import aya.cli.help;
 
 public class main {
-  public static byte verbosity_level = 1;
-  
   public static void main(String[] args) {
     if (parser.hasArgument(args, "-h")) {
       stdout.print(help.getHelp());
       return;
     }
-    verbosity_level = getVerbosityLevel(args);
+    global.verbosity_level = getVerbosityLevel(args);
     if (!systemSupported()) {
       stdout.print("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
       return;

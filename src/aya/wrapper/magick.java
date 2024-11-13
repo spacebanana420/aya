@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class magick {
   public static ArrayList<String> getCaptureArgs() {
-    return process.mkList(new String[]{"magick", "import", "-window", "root"});
+    return process.mkList(new String[]{"import", "-window", "root"});
   }
 
   public static ArrayList<String> encodeArgs_png(byte quality) {

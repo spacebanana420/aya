@@ -71,6 +71,9 @@ class ssoptions {
     directory = config.getDirectory(conf);
     format = config.getFormat(conf, use_magick);
     quality = config.getQuality(conf);
+
+    global.ffmpeg_path = config.getFFmpegPath(conf);
+    global.magick_path = config.getMagickPath(conf);
        
     setCrop(args);
     setScale(args);
@@ -84,6 +87,7 @@ class ssoptions {
   public ArrayList<String> mkCommand() {
     var args = new ArrayList<String>();
     if (use_magick) {
+      args.add(global.magick_path);
       args.addAll(magick.getCaptureArgs());
       if (format.equals("png")) {
         args.addAll(magick.encodeArgs_png(quality));
@@ -93,7 +97,7 @@ class ssoptions {
       args.addAll(magick.scaleArgs(scale));
     }
     else {
-      args.add("ffmpeg"); args.addAll(ffmpeg.getCaptureArgs());
+      args.add(global.ffmpeg_path); args.addAll(ffmpeg.getCaptureArgs());
       if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }

@@ -66,6 +66,20 @@ public class config {
     return (use_magick.equals("true") || use_magick.equals("yes")) ? true : false;
   }
 
+  public static String getFFmpegPath(String[] config) {
+    String path = readSetting(config, "ffmpeg_path");
+    if (path == null) {return "ffmpeg";}
+    var f = new File(path);
+    if (f.isFile() && f.isAbsolute() && f.canExecute()) {return path;} else {return "ffmpeg";}
+  }
+  
+  public static String getMagickPath(String[] config) {
+    String path = readSetting(config, "magick_path");
+    if (path == null) {return "magick";}
+    var f = new File(path);
+    if (f.isFile() && f.isAbsolute() && f.canExecute()) {return path;} else {return "magick";}
+  }
+
   private static int readSetting_int(String[] config, String setting) {
     String svalue = readSetting(config, setting);
     if (svalue == null) {return -1;}
@@ -149,6 +163,10 @@ class confwriter {
         
         + "\n\nSet to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"
+
+        + "\n\nSet the absolute path to the FFmpeg and ImageMagick binaries for custom ones"
+        + "\n#ffmpeg_path=ffmpeg"
+        + "\n#magick_path=magick"
       ).getBytes();
   }
 }
