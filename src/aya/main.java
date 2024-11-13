@@ -17,7 +17,7 @@ public class main {
     screenshotter.takeScreenshot(args);
   }
 
-  private static boolean systemSupported() {
+  public static boolean systemSupported() {
     String os = System.getProperty("os.name").toLowerCase();
     return (!os.contains("Windows") && !os.contains("mac") && !os.equals("haiku"));
   }

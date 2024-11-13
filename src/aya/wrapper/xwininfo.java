@@ -1,14 +1,23 @@
 package aya.wrapper;
 
 import aya.stdout;
+import aya.main;
+
 import java.util.ArrayList;
 
 public class xwininfo {
   public static int[] getWindowCoordinates() {
-    stdout.print("Please click on the window to capture");
+    if (!main.systemSupported()) {
+      stdout.print_verbose("Ignoring -window argument, operating system unsupported");
+      return null;
+    }
+    stdout.print("Please click on the window to capture"); 
     String[] cmd = new String[]{"xwininfo"};
     String result = process.runAndGet(cmd);
-    if (result == null) {return null;}
+    if (result == null) {
+      stdout.print("Error retrieving window coordinates! Make sure you have \"xwininfo\" installed!");
+      return null;
+    }
 
     return getCoordinates(result);
   }
