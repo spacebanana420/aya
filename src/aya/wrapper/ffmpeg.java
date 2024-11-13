@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ffmpeg {
   public static ArrayList<String> getCaptureArgs() {
-    return process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-i", ":0.0", "-draw_mouse", "0", "-frames:v", "1"});
+    return process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", "0", "-i", ":0.0", "-frames:v", "1"});
   }
 
   public static ArrayList<String> encodeArgs_png(byte quality) {
