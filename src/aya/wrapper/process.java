@@ -35,6 +35,7 @@ public class process {
       }
       var p = pb.start();
       p.waitFor();
+      if (p.exitValue() != 0) {return null;}
       return new String(p.getInputStream().readAllBytes());
     }
     catch (IOException e) {return null;}

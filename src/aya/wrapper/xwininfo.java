@@ -25,6 +25,7 @@ public class xwininfo {
       }
       else {buf += c;}
     }
+    stdout.print_debug("Parsed xwininfo output:", list);
     
     String[] settings = new String[]
     {
@@ -37,7 +38,7 @@ public class xwininfo {
     for (int i = 0; i < coordinates.length; i++) {
       coordinates[i] = parseLine(list.get(i), settings[i].length());
     }
-
+    reorderCoordinates(coordinates);
     return coordinates;
   }
   
@@ -54,5 +55,11 @@ public class xwininfo {
     int num = Integer.parseInt(buf);
     if (num < 0) {num = 0;}
     return num;
+  }
+
+  private static void reorderCoordinates(int[] coords) { //order goes from X-Y-WIDTH-HEIGHT to WIDTH-HEIGHT-X-Y
+    int temp;
+    temp = coords[0]; coords[0] = coords[2]; coords[2] = temp;
+    temp = coords[1]; coords[1] = coords[3]; coords[3] = temp;
   }
 }

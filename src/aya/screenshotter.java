@@ -3,6 +3,8 @@ package aya;
 import aya.wrapper.ffmpeg;
 import aya.wrapper.magick;
 import aya.wrapper.process;
+import aya.wrapper.xwininfo;
+
 import aya.cli.parser;
 import aya.config.config;
 
@@ -119,6 +121,11 @@ class ssoptions {
     for (int i = 0; i < opts.length; i++) {
       int value = parser.getArgInt(args, opts[i]);
       if (value >= 0) {crop[i] = value;}
+    }
+
+    if (parser.hasArgument(args, "-window")) {
+      int[] window_coords = xwininfo.getWindowCoordinates();
+      if (window_coords != null) {crop = window_coords;}
     }
   }
 
