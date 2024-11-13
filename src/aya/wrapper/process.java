@@ -1,17 +1,21 @@
 package aya.wrapper;
 
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import aya.stdout;
 
 public class process {
-  public static int run(String[] args) {
+  public static int run(String[] args, boolean silent) {
     stdout.print_debug("Running command:", args);
     try {
-      var p =
-        new ProcessBuilder(args)
-        .inheritIO()
-        .start();
+      var pb = new ProcessBuilder(args);
+      pb.inheritIO();
+      if (silent) {
+        pb.redirectOutput(Redirect.DISCARD);
+        pb.redirectError(Redirect.DISCARD);
+      }
+      var p = pb.start();
       p.waitFor();
       return p.exitValue();
     }
@@ -19,8 +23,26 @@ public class process {
     catch (InterruptedException e) {return -2;}
   }
 
-  public static int run(ArrayList<String> args) {
-    return run(args.toArray(new String[0]));
+  //duplicate code, rewrite later
+  public static String runAndGet(String[] args, boolean silent) {
+    stdout.print_debug("Running command:", args);
+    try {
+      var pb = new ProcessBuilder(args);
+      pb.inheritIO();
+      if (silent) {
+        pb.redirectOutput(Redirect.DISCARD);
+        pb.redirectError(Redirect.DISCARD);
+      }
+      var p = pb.start();
+      p.waitFor();
+      return new String(p.getInputStream().readAllBytes());
+    }
+    catch (IOException e) {return null;}
+    catch (InterruptedException e) {return null;}
+  }
+
+  public static int run(ArrayList<String> args, boolean silent) {
+    return run(args.toArray(new String[0]), silent);
   }
 
   public static String[] concatArgs(String[]... args) {

@@ -25,7 +25,7 @@ public class screenshotter {
        misc.sleep(opts.delay);
     }
     stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
-    int result = process.run(cmd);
+    int result = process.run(cmd, false);
     switch (result) {
       case 0:
         stdout.print_verbose("Screenshot saved successfully!");
