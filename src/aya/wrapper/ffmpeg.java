@@ -3,8 +3,14 @@ package aya.wrapper;
 import java.util.ArrayList;
 
 public class ffmpeg {
-  public static ArrayList<String> getCaptureArgs() {
-    return process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", "0", "-i", ":0.0", "-frames:v", "1"});
+  public static ArrayList<String> getCaptureArgs(boolean select_region) {
+    var base_list = process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", "0"});
+    if (select_region) {base_list.add("-select_region"); base_list.add("1");}
+    
+    var final_list = process.mkList(new String[]{"-i", ":0.0", "-frames:v", "1"});
+    base_list.addAll(final_list);
+
+    return base_list;
   }
 
   public static ArrayList<String> encodeArgs_png(byte quality) {

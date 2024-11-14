@@ -14,6 +14,7 @@ public class help {
       + "\n  * -x [pixels] - sets the starting horizontal point for cropping"
       + "\n  * -y [pixels] - sets the starting vertical point for cropping"
       + "\n  * -window - crops the screenshot to a window the user selects (overrides -x and -y)"
+      + "\n  * -region - screenshots the region the user selects (FFmpeg only)"
       + "\n  * -s [factor] - scales the screenshot by a factor (>0 to +inf)"
       + "\n  * -f [format] - sets the image file format"
       + "\n    (supported formats: \"png\", \"jpg\", \"avif\" (FFmpeg only))"

@@ -58,6 +58,9 @@ class ssoptions {
   public byte quality = -1;
   public float scale = 0f;
 
+  private boolean window_select = false;
+  private boolean region_select = false;
+
   public boolean use_magick = false;
   public String directory = "";
   public String filename = "";
@@ -84,6 +87,7 @@ class ssoptions {
     setDelay(args);
     setDirectory(args);
     filename = generateFilename(args);
+    setRegionSelect(args);
   }
 
   public ArrayList<String> mkCommand() {
@@ -99,7 +103,7 @@ class ssoptions {
       args.addAll(magick.scaleArgs(scale));
     }
     else {
-      args.add(global.ffmpeg_path); args.addAll(ffmpeg.getCaptureArgs());
+      args.add(global.ffmpeg_path); args.addAll(ffmpeg.getCaptureArgs(region_select));
       if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
@@ -124,6 +128,7 @@ class ssoptions {
     }
 
     if (parser.hasArgument(args, "-window")) {
+      window_select = true;
       int[] window_coords = xwininfo.getWindowCoordinates();
       if (window_coords != null) {crop = window_coords;}
     }
@@ -164,6 +169,11 @@ class ssoptions {
     directory = value;
   }
 
+
+  private void setRegionSelect(String[] args) {
+    if (parser.hasArgument(args, "-region") && !window_select) {region_select = true;}
+  }
+
   private String generateFilename(String[] args) {
     String argname = parser.getFilename(args, format);
     if (argname != null) {return argname;}
@@ -179,4 +189,5 @@ class ssoptions {
     }
     return full;    
   }
+
 }
