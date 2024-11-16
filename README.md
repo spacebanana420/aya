@@ -7,7 +7,8 @@ Aya is a command-line screenshotter tool for Unix-based systems that run on X11 
 
 - Unix-like system that can run a graphical X11 desktop (such as Linux-based systems, FreeBSD, OpenBSD, etc)
 - Java 11 or newer
-- [FFmpeg](https://ffmpeg.org/) **or** [ImageMagick](https://imagemagick.org/) 
+- [FFmpeg](https://ffmpeg.org/) **or** [ImageMagick](https://imagemagick.org/)
+- Xwininfo (optional, for window capture) 
 
 Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
