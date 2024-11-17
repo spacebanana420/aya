@@ -3,7 +3,7 @@ package aya.cli;
 public class help {
   public static String getHelp() {
     return
-      "Aya (version 0.3)"
+      "Aya (version 0.4)"
       + "\nUsage: Aya [options] [optional filename]"
       + "\n\nAvailable Options:"
       + "\n  * -h - opens this menu"
@@ -29,7 +29,7 @@ public class help {
 
   public static String getSmallHelp() {
     return
-      "Aya (version 0.2)"
+      "Aya (version 0.4)"
       + "\nUsage: Aya [options] [filename]"
       + "\nRun \"aya -h\" to view the full help screen"
     ;

@@ -10,6 +10,7 @@ import aya.config.config;
 
 import java.util.ArrayList;
 import java.io.File;
+import java.time.LocalDate;
 
 public class screenshotter {
   public static int takeScreenshot(String[] args) {
@@ -177,9 +178,11 @@ class ssoptions {
   private String generateFilename(String[] args) {
     String argname = parser.getFilename(args, format);
     if (argname != null) {return argname;}
+
+    String currentTime = LocalDate.now().toString();
     String name =
-      (misc.isWorkingDirectory(directory)) ? "Aya-screenshot"
-      : directory + "Aya-screenshot";
+      (misc.isWorkingDirectory(directory)) ? "Aya-screenshot"+currentTime
+      : directory + "AyaScreenshot-"+currentTime;
     int num = 0;
     String full = name + "-" + num + "." + format;
 
