@@ -67,19 +67,17 @@ public class ffmpeg {
   }
 
   public static ArrayList<String> assembleFilters(String... filters) {
-    boolean hasFilters = false;
     var list = new ArrayList<String>();
-    for (String f : filters) {if (!f.equals("")) {hasFilters = true; break;}}
+    
+    boolean hasFilters = false;
+    for (String f : filters) {if (f.length() > 0) {hasFilters = true; break;}}
     if (!hasFilters) {return list;}
 
     list.add("-filter:v");
-    boolean first = true;
-    String arg = "";
-    for (int i = 0; i < filters.length; i++) {
-      if (!filters[i].equals("")) {
-        if (first) {arg+=filters[i]; first = false;}
-        else {arg+=","+filters[i];}
-      }
+    String arg = filters[0]; //First ffmpeg filter does not have comma
+    for (int i = 1; i < filters.length; i++) {
+      if (filters[i].length() == 0) {continue;}
+      arg+=","+filters[i];
     }
     list.add(arg);
     return list;
