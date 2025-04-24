@@ -7,6 +7,7 @@ import aya.wrapper.xwininfo;
 
 import aya.cli.parser;
 import aya.config.config;
+import aya.config.Setting;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -69,7 +70,7 @@ class ssoptions {
   
   public void setOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
-    String[] conf = config.openConfig();
+    Setting[] conf = config.openConfig();
     use_magick = config.useMagick(conf);
     use_magick = parser.hasArgument(args, "-magick");
     
