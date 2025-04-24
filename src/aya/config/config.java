@@ -96,7 +96,7 @@ public class config {
 }
 
 class confwriter {
-  public static void createConfig() {
+  static void createConfig() {
     String home = System.getProperty("user.home");
     var dir_f = new File(home + "/.config/aya");
     var conf_f = new File(home + "/.config/aya/aya.conf");
@@ -112,33 +112,33 @@ class confwriter {
     catch (IOException e) {stdout.print("Error creating Aya config! Unable to create config directory or file!");}
   }
 
-  public static byte[] getDefaultConfig() {
+  static byte[] getDefaultConfig() {
     return
       (
         "==Aya Config=="
-        + "\nTo enable a setting, uncomment it by removing the initial \"#\" character"
-        + "\nCLI arguments override their respective settings here"
+        + "\n# To enable a setting, uncomment it by removing the initial \"#\" character"
+        + "\n# CLI arguments override their respective settings here"
 
         + "\n\n==Settings=="
-        + "\nSet an absolute path as the directory to where the screenshots are saved"
+        + "\n# Set an absolute path as the directory to where the screenshots are saved"
         + "\n#screenshot_directory=."
         
-        + "\n\nSet a default delay in milliseconds for taking screenshots"
+        + "\n\n# Set a default delay in milliseconds for taking screenshots"
         + "\n#screenshot_delay=0"
 
-        + "\n\nSupported formats (FFmpeg): \"png\" \"jpg\" \"avif\""
-        + "\nSupported formats (ImageMagick): \"png\" \"jpg\""
+        + "\n\n# Supported formats (FFmpeg): \"png\" \"jpg\" \"avif\""
+        + "\n# Supported formats (ImageMagick): \"png\" \"jpg\""
         + "\n#screenshot_format=png"
 
-        + "\n\nPNG: quality ranges from 0 to 5 (FFmpeg), or 1 to 100 (ImageMagick). Higher is better"
-        + "\nJPG: quality ranges from 1 to 100. Higher is better"
-        + "\nAVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
+        + "\n\n# PNG: quality ranges from 0 to 5 (FFmpeg), or 1 to 100 (ImageMagick). Higher is better"
+        + "\n# JPG: quality ranges from 1 to 100. Higher is better"
+        + "\n# AVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
         + "\n#screenshot_quality=5"
         
-        + "\n\nSet to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
+        + "\n\n# Set to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"
 
-        + "\n\nSet the absolute path to the FFmpeg and ImageMagick binaries for custom ones"
+        + "\n\n# Set the absolute path to the FFmpeg and ImageMagick binaries for custom ones"
         + "\n#ffmpeg_path=ffmpeg"
         + "\n#magick_path=magick"
       ).getBytes();
