@@ -1,11 +1,11 @@
 # Aya
-Aya is a command-line screenshotter tool for Unix-based systems that run on X11 environments such as Linux systems, FreeBSD, OpenBSD and others.
+Aya is a command-line screenshotter tool for UNIX-like systems that run on an X11 graphical environment such as Linux systems, FreeBSD, OpenBSD and more.
 
 # Requirements and download
 
 ### Requirements:
 
-- Unix-like system that can run a graphical X11 desktop (such as Linux-based systems, FreeBSD, OpenBSD, etc)
+- UNIX-like system that can run a graphical X11 desktop (such as Linux-based systems, FreeBSD, OpenBSD, etc)
 - Java 11 or newer
 - [FFmpeg](https://ffmpeg.org/) **or** [ImageMagick](https://imagemagick.org/)
 - Xwininfo (optional, for window capture) 
@@ -31,9 +31,10 @@ Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`.
 
 Download [Yuuka](https://github.com/spacebanana420/yuuka), open a terminal at the root of the project and run:
 ```
-yuuka package
-```
-Or if you don't have Yuuka installed:
-```
 java -jar yuuka.jar package
+```
+
+Or if you already have Yuuka installed on your system:
+```
+yuuka package
 ```
