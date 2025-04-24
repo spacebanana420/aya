@@ -3,7 +3,7 @@ package aya.cli;
 public class help {
   public static String getHelp() {
     return
-      "Aya (version 0.4)"
+      "Aya (version 0.4.1)"
       + "\nUsage: Aya [options] [optional filename]"
       + "\n\nAvailable Options:"
       + "\n  * -h - opens this menu"
