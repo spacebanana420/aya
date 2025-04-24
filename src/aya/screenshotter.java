@@ -181,7 +181,7 @@ class ssoptions {
 
     String currentTime = LocalDate.now().toString();
     String name =
-      (misc.isWorkingDirectory(directory)) ? "AyaScreenshot"+currentTime
+      (misc.isWorkingDirectory(directory)) ? "AyaScreenshot-"+currentTime
       : directory + "AyaScreenshot-"+currentTime;
     int num = 0;
     String full = name + "-" + num + "." + format;
