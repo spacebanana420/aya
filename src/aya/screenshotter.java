@@ -148,7 +148,7 @@ class CaptureOpts {
       format = value;
     }
     else {
-      stdout.print_verbose("Ignore specified image format " + value + " for being invalid\nDefaulting to PNG");
+      stdout.print_verbose("Ignored specified image format " + value + " for being invalid\nDefaulting to PNG");
     }
   }
 
