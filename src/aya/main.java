@@ -18,7 +18,8 @@ public class main {
       stdout.print("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
       return;
     }
-    screenshotter.takeScreenshot(args);
+    int result = screenshotter.takeScreenshot(args);
+    System.exit(result);
   }
 
   public static boolean systemSupported() {

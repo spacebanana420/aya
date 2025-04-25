@@ -23,7 +23,7 @@ public class screenshotter {
     //   return -3;
     // }
     
-    var cmd = opts.mkCommand();    
+    ArrayList<String> cmd = opts.mkCommand();    
     if (opts.delay > 0) {
        stdout.print_verbose("Taking a screenshot in " + opts.delay + " milliseconds");
        misc.sleep(opts.delay);
