@@ -148,7 +148,7 @@ class CaptureOpts {
       format = value;
     }
     else {
-      stdout.print_verbose("Ignore specified image format " + value + " for being invalid!\nDefaulting to PNG");
+      stdout.print_verbose("Ignore specified image format " + value + " for being invalid\nDefaulting to PNG");
     }
   }
 
@@ -168,11 +168,11 @@ class CaptureOpts {
     if (value.equals("~")) {directory = System.getProperty("user.home"); return;}
     File f = new File(value);
     if (!f.isDirectory()) {
-      stdout.print_verbose("The specified directory located at " + value + " is not a real directory!\nDefaulting to current working directory");
+      stdout.print_verbose("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory");
       return;
     }
     if (!f.canWrite()) {
-      stdout.print_verbose("You lack the permission to write at the specified directory" + value + "!\nDefaulting to current working directory");
+      stdout.print_verbose("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory");
       return;
     }
     
