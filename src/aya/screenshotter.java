@@ -15,15 +15,10 @@ import java.time.LocalDate;
 
 public class screenshotter {
   public static int takeScreenshot(String[] args) {
-    var opts = new CaptureOpts();
+    CaptureOpts opts = new CaptureOpts();
     opts.setOpts(args);
-    // implement later, requires parser.hasExtension rewrite
-    // if (incorrectFormat(opts.filename, opts.format)) {
-    //   stdout.print("Output file name error! The extension of the filename " + opts.filename + " does not match the image format " + opts.format + "!");
-    //   return -3;
-    // }
-    
-    ArrayList<String> cmd = opts.mkCommand();    
+    ArrayList<String> cmd = opts.mkCommand();   
+     
     if (opts.delay > 0) {
        stdout.print_verbose("Taking a screenshot in " + opts.delay + " milliseconds");
        misc.sleep(opts.delay);
@@ -46,11 +41,6 @@ public class screenshotter {
     }
     return result;
   }
-
-  // private static boolean incorrectFormat(String filename, String extension) {
-  //   String fileExtension = misc.getExtension(filename);
-  //   return (!extension.equals(fileExtension));
-  // }
 }
 
 class CaptureOpts {
@@ -59,13 +49,13 @@ class CaptureOpts {
   byte quality = -1;
   float scale = 0f;
 
-  private boolean window_select = false;
-  private boolean region_select = false;
-
   boolean use_magick = false;
   String directory = "";
   String filename = "";
   int delay = 0;
+  
+  private boolean window_select = false;
+  private boolean region_select = false;
   
   void setOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
