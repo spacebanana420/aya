@@ -54,20 +54,20 @@ public class screenshotter {
 }
 
 class CaptureOpts {
-  public int[] crop = new int[4];
-  public String format = "png";
-  public byte quality = -1;
-  public float scale = 0f;
+  int[] crop = new int[4];
+  String format = "png";
+  byte quality = -1;
+  float scale = 0f;
 
   private boolean window_select = false;
   private boolean region_select = false;
 
-  public boolean use_magick = false;
-  public String directory = "";
-  public String filename = "";
-  public int delay = 0;
+  boolean use_magick = false;
+  String directory = "";
+  String filename = "";
+  int delay = 0;
   
-  public void setOpts(String[] args) {
+  void setOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
     Setting[] conf = config.openConfig();
     
@@ -90,7 +90,7 @@ class CaptureOpts {
     setRegionSelect(args);
   }
 
-  public ArrayList<String> mkCommand() {
+  ArrayList<String> mkCommand() {
     var args = new ArrayList<String>();
     if (use_magick) {
       args.add(global.magick_path);
