@@ -71,9 +71,8 @@ class ssoptions {
   public void setOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
     Setting[] conf = config.openConfig();
-    use_magick = config.useMagick(conf);
-    use_magick = parser.hasArgument(args, "-magick");
     
+    use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
     delay = config.getDelay(conf);
     directory = config.getDirectory(conf);
     format = config.getFormat(conf, use_magick);
