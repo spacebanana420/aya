@@ -1,12 +1,15 @@
 package aya.cli;
 
 public class help {
+  public static final String VERSION = "0.4.1";
+  
   public static String getHelp() {
     return
-      "Aya (version 0.4.1)"
+      "Aya (version "+VERSION+")"
       + "\nUsage: Aya [options] [optional filename]"
       + "\n\nAvailable Options:"
       + "\n  * -h - opens this menu"
+      + "\n  * -v - displays Aya's version"
       + "\n  * -t [delay] - sets the delay for screenshotting in milliseconds"
       + "\n  * -d [directory] - sets the directory to save the screenshot at"
       + "\n"
