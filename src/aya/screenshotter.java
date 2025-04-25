@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 public class screenshotter {
   public static int takeScreenshot(String[] args) {
-    var opts = new ssoptions();
+    var opts = new CaptureOpts();
     opts.setOpts(args);
     // implement later, requires parser.hasExtension rewrite
     // if (incorrectFormat(opts.filename, opts.format)) {
@@ -54,7 +54,7 @@ public class screenshotter {
   // }
 }
 
-class ssoptions {
+class CaptureOpts {
   public int[] crop = new int[4];
   public String format = "png";
   public byte quality = -1;
