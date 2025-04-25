@@ -90,12 +90,13 @@ class CaptureOpts {
     setFormat(args);
     setQuality(args);
     setDelay(args);
+    
     setDirectory(args);
     filename = generateFilename(args);
-    setRegionSelect(args);
-    
     open_image = parser.hasArgument(args, "-open");
     image_viewer_cmd = config.getImageViewer(conf, filename);
+    
+    setRegionSelect(args);
   }
 
   ArrayList<String> mkCommand() {
@@ -111,7 +112,8 @@ class CaptureOpts {
       args.addAll(magick.scaleArgs(scale));
     }
     else {
-      args.add(global.ffmpeg_path); args.addAll(ffmpeg.getCaptureArgs(region_select));
+      args.add(global.ffmpeg_path);
+      args.addAll(ffmpeg.getCaptureArgs(region_select));
       if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
