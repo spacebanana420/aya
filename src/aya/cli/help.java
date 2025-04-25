@@ -35,7 +35,7 @@ public class help {
 
   public static String getSmallHelp() {
     return
-      "Aya (version 0.4)"
+      "Aya (version "+VERSION+")"
       + "\nUsage: Aya [options] [filename]"
       + "\nRun \"aya -h\" to view the full help screen"
     ;
