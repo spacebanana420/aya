@@ -43,7 +43,6 @@ public class screenshotter {
         break;
       default:
         stdout.print("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
-        stdout.print_verbose("Exit status: " + result);
     }
     return result;
   }
