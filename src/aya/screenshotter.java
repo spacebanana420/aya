@@ -42,7 +42,7 @@ public class screenshotter {
         stdout.print("Aya's process was interrupted while taking a screenshot!");
         break;
       default:
-        stdout.print("Error capturing/encoding screenshot! Make sure you have permission to write files in the specified directory!");
+        stdout.print("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
         stdout.print_verbose("Exit status: " + result);
     }
     return result;
