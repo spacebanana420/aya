@@ -147,6 +147,9 @@ class ssoptions {
     if (value.equals("png") || value.equals("jpg") || (value.equals("avif") && !use_magick)) {
       format = value;
     }
+    else {
+      stdout.print_verbose("Ignore specified image format " + value + " for being invalid!\nDefaulting to PNG");
+    }
   }
 
   private void setQuality(String[] args) {
@@ -163,7 +166,15 @@ class ssoptions {
     String value = parser.getArgValue(args, "-d");
     if (value == null || value.length() == 0) {return;}
     if (value.equals("~")) {directory = System.getProperty("user.home"); return;}
-    if (!new File(value).isDirectory()) {return;}
+    File f = new File(value);
+    if (!f.isDirectory()) {
+      stdout.print_verbose("The specified directory located at " + value + " is not a real directory!\nDefaulting to current working directory");
+      return;
+    }
+    if (!f.canWrite()) {
+      stdout.print_verbose("You lack the permission to write at the specified directory" + value + "!\nDefaulting to current working directory");
+      return;
+    }
     
     char final_char = value.charAt(value.length()-1);
     if (final_char != '/' && final_char != '\\') {value += System.getProperty("file.separator");}
