@@ -9,7 +9,7 @@ public class main {
       stdout.print(help.getHelp());
       return;
     }
-    else if(parser.hasArgument(args, "-v")) {
+    else if (parser.hasArgument(args, "-v")) {
       stdout.print("Aya version " + help.VERSION);
       return;
     }

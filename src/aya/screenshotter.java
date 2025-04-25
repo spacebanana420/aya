@@ -36,7 +36,7 @@ public class screenshotter {
         break;
       case -1:  
         String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
-        stdout.print("Aya failed to take a screenshot! You do not have " + process_name + " installed in your system!");
+        stdout.print("Aya failed to take a screenshot! Program " + process_name + " not found in your system!");
         break;
       case -2:
         stdout.print("Aya's process was interrupted while taking a screenshot!");
