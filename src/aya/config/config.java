@@ -93,6 +93,10 @@ public class config {
     var f = new File(path);
     if (f.isFile() && f.isAbsolute() && f.canExecute()) {return path;} else {return "magick";}
   }
+  
+  public static ArrayList<String> getImageViewer(Setting[] config, String filename) {
+    return confio.readCommand(config, "image_viewer_command", filename);
+  }
 }
 
 class confwriter {
@@ -134,6 +138,11 @@ class confwriter {
         + "\n# JPG: quality ranges from 1 to 100. Higher is better"
         + "\n# AVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
         + "\n#screenshot_quality=5"
+        
+        + "\n\n# The command to use for opening screenshot images"
+        + "\n# Use the special keyword %F to place the filename"
+        + "\n# If unspecified, the filename is added at the end of the command"
+        + "\n#image_viewer_command=xdg-open %F"
         
         + "\n\n# Set to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"

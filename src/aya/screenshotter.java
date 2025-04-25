@@ -17,7 +17,7 @@ public class screenshotter {
   public static int takeScreenshot(String[] args) {
     CaptureOpts opts = new CaptureOpts();
     opts.setOpts(args);
-    ArrayList<String> cmd = opts.mkCommand();   
+    ArrayList<String> cmd = opts.mkCommand();
      
     if (opts.delay > 0) {
        stdout.print_verbose("Taking a screenshot in " + opts.delay + " milliseconds");
@@ -39,7 +39,20 @@ public class screenshotter {
       default:
         stdout.print("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
     }
-    return result;
+    if (result != 0) {return 1;}
+    
+    if (opts.open_image) {
+      if (opts.image_viewer_cmd == null) {
+        stdout.print("Error opening screenshot, image viewer command is missing!");
+        return 2;
+      }
+      result = process.run(opts.image_viewer_cmd, true);
+      if (result != 0) {
+        stdout.print("Error opening screenshot, command is invalid or program is not present in system!");
+        return 3;
+      }
+    }
+    return 0;
   }
 }
 
@@ -53,6 +66,8 @@ class CaptureOpts {
   String directory = "";
   String filename = "";
   int delay = 0;
+  boolean open_image = false;
+  ArrayList<String> image_viewer_cmd = null;
   
   private boolean window_select = false;
   private boolean region_select = false;
@@ -78,6 +93,9 @@ class CaptureOpts {
     setDirectory(args);
     filename = generateFilename(args);
     setRegionSelect(args);
+    
+    open_image = parser.hasArgument(args, "-open");
+    image_viewer_cmd = config.getImageViewer(conf, filename);
   }
 
   ArrayList<String> mkCommand() {

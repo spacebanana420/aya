@@ -19,6 +19,7 @@ public class help {
       + "\n  * -y [pixels] - sets the starting vertical point for cropping"
       + "\n  * -window - crops the screenshot to a window the user selects (overrides -x and -y)"
       + "\n  * -region - screenshots the region the user selects (FFmpeg only)"
+      + "\n  * -open - opens the screenshot after saving it (requires configuration in dotfile)"
       + "\n"
       + "\n  * -s [factor] - scales the screenshot by a factor (>0 to +inf)"
       + "\n  * -f [format] - sets the image file format"
