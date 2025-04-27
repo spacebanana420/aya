@@ -159,7 +159,7 @@ class CaptureOpts {
     value = value.toLowerCase();
     if (!config.unsupportedFormat(value, use_magick)) {format = value;}
     else {
-      stdout.print_verbose("Ignored specified image format " + value + " for being invalid\nDefaulting to PNG");
+      stdout.print_verbose("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
     }
   }
 
