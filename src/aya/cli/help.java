@@ -23,7 +23,7 @@ public class help {
       + "\n"
       + "\n  * -s [factor] - scales the screenshot by a factor (>0 to +inf)"
       + "\n  * -f [format] - sets the image file format"
-      + "\n    (supported formats: \"png\", \"jpg\", \"avif\" (FFmpeg only))"
+      + "\n    (supported formats: \"png\", \"jpg\", \"avif\" (FFmpeg only), \"bmp\" (FFmpeg only))"
       + "\n  * -q [number] - sets the quality level (0-5 for PNG (or 1-100 with ImageMagick), 1-100 for JPG, 0-63 for AVIF)"
       + "\n    (0-5 for PNG with FFmpeg and 1-100 for JPG or PNG with ImageMagick)"
       + "\n"

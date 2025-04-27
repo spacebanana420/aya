@@ -120,6 +120,9 @@ class CaptureOpts {
       else if (format.equals("avif")) {
         args.addAll(ffmpeg.encodeArgs_avif(quality));
       }
+      else if (format.equals("bmp")) {
+        args.addAll(ffmpeg.encodeArgs_bmp());
+      }
       else {args.addAll(ffmpeg.encodeArgs_jpg(quality));}
       String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
       String arg_scale = ffmpeg.scaleArgs(scale);
@@ -152,10 +155,9 @@ class CaptureOpts {
   private void setFormat(String[] args) {
     String value = parser.getArgValue(args, "-f");
     if (value == null) {return;}
+    
     value = value.toLowerCase();
-    if (value.equals("png") || value.equals("jpg") || (value.equals("avif") && !use_magick)) {
-      format = value;
-    }
+    if (!config.unsupportedFormat(value, use_magick)) {format = value;}
     else {
       stdout.print_verbose("Ignored specified image format " + value + " for being invalid\nDefaulting to PNG");
     }

@@ -64,8 +64,16 @@ public class config {
     String fmt = confio.readSetting(config, "screenshot_format");
     if (fmt == null) {return "png";}
     fmt = fmt.toLowerCase();
-    if (!fmt.equals("png") && !fmt.equals("jpg") && (!fmt.equals("avif") || use_magick)) {return "png";}  
+    if (!unsupportedFormat(fmt, use_magick)) {return "png";}  
     return fmt;
+  }
+  
+  public static boolean unsupportedFormat(String format, boolean use_magick) { //also used in screenshotter.java
+    return
+      !format.equals("png")
+      && !format.equals("jpg")
+      && ((!format.equals("avif") && !format.equals("bmp")) || use_magick)
+    ;
   }
 
   public static byte getQuality(Setting[] config) {
@@ -130,7 +138,7 @@ class confwriter {
         + "\n\n# Set a default delay in milliseconds for taking screenshots"
         + "\n#screenshot_delay=0"
 
-        + "\n\n# Supported formats (FFmpeg): \"png\" \"jpg\" \"avif\""
+        + "\n\n# Supported formats (FFmpeg): \"png\" \"jpg\" \"avif\" \"bmp\""
         + "\n# Supported formats (ImageMagick): \"png\" \"jpg\""
         + "\n#screenshot_format=png"
 

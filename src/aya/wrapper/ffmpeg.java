@@ -24,6 +24,12 @@ public class ffmpeg {
     list.add("-pred"); list.add(q_arg);
     return list;
   }
+  
+  public static ArrayList<String> encodeArgs_bmp() {
+    var list = new ArrayList<String>();
+    list.add("-c:v"); list.add("bmp");
+    return list;
+  }
 
   public static ArrayList<String> encodeArgs_jpg(byte quality) {
     var list = new ArrayList<String>();
