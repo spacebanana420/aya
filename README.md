@@ -26,6 +26,7 @@ Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`.
 * PNG
 * JPG
 * AVIF (FFmpeg only)
+* BMP (FFmpeg only) (as of version 0.5)
 
 # Build from source
 
