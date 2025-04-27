@@ -9,15 +9,13 @@ public class ffmpeg {
     
     var final_list = process.mkList(new String[]{"-i", ":0.0", "-frames:v", "1"});
     base_list.addAll(final_list);
-
     return base_list;
   }
 
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};
-    String q_arg = null;
-    if (quality < 0 || quality > 5) {q_arg = "mixed";}
-    else {q_arg = qualities[quality];}
+    String q_arg = "mixed";
+    if (quality >= 0 && quality <= 5) {q_arg = qualities[quality];}
 
     var list = new ArrayList<String>();
     list.add("-c:v"); list.add("png");
