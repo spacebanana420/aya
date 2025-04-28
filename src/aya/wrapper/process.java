@@ -3,11 +3,11 @@ package aya.wrapper;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
-import aya.stdout;
+import aya.stdio;
 
 public class process {
   public static int run(ArrayList<String> args, boolean silent) {
-    stdout.print_debug("Running command:", args);
+    stdio.print_debug("Running command:", args);
     try {
       var pb = new ProcessBuilder(args);
       pb.inheritIO();
@@ -25,7 +25,7 @@ public class process {
 
   //duplicate code, rewrite later
   public static String runAndGet(String[] args) {
-    stdout.print_debug("Running command:", args);
+    stdio.print_debug("Running command:", args);
     try {
       var p = new ProcessBuilder(args).start();
       var stdout = p.getInputStream();

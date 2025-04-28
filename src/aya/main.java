@@ -6,16 +6,16 @@ import aya.cli.help;
 public class main {
   public static void main(String[] args) {
     if (parser.hasArgument(args, "-h")) {
-      stdout.print(help.getHelp());
+      stdio.print(help.getHelp());
       return;
     }
     else if (parser.hasArgument(args, "-v")) {
-      stdout.print("Aya version " + help.VERSION);
+      stdio.print("Aya version " + help.VERSION);
       return;
     }
     global.verbosity_level = getVerbosityLevel(args);
     if (!systemSupported()) {
-      stdout.print("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
+      stdio.print("Aya does not support this operating system! Aya must run under an operating system that can run an X11-based environment!");
       return;
     }
     int result = screenshotter.takeScreenshot(args);

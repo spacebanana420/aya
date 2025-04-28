@@ -1,8 +1,9 @@
 package aya;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class stdout {
+public class stdio {
   public static void print(String message) {
     if (global.verbosity_level > 0) {System.out.println(message);}
   }
@@ -37,6 +38,13 @@ public class stdout {
 
   public static void print_debug(String title, ArrayList<String> contents) {
     if (global.verbosity_level > 2) {printSeq(title, contents);}
+  }
+  
+  public static String readInput(String message) {
+    if (message != null && message.length() > 0) {
+      System.out.println(message);
+    }
+    return new Scanner(System.in).nextLine();
   }
 
   
