@@ -10,11 +10,11 @@ public class process {
     stdio.print_debug("Running command:", args);
     try {
       var pb = new ProcessBuilder(args);
-      pb.inheritIO();
       if (silent) {
         pb.redirectOutput(Redirect.DISCARD);
         pb.redirectError(Redirect.DISCARD);
       }
+      else {pb.inheritIO();}
       Process p = pb.start();
       p.waitFor();
       return p.exitValue();
