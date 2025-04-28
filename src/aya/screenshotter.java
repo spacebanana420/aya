@@ -63,6 +63,7 @@ class CaptureOpts {
   float scale = 0f;
 
   boolean use_magick = false;
+  boolean override_file = false;
   String directory = "";
   String filename = "";
   int delay = 0;
@@ -77,6 +78,7 @@ class CaptureOpts {
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
+    override_file = config.overrideFile(conf);
     delay = config.getDelay(conf);
     directory = config.getDirectory(conf);
     format = config.getFormat(conf, use_magick);
@@ -90,6 +92,7 @@ class CaptureOpts {
     setFormat(args);
     setQuality(args);
     setDelay(args);
+    setOverrideFile(args);
     
     setDirectory(args);
     filename = generateFilename(args);
@@ -196,6 +199,11 @@ class CaptureOpts {
   private void setRegionSelect(String[] args) {
     if (parser.hasArgument(args, "-region") && !window_select) {region_select = true;}
   }
+  
+  private void setOverrideFile(String[] args) {
+    boolean result = parser.hasArgument(args, "-y");
+    if (result) {override_file = result;}
+  }
 
   private String generateFilename(String[] args) {
     String argname = parser.getFilename(args, format);
@@ -214,5 +222,4 @@ class CaptureOpts {
     }
     return full;    
   }
-
 }

@@ -28,6 +28,13 @@ class confio {
     catch (NumberFormatException e) {return -1;}
   }
   
+  static boolean readSetting_bool(Setting[] conf, String setting) {
+    String value = readSetting(conf, setting);
+    if (value == null) {return false;}
+    value = value.toLowerCase();
+    return value.equals("true") || value.equals("yes");
+  }
+  
   static ArrayList<String> readCommand(Setting[] conf, String setting, String filename) {
     String cmd_str = readSetting(conf, setting);
     if (cmd_str == null) {return null;}

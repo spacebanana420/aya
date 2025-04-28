@@ -82,10 +82,7 @@ public class config {
   }
 
   public static boolean useMagick(Setting[] config) {
-    String use_magick = confio.readSetting(config, "use_magick");
-    if (use_magick == null) {return false;}
-    use_magick = use_magick.toLowerCase();
-    return (use_magick.equals("true") || use_magick.equals("yes")) ? true : false;
+    return confio.readSetting_bool(config, "use_magick");
   }
 
   public static String getFFmpegPath(Setting[] config) {
@@ -104,6 +101,10 @@ public class config {
   
   public static ArrayList<String> getImageViewer(Setting[] config, String filename) {
     return confio.readCommand(config, "image_viewer_command", filename);
+  }
+  
+  public static boolean overrideFile(Setting[] config) {
+    return confio.readSetting_bool(config, "override_file");
   }
 }
 
@@ -151,6 +152,9 @@ class confwriter {
         + "\n# Use the special keyword %F to place the filename"
         + "\n# If unspecified, the filename is added at the end of the command"
         + "\n#image_viewer_command=xdg-open %F"
+        
+        + "\n\n# If another image with the same filename exists, Aya will override it"
+        + "\n#override_file=false"
         
         + "\n\n# Set to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
         + "\n#use_magick=false"
