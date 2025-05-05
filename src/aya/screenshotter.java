@@ -217,8 +217,10 @@ class CaptureOpts {
     return full;    
   }
   
-  private String getDirectory(String[] args, Setting[] conf) {
+  private static String getDirectory(String[] args, Setting[] conf) {
     String config_directory = config.getDirectory(conf);
+    config_directory = addDirSlash(config_directory);
+    
     String value = parser.getArgValue(args, "-d");
     if (value == null || value.length() == 0) {return config_directory;}
     if (value.equals("~")) {return System.getProperty("user.home");}
@@ -233,8 +235,14 @@ class CaptureOpts {
       return config_directory;
     }
     
-    char final_char = value.charAt(value.length()-1);
-    if (final_char != '/' && final_char != '\\') {value += System.getProperty("file.separator");}
+    value = addDirSlash(value);
     return value;
+  }
+  
+  private static String addDirSlash(String dir) {
+    if (dir.length() <= 1) {return dir;}
+    char final_char = dir.charAt(dir.length()-1);
+    if (final_char != '/' && final_char != '\\') {return dir + System.getProperty("file.separator");}
+    return dir;
   }
 }
