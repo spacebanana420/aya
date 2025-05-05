@@ -34,9 +34,9 @@ public class screenshotter {
     int result = process.run(cmd, false);
     switch (result) {
       case 0:
-        stdio.print_verbose("Screenshot saved successfully!");
+        stdio.print("Screenshot saved successfully!");
         break;
-      case -1:  
+      case -1:
         String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
         stdio.print("Aya failed to take a screenshot! Program " + process_name + " not found in your system!");
         break;
@@ -168,7 +168,7 @@ class CaptureOpts {
     value = value.toLowerCase();
     if (!config.unsupportedFormat(value, use_magick)) {format = value;}
     else {
-      stdio.print_verbose("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
+      stdio.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
     }
   }
 
@@ -227,11 +227,11 @@ class CaptureOpts {
     
     File f = new File(value);
     if (!f.isDirectory()) {
-      stdio.print_verbose("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory or config-specified directory");
+      stdio.print("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory or config-specified directory");
       return config_directory;
     }
     if (!f.canWrite()) {
-      stdio.print_verbose("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory or config-specified directory");
+      stdio.print("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory or config-specified directory");
       return config_directory;
     }
     
