@@ -13,6 +13,7 @@ Aya is a command-line screenshotter tool for UNIX-like systems that run on an X1
 Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
 Note 1: ImageMagick support is secondary and is planned to be removed in the future.
+
 Note 2: Wayland is not yet supported but is planned to be in a future release through the use of the grim and slurp programs (while preserving FFmpeg feature-parity).
 
 # How to use
