@@ -26,7 +26,6 @@ public class help {
       + "\n  * -f [format] - sets the image file format"
       + "\n    (supported formats: \"png\", \"jpg\", \"avif\" (FFmpeg only), \"bmp\" (FFmpeg only))"
       + "\n  * -q [number] - sets the quality level (0-5 for PNG (or 1-100 with ImageMagick), 1-100 for JPG, 0-63 for AVIF)"
-      + "\n    (0-5 for PNG with FFmpeg and 1-100 for JPG or PNG with ImageMagick)"
       + "\n  * -avif-speed [number] - sets the AVIF encoding speed/efficiency tradeoff (0 to 8, higher is faster) (default 8)"
       + "\n"
       + "\n  * -magick - uses ImageMagick instead of FFmpeg for taking screenshots"
