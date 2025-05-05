@@ -80,6 +80,11 @@ public class config {
     byte value = confio.readSetting_byte(config, "screenshot_quality");
     return (value >= 0 && value < 100) ? value : -1;
   }
+  
+  public static byte getAvifSpeed(Setting[] config) {
+    byte value = confio.readSetting_byte(config, "avif_speed");
+    return (value >= 0 && value <= 8) ? value : 8;
+  }
 
   public static boolean useMagick(Setting[] config) {
     return confio.readSetting_bool(config, "use_magick");
@@ -147,6 +152,10 @@ class confwriter {
         + "\n# JPG: quality ranges from 1 to 100. Higher is better"
         + "\n# AVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
         + "\n#screenshot_quality=5"
+        
+        + "\n\n# AVIF speed defines the tradeoff between compression speed and compresion efficiency"
+        + "\n# Value ranges from 0 to 8, default value is 8. Higher values represent faster encoding at the cost of lower compression efficiency"
+        + "\n#avif_speed=8"
         
         + "\n\n# The command to use for opening screenshot images"
         + "\n# Use the special keyword %F to place the filename"

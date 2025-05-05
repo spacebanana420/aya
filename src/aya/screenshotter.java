@@ -68,6 +68,7 @@ class CaptureOpts {
   String format = "png";
   byte quality = -1;
   float scale = 0f;
+  byte avif_speed = 8;
 
   boolean use_magick = false;
   boolean override_file = false;
@@ -107,6 +108,7 @@ class CaptureOpts {
     image_viewer_cmd = config.getImageViewer(conf, filename);
     
     setRegionSelect(args);
+    setAvifSpeed(args, conf);
   }
 
   ArrayList<String> mkCommand() {
@@ -128,7 +130,7 @@ class CaptureOpts {
         args.addAll(ffmpeg.encodeArgs_png(quality));
       }
       else if (format.equals("avif")) {
-        args.addAll(ffmpeg.encodeArgs_avif(quality));
+        args.addAll(ffmpeg.encodeArgs_avif(quality, avif_speed));
       }
       else if (format.equals("bmp")) {
         args.addAll(ffmpeg.encodeArgs_bmp());
@@ -210,6 +212,13 @@ class CaptureOpts {
   private void setOverrideFile(String[] args) {
     boolean result = parser.hasArgument(args, "-y");
     if (result) {override_file = result;}
+  }
+  
+  private void setAvifSpeed(String[] args, Setting[] conf) {
+    byte conf_quality = config.getAvifSpeed(conf);
+    byte cli_quality = parser.getArgByte(args, "-avif-speed");
+    if (cli_quality >= 0 && cli_quality <= 8) {avif_speed = cli_quality;}
+    else {avif_speed = conf_quality;}
   }
 
   private String generateFilename(String[] args) {

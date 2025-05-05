@@ -38,8 +38,8 @@ public class ffmpeg {
     return list;
   }
 
-  public static ArrayList<String> encodeArgs_avif(byte quality) {
-    var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", "8", "-row-mt", "true"});
+  public static ArrayList<String> encodeArgs_avif(byte quality, byte speed) {
+    var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true"});
     byte quality_filtered = (quality >= 0 && quality <= 63) ? quality : 0;
     list.add("-crf"); list.add(""+quality_filtered);
     return list;
