@@ -72,7 +72,6 @@ class CaptureOpts {
 
   boolean use_magick = false;
   boolean override_file = false;
-  String directory = "";
   String filename = "";
   int delay = 0;
   boolean open_image = false;
@@ -88,7 +87,6 @@ class CaptureOpts {
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
     override_file = config.overrideFile(conf);
     delay = config.getDelay(conf);
-    directory = config.getDirectory(conf);
     format = config.getFormat(conf, use_magick);
     quality = config.getQuality(conf);
 
@@ -102,8 +100,7 @@ class CaptureOpts {
     setDelay(args);
     setOverrideFile(args);
     
-    setDirectory(args);
-    filename = generateFilename(args);
+    filename = generateFilename(args, conf);
     open_image = parser.hasArgument(args, "-open");
     image_viewer_cmd = config.getImageViewer(conf, filename);
     
@@ -185,26 +182,6 @@ class CaptureOpts {
     if (value > 0) {delay = value;}
   }
 
-  private void setDirectory(String[] args) {
-    String value = parser.getArgValue(args, "-d");
-    if (value == null || value.length() == 0) {return;}
-    if (value.equals("~")) {directory = System.getProperty("user.home"); return;}
-    File f = new File(value);
-    if (!f.isDirectory()) {
-      stdio.print_verbose("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory");
-      return;
-    }
-    if (!f.canWrite()) {
-      stdio.print_verbose("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory");
-      return;
-    }
-    
-    char final_char = value.charAt(value.length()-1);
-    if (final_char != '/' && final_char != '\\') {value += System.getProperty("file.separator");}
-    directory = value;
-  }
-
-
   private void setRegionSelect(String[] args) {
     if (parser.hasArgument(args, "-region") && !window_select) {region_select = true;}
   }
@@ -221,11 +198,12 @@ class CaptureOpts {
     else {avif_speed = conf_quality;}
   }
 
-  private String generateFilename(String[] args) {
+  private String generateFilename(String[] args, Setting[] conf) {
     String argname = parser.getFilename(args, format);
     if (argname != null) {return argname;}
 
     String currentTime = LocalDate.now().toString();
+    String directory = getDirectory(args, conf);
     String name =
       (misc.isWorkingDirectory(directory)) ? "AyaScreenshot-"+currentTime
       : directory + "AyaScreenshot-"+currentTime;
@@ -237,5 +215,26 @@ class CaptureOpts {
       full = name + "-" + num + "." + format;
     }
     return full;    
+  }
+  
+  private String getDirectory(String[] args, Setting[] conf) {
+    String config_directory = config.getDirectory(conf);
+    String value = parser.getArgValue(args, "-d");
+    if (value == null || value.length() == 0) {return config_directory;}
+    if (value.equals("~")) {return System.getProperty("user.home");}
+    
+    File f = new File(value);
+    if (!f.isDirectory()) {
+      stdio.print_verbose("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory or config-specified directory");
+      return config_directory;
+    }
+    if (!f.canWrite()) {
+      stdio.print_verbose("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory or config-specified directory");
+      return config_directory;
+    }
+    
+    char final_char = value.charAt(value.length()-1);
+    if (final_char != '/' && final_char != '\\') {value += System.getProperty("file.separator");}
+    return value;
   }
 }
