@@ -15,8 +15,7 @@ import java.time.LocalDate;
 
 public class screenshotter {
   public static int takeScreenshot(String[] args) {
-    CaptureOpts opts = new CaptureOpts();
-    opts.setOpts(args);
+    CaptureOpts opts = new CaptureOpts(args);
     
     if (!opts.override_file && new File(opts.filename).isFile()) {
       String message = "The file in path " + opts.filename + " already exists!\nOverride file? (y/N)";
@@ -77,10 +76,13 @@ class CaptureOpts {
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
   
+  String ffmpeg_path = "ffmpeg";
+  String magick_path = "magick";
+  
   private boolean window_select = false;
   private boolean region_select = false;
   
-  void setOpts(String[] args) {
+  CaptureOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
     Setting[] conf = config.openConfig();
     
@@ -90,8 +92,8 @@ class CaptureOpts {
     format = config.getFormat(conf, use_magick);
     quality = config.getQuality(conf);
 
-    global.ffmpeg_path = config.getFFmpegPath(conf);
-    global.magick_path = config.getMagickPath(conf);
+    ffmpeg_path = config.getFFmpegPath(conf);
+    magick_path = config.getMagickPath(conf);
        
     setCrop(args);
     setScale(args);
@@ -111,7 +113,7 @@ class CaptureOpts {
   ArrayList<String> mkCommand() {
     var args = new ArrayList<String>();
     if (use_magick) {
-      args.add(global.magick_path);
+      args.add(magick_path);
       args.addAll(magick.getCaptureArgs());
       if (format.equals("png")) {
         args.addAll(magick.encodeArgs_png(quality));
@@ -121,7 +123,7 @@ class CaptureOpts {
       args.addAll(magick.scaleArgs(scale));
     }
     else {
-      args.add(global.ffmpeg_path);
+      args.add(ffmpeg_path);
       args.addAll(ffmpeg.getCaptureArgs(region_select));
       if (format.equals("png")) {
         args.addAll(ffmpeg.encodeArgs_png(quality));
