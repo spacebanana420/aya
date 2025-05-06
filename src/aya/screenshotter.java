@@ -37,7 +37,7 @@ public class screenshotter {
         break;
       case -1:
         String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
-        stdio.print("Aya failed to take a screenshot! Program " + process_name + " not found in your system!");
+        stdio.print("Aya failed to take a screenshot! " + process_name + " not found in your system!");
         break;
       case -2:
         stdio.print("Aya's process was interrupted while taking a screenshot!");
@@ -76,8 +76,8 @@ class CaptureOpts {
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
   
-  String ffmpeg_path = "ffmpeg";
-  String magick_path = "magick";
+  private String ffmpeg_path = "ffmpeg";
+  private String magick_path = "magick";
   
   private boolean window_select = false;
   private boolean region_select = false;
