@@ -87,27 +87,21 @@ class CaptureOpts {
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
-    override_file = config.overrideFile(conf);
-    delay = config.getDelay(conf);
-    format = config.getFormat(conf, use_magick);
-    quality = config.getQuality(conf);
-
     ffmpeg_path = config.getFFmpegPath(conf);
     magick_path = config.getMagickPath(conf);
        
     setCrop(args);
     setScale(args);
-    setFormat(args);
-    setQuality(args);
-    setDelay(args);
-    setOverrideFile(args);
+    setFormat(args, conf, use_magick);
+    setQuality(args, conf);
+    setDelay(args, conf);
+    setOverrideFile(args, conf);
+    setAvifSpeed(args, conf);
+    setRegionSelect(args);
     
     filename = generateFilename(args, conf);
     open_image = parser.hasArgument(args, "-open");
     image_viewer_cmd = config.getImageViewer(conf, filename);
-    
-    setRegionSelect(args);
-    setAvifSpeed(args, conf);
   }
 
   ArrayList<String> mkCommand() {
@@ -163,23 +157,28 @@ class CaptureOpts {
     if (value > 0.0) {scale = value;}
   }
   
-  private void setFormat(String[] args) {
+  private void setFormat(String[] args, Setting[] conf, boolean image_magick) {
+    format = config.getFormat(conf, image_magick);
+    
     String value = parser.getArgValue(args, "-f");
     if (value == null) {return;}
     
     value = value.toLowerCase();
-    if (!config.unsupportedFormat(value, use_magick)) {format = value;}
+    if (!config.unsupportedFormat(value, image_magick)) {format = value;}
     else {
       stdio.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
     }
   }
 
-  private void setQuality(String[] args) {
+  private void setQuality(String[] args, Setting[] conf) {
+    quality = config.getQuality(conf);
+    
     byte value = parser.getArgByte(args, "-q");
     if (value >= 0) {quality = value;}
   }
 
-  private void setDelay(String[] args) {
+  private void setDelay(String[] args, Setting[] conf) {
+    delay = config.getDelay(conf);
     int value = parser.getArgInt(args, "-t");
     if (value > 0) {delay = value;}
   }
@@ -188,7 +187,8 @@ class CaptureOpts {
     if (parser.hasArgument(args, "-region") && !window_select) {region_select = true;}
   }
   
-  private void setOverrideFile(String[] args) {
+  private void setOverrideFile(String[] args, Setting[] conf) {
+    override_file = config.overrideFile(conf);
     boolean result = parser.hasArgument(args, "-y");
     if (result) {override_file = result;}
   }
