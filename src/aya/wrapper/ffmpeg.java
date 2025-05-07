@@ -1,5 +1,6 @@
 package aya.wrapper;
 
+import aya.stdio;
 import java.util.ArrayList;
 
 public class ffmpeg {
@@ -15,7 +16,10 @@ public class ffmpeg {
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};
     String q_arg = "mixed";
-    if (quality >= 0 && quality <= 5) {q_arg = qualities[quality];}
+    if (quality >= 0 && quality <= 5) {
+      q_arg = qualities[quality];
+    }
+    else {stdio.warnInvalidQuality("PNG", 0, 5, 5);}
 
     var list = new ArrayList<String>();
     list.add("-c:v"); list.add("png");
@@ -31,7 +35,11 @@ public class ffmpeg {
 
   public static ArrayList<String> encodeArgs_jpg(byte quality) {
     var list = new ArrayList<String>();
-    byte quality_filtered = (quality >= 1 && quality <= 100) ? (byte)(101 - quality) : 1; //101-quality reverses the quality value so that 100 is highest quality and 1 is lowest
+    byte quality_filtered = 1;
+    //101-quality reverses the quality value so that 100 is highest quality and 1 is lowest
+    if (quality >= 1 && quality <= 100) {quality_filtered = (byte)(101 - quality);}
+    else {stdio.warnInvalidQuality("JPG", 1, 100, 1);}
+    
     list.add("-qmin"); list.add("1");
     list.add("-qmax"); list.add("100");
     list.add("-q:v"); list.add(""+quality_filtered);
@@ -40,7 +48,10 @@ public class ffmpeg {
 
   public static ArrayList<String> encodeArgs_avif(byte quality, byte speed) {
     var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true"});
-    byte quality_filtered = (quality >= 0 && quality <= 63) ? quality : 0;
+    byte quality_filtered = 0;
+    if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
+    else {stdio.warnInvalidQuality("AVIF", 0, 63, 0);}
+    
     list.add("-crf"); list.add(""+quality_filtered);
     return list;
   }

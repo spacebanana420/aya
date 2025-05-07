@@ -48,6 +48,14 @@ public class stdio {
     }
     return new Scanner(System.in).nextLine();
   }
+  
+  public static void warnInvalidQuality(String format, int q_min, int q_max, int q_default) {
+    print(
+      "Invalid quality level chosen for format " + format + "!"
+      + "\nSupported quality range: " + q_min + " to " + q_max
+      + "\nDefaulting to " + q_default
+    );
+  }
 
   
   private static void printSeq(String title, String[] contents) {
