@@ -24,8 +24,8 @@ public class screenshotter {
     }
     
     if (opts.delay > 0) {
-       stdio.print_verbose("Taking a screenshot in " + opts.delay + " milliseconds");
-       misc.sleep(opts.delay);
+       stdio.print_verbose("Taking a screenshot in " + opts.delay + " seconds");
+       misc.sleep(opts.delay * 1000);
     }
     
     stdio.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");

@@ -141,7 +141,7 @@ class confwriter {
         + "\n# Set an absolute path as the directory to where the screenshots are saved"
         + "\n#screenshot_directory=."
         
-        + "\n\n# Set a default delay in milliseconds for taking screenshots"
+        + "\n\n# Set a default delay in seconds for taking screenshots"
         + "\n#screenshot_delay=0"
 
         + "\n\n# Supported formats (FFmpeg): \"png\" \"jpg\" \"avif\" \"bmp\""
