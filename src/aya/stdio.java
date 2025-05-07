@@ -4,42 +4,42 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class stdio {
-  public static byte verbosity_level = 1;
+  public static byte VERBOSITY_LEVEL = 1;
   
   public static void print(String message) {
-    if (verbosity_level > 0) {System.out.println(message);}
+    if (VERBOSITY_LEVEL > 0) {System.out.println(message);}
   }
 
   public static void print(String title, String[] contents) {
-    if (verbosity_level > 0) {printSeq(title, contents);}
+    if (VERBOSITY_LEVEL > 0) {printSeq(title, contents);}
   }
 
   public static void print(String title, ArrayList<String> contents) {
-    if (verbosity_level > 0) {printSeq(title, contents);}
+    if (VERBOSITY_LEVEL > 0) {printSeq(title, contents);}
   }
 
   public static void print_verbose(String message) {
-    if (verbosity_level > 1) {System.out.println(message);}
+    if (VERBOSITY_LEVEL > 1) {System.out.println(message);}
   }
 
   public static void print_verbose(String title, String[] contents) {
-    if (verbosity_level > 1) {printSeq(title, contents);}
+    if (VERBOSITY_LEVEL > 1) {printSeq(title, contents);}
   }
 
   public static void print_verbose(String title, ArrayList<String> contents) {
-    if (verbosity_level > 1) {printSeq(title, contents);}
+    if (VERBOSITY_LEVEL > 1) {printSeq(title, contents);}
   }
   
   public static void print_debug(String message) {
-    if (verbosity_level > 2) {System.out.println(message);}
+    if (VERBOSITY_LEVEL > 2) {System.out.println(message);}
   }
 
   public static void print_debug(String title, String[] contents) {
-    if (verbosity_level > 2) {printSeq(title, contents);}
+    if (VERBOSITY_LEVEL > 2) {printSeq(title, contents);}
   }
 
   public static void print_debug(String title, ArrayList<String> contents) {
-    if (verbosity_level > 2) {printSeq(title, contents);}
+    if (VERBOSITY_LEVEL > 2) {printSeq(title, contents);}
   }
   
   public static String readInput(String message) {

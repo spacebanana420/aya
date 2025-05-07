@@ -5,7 +5,7 @@ import aya.cli.help;
 
 public class main {
   public static void main(String[] args) {
-    stdio.verbosity_level = getVerbosityLevel(args);
+    stdio.VERBOSITY_LEVEL = getVerbosityLevel(args);
     
     if (parser.hasArgument(args, "-h")) {
       stdio.print(help.getHelp());
