@@ -158,8 +158,6 @@ class CaptureOpts {
   }
   
   private void setFormat(String[] args, Setting[] conf, boolean image_magick) {
-    format = config.getFormat(conf, image_magick);
-    
     String value = parser.getArgValue(args, "-f");
     if (value == null) {return;}
     
@@ -167,20 +165,20 @@ class CaptureOpts {
     if (!config.unsupportedFormat(value, image_magick)) {format = value;}
     else {
       stdio.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
+      format = config.getFormat(conf, image_magick);
     }
   }
 
   private void setQuality(String[] args, Setting[] conf) {
-    quality = config.getQuality(conf);
-    
     byte value = parser.getArgByte(args, "-q");
     if (value >= 0) {quality = value;}
+    else {quality = config.getQuality(conf);}
   }
 
   private void setDelay(String[] args, Setting[] conf) {
-    delay = config.getDelay(conf);
     int value = parser.getArgInt(args, "-t");
     if (value > 0) {delay = value;}
+    else {delay = config.getDelay(conf);}
   }
 
   private void setRegionSelect(String[] args) {
@@ -188,16 +186,16 @@ class CaptureOpts {
   }
   
   private void setOverrideFile(String[] args, Setting[] conf) {
-    override_file = config.overrideFile(conf);
     boolean result = parser.hasArgument(args, "-y");
     if (result) {override_file = result;}
+    else {override_file = config.overrideFile(conf);}
   }
   
   private void setAvifSpeed(String[] args, Setting[] conf) {
-    byte conf_quality = config.getAvifSpeed(conf);
-    byte cli_quality = parser.getArgByte(args, "-avif-speed");
-    if (cli_quality >= 0 && cli_quality <= 8) {avif_speed = cli_quality;}
-    else {avif_speed = conf_quality;}
+    byte conf_speed = config.getAvifSpeed(conf);
+    byte cli_speed = parser.getArgByte(args, "-avif-speed");
+    if (cli_speed >= 0 && cli_speed <= 8) {avif_speed = cli_speed;}
+    else {avif_speed = conf_speed;}
   }
 
   private String generateFilename(String[] args, Setting[] conf) {
