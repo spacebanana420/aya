@@ -96,12 +96,12 @@ class CaptureOpts {
     setQuality(args, conf);
     setDelay(args, conf);
     setOverrideFile(args, conf);
-    setAvifSpeed(args, conf);
     setRegionSelect(args);
     
     filename = generateFilename(args, conf);
     open_image = parser.hasArgument(args, "-open");
     if (open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
+    if (format.equals("avif")) {setAvifSpeed(args, conf);}
   }
 
   ArrayList<String> mkCommand() {
