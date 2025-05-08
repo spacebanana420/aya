@@ -76,8 +76,8 @@ class CaptureOpts {
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
   
-  private String ffmpeg_path = "ffmpeg";
-  private String magick_path = "magick";
+  private String ffmpeg_path = null;
+  private String magick_path = null;
   
   private boolean window_select = false;
   private boolean region_select = false;
@@ -87,9 +87,9 @@ class CaptureOpts {
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
-    ffmpeg_path = config.getFFmpegPath(conf);
-    magick_path = config.getMagickPath(conf);
-       
+    if (!use_magick) {ffmpeg_path = config.getFFmpegPath(conf);}
+    else {magick_path = config.getMagickPath(conf);}
+    
     setCrop(args);
     setScale(args);
     setFormat(args, conf, use_magick);
