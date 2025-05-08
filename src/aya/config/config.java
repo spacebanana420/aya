@@ -111,6 +111,10 @@ public class config {
   public static boolean overrideFile(Setting[] config) {
     return confio.readSetting_bool(config, "override_file");
   }
+
+  public static boolean captureCursor(Setting[] config) {
+    return confio.readSetting_bool(config, "capture_cursor");
+  }
 }
 
 class confwriter {
@@ -152,6 +156,9 @@ class confwriter {
         + "\n# JPG: quality ranges from 1 to 100. Higher is better"
         + "\n# AVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
         + "\n#screenshot_quality=5"
+        
+        + "\n\n# Includes the cursor in the screenshot (FFmpeg only)"
+        + "\n#capture_cursor=false"
         
         + "\n\n# AVIF speed defines the tradeoff between compression speed and compresion efficiency"
         + "\n# Value ranges from 0 to 8, default value is 8. Higher values represent faster encoding at the cost of lower compression efficiency"

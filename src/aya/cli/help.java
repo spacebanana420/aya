@@ -13,6 +13,7 @@ public class help {
       + "\n  * -t [delay]             sets the delay for screenshotting (in seconds)"
       + "\n  * -d [directory]         sets the directory to save the screenshot at"
       + "\n  * -y                     overwrites the image file if it already exists"
+      + "\n  * -c                     includes the cursor in the screenshot (FFmpeg only)"
       + "\n"
       + "\n  * -width [width]         sets the screenshot's width for cropping"
       + "\n  * -height [height]       sets the screenshot's height for cropping"

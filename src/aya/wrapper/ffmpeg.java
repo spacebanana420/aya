@@ -4,8 +4,9 @@ import aya.stdio;
 import java.util.ArrayList;
 
 public class ffmpeg {
-  public static ArrayList<String> getCaptureArgs(boolean select_region) {
-    var base_list = process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", "0"});
+  public static ArrayList<String> getCaptureArgs(boolean select_region, boolean capture_cursor) {
+    String cursor_value = (capture_cursor) ? "1" : "0";
+    var base_list = process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", cursor_value});
     if (select_region) {base_list.add("-select_region"); base_list.add("1");}
     
     var final_list = process.mkList(new String[]{"-i", ":0.0", "-frames:v", "1"});

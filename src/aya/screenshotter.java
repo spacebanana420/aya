@@ -81,13 +81,17 @@ class CaptureOpts {
   
   private boolean window_select = false;
   private boolean region_select = false;
+  private boolean capture_cursor = false;
   
   CaptureOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
-    if (!use_magick) {ffmpeg_path = config.getFFmpegPath(conf);}
+    if (!use_magick) {
+      ffmpeg_path = config.getFFmpegPath(conf);
+      setCursorCapture(args, conf); //ffmpeg only
+    }
     else {magick_path = config.getMagickPath(conf);}
     
     setCrop(args);
@@ -118,7 +122,7 @@ class CaptureOpts {
     }
     else {
       args.add(ffmpeg_path);
-      args.addAll(ffmpeg.getCaptureArgs(region_select));
+      args.addAll(ffmpeg.getCaptureArgs(region_select, capture_cursor));
       switch(format) {
         case "png":
           args.addAll(ffmpeg.encodeArgs_png(quality));
@@ -199,6 +203,10 @@ class CaptureOpts {
     byte cli_speed = parser.getArgByte(args, "-avif-speed");
     if (cli_speed >= 0 && cli_speed <= 8) {avif_speed = cli_speed;}
     else {avif_speed = conf_speed;}
+  }
+  
+  private void setCursorCapture(String[] args, Setting[] conf) {
+    capture_cursor = parser.hasArgument(args, "-c") || config.captureCursor(conf);
   }
 
   private String generateFilename(String[] args, Setting[] conf) {
