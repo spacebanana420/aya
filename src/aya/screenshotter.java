@@ -101,7 +101,7 @@ class CaptureOpts {
     
     filename = generateFilename(args, conf);
     open_image = parser.hasArgument(args, "-open");
-    image_viewer_cmd = config.getImageViewer(conf, filename);
+    if (open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
   }
 
   ArrayList<String> mkCommand() {
@@ -119,16 +119,19 @@ class CaptureOpts {
     else {
       args.add(ffmpeg_path);
       args.addAll(ffmpeg.getCaptureArgs(region_select));
-      if (format.equals("png")) {
-        args.addAll(ffmpeg.encodeArgs_png(quality));
+      switch(format) {
+        case "png":
+          args.addAll(ffmpeg.encodeArgs_png(quality));
+          break;
+        case "avif":
+          args.addAll(ffmpeg.encodeArgs_avif(quality, avif_speed));
+          break;
+        case "bmp":
+          args.addAll(ffmpeg.encodeArgs_bmp());
+          break;
+        default:
+          args.addAll(ffmpeg.encodeArgs_jpg(quality));
       }
-      else if (format.equals("avif")) {
-        args.addAll(ffmpeg.encodeArgs_avif(quality, avif_speed));
-      }
-      else if (format.equals("bmp")) {
-        args.addAll(ffmpeg.encodeArgs_bmp());
-      }
-      else {args.addAll(ffmpeg.encodeArgs_jpg(quality));}
       String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
       String arg_scale = ffmpeg.scaleArgs(scale);
       args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
