@@ -5,7 +5,7 @@ public class wayland {
   public static void main(String[] args) {
     String[] slurp_cmd = new String[]{"slurp"};
     String[] grim_cmd = new String[]{"grim", "-l", "0", "-"};
-    String[] ffmpeg_cmd = new String[]{"ffmpeg", "-i", "-", "-pred", "-mixed", "test-image.png"};
+    String[] ffmpeg_cmd = new String[]{"ffmpeg", "-y", "-i", "-", "-pred", "-mixed", "test-image.png"};
     
     try {
       print("Running Slurp");
