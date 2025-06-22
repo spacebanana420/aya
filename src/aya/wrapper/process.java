@@ -23,7 +23,6 @@ public class process {
     catch (InterruptedException e) {return -2;}
   }
 
-  //duplicate code, rewrite later
   public static String runAndGet(String[] args) {
     stdio.print_debug("Running command:", args);
     try {
@@ -48,6 +47,7 @@ public class process {
     catch (IOException | InterruptedException e) {return null;}
   }
   
+  //Used in Wayland capture for passing an image into FFmpeg's standard input
   public static int run_stdin(ArrayList<String> args, byte[] screenshot_image) {
     try {
       Process p = new ProcessBuilder(args).start();
