@@ -31,13 +31,13 @@ public class screenshotter {
     
     stdio.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
     int result;
-    if (opts.wayland_mode) {
+    if (opts.wayland_mode) { //Wayland screen capture
       byte[] screenshot = wayland.captureScreen(opts.region_select, opts.capture_cursor);
       if (screenshot == null) {return 1;}
       ArrayList<String> cmd = opts.mkCommand_wayland();
       result = process.run_stdin(cmd, screenshot);
     }
-    else {
+    else { //x11 screen capture
       ArrayList<String> cmd = opts.mkCommand_x11();
       result = process.run(cmd, false);
     }
@@ -120,6 +120,7 @@ class CaptureOpts {
     if (format.equals("avif")) {setAvifSpeed(args, conf);}
   }
 
+  //For x11, builds the FFmpeg or Imagemagick command that takes the screenshot and encodes it
   ArrayList<String> mkCommand_x11() {
     var args = new ArrayList<String>();
     if (use_magick) {
@@ -145,6 +146,7 @@ class CaptureOpts {
     return args;
   }
   
+  //For Wayland, FFmpeg only processes the screenshot taken by Grim for feature parity with x11 mode
   ArrayList<String> mkCommand_wayland() {
     var args = new ArrayList<String>();
     args.add(ffmpeg_path);

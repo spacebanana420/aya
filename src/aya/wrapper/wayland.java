@@ -18,10 +18,12 @@ public class wayland {
     
     stdio.print_debug("Running Grim", cmd_grim);
     byte[] image = process.run_stdout(new ProcessBuilder(cmd_grim));
+    
     if (image == null) {stdio.print("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
     return image;
   }
   
+  //Capture a region of the screen
   private static String runSlurp() {
     stdio.print_debug("Running Slurp");
     var cmd = new ProcessBuilder(new String[]{"slurp"}).redirectInput(ProcessBuilder.Redirect.INHERIT);

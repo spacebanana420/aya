@@ -1,7 +1,7 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.7";
+  public static final String VERSION = "0.8";
   
   public static String getHelp() {
     return
@@ -28,6 +28,7 @@ public class help {
       + "\n  * -q [number]            sets the quality level (0-5 for PNG (or 1-100 with ImageMagick), 1-100 for JPG, 0-63 for AVIF)"
       + "\n  * -avif-speed [number]   sets the AVIF encoding speed/efficiency tradeoff (0 to 8, higher is faster) (default 8)"
       + "\n"
+      + "\n  * -wayland               enables experimental Wayland mode"
       + "\n  * -magick                uses ImageMagick instead of FFmpeg for taking screenshots"
       + "\n  * -quiet                 disables all output messages"
       + "\n  * -verbose               displays more status messages"
