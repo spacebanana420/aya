@@ -41,7 +41,6 @@ public class process {
       Process p = cmd.start();
       byte[] stdout = p.getInputStream().readAllBytes();
       p.waitFor();
-      if (p.exitValue() != 0) {return null;}
       return stdout;
     }
     catch (IOException | InterruptedException e) {return null;}
@@ -49,11 +48,13 @@ public class process {
   
   //Used in Wayland capture for passing an image into FFmpeg's standard input
   public static int run_stdin(ArrayList<String> args, byte[] screenshot_image) {
+    stdio.print_debug("Running command:", args);
     try {
       Process p = new ProcessBuilder(args).start();
-      var stdout = p.getOutputStream();
-      stdout.write(screenshot_image);
-      stdout.flush(); //is this necessary?
+      var stdin = p.getOutputStream();
+      stdin.write(screenshot_image);
+      stdin.flush(); //is this necessary?
+      stdin.close();
       p.waitFor();
       return p.exitValue();
     }

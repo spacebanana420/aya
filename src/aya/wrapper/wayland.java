@@ -1,6 +1,5 @@
 package aya.wrapper;
 
-
 import aya.stdio;
 import java.util.ArrayList;
 
@@ -14,12 +13,14 @@ public class wayland {
       else {stdio.print_error("Failed to grab selection! Make sure you have Slurp installed");}
     }
     if (capture_cursor) {cmd_grim.add("-c");}
+    cmd_grim.add("-l"); cmd_grim.add("0");
     cmd_grim.add("-");
     
     stdio.print_debug("Running Grim", cmd_grim);
     byte[] image = process.run_stdout(new ProcessBuilder(cmd_grim));
     
     if (image == null) {stdio.print_error("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
+    stdio.print_debug("Grim-captured screenshot size: " + image.length + " bytes");
     return image;
   }
   
@@ -29,6 +30,6 @@ public class wayland {
     var cmd = new ProcessBuilder(new String[]{"slurp"}).redirectInput(ProcessBuilder.Redirect.INHERIT);
     byte[] data = process.run_stdout(cmd);
     if (data == null) {return null;}
-    return new String(data);
+    return new String(data).trim();
   }
 }
