@@ -42,6 +42,10 @@ public class stdio {
     if (VERBOSITY_LEVEL > 2) {printSeq(title, contents);}
   }
   
+  public static void print_error(String message) {
+    if (VERBOSITY_LEVEL > 0) {System.err.println(message);}
+  }
+  
   public static String readInput(String message) {
     if (message != null && message.length() > 0) {
       System.out.println(message);

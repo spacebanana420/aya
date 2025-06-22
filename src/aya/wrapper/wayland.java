@@ -11,7 +11,7 @@ public class wayland {
     if (make_selection) {
       String coordinates = runSlurp();
       if (coordinates != null) {cmd_grim.add("-g"); cmd_grim.add(coordinates);}
-      else {stdio.print("Failed to grab selection! Make sure you have Slurp installed");}
+      else {stdio.print_error("Failed to grab selection! Make sure you have Slurp installed");}
     }
     if (capture_cursor) {cmd_grim.add("-c");}
     cmd_grim.add("-");
@@ -19,7 +19,7 @@ public class wayland {
     stdio.print_debug("Running Grim", cmd_grim);
     byte[] image = process.run_stdout(new ProcessBuilder(cmd_grim));
     
-    if (image == null) {stdio.print("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
+    if (image == null) {stdio.print_error("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
     return image;
   }
   

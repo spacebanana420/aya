@@ -16,7 +16,7 @@ public class main {
       return;
     }
     if (!systemSupported()) {
-      stdio.print("Aya does not support this operating system! Aya must run on a UNIX-like system!");
+      stdio.print_error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
     int result = screenshotter.takeScreenshot(args);

@@ -15,7 +15,7 @@ public class xwininfo {
     String[] cmd = new String[]{"xwininfo"};
     String result = process.runAndGet(cmd);
     if (result == null) {
-      stdio.print("Error retrieving window coordinates! Make sure you have \"xwininfo\" installed!");
+      stdio.print_error("Error retrieving window coordinates! Make sure you have \"xwininfo\" installed!");
       return null;
     }
 

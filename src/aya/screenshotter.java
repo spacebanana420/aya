@@ -47,24 +47,24 @@ public class screenshotter {
         break;
       case -1:
         String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
-        stdio.print("Aya failed to take a screenshot! " + process_name + " not found in your system!");
+        stdio.print_error("Aya failed to take a screenshot! " + process_name + " not found in your system!");
         break;
       case -2:
-        stdio.print("Aya's process was interrupted while taking a screenshot!");
+        stdio.print_error("Aya's process was interrupted while taking a screenshot!");
         break;
       default:
-        stdio.print("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
+        stdio.print_error("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
     }
     if (result != 0) {return 1;}
     
     if (opts.open_image) {
       if (opts.image_viewer_cmd == null) {
-        stdio.print("Error opening screenshot, image viewer command is missing!");
+        stdio.print_error("Error opening screenshot, image viewer command is missing!");
         return 2;
       }
       result = process.run(opts.image_viewer_cmd, true);
       if (result != 0) {
-        stdio.print("Error opening screenshot, command is invalid or program is not present in system!");
+        stdio.print_error("Error opening screenshot, command is invalid or program is not present in system!");
         return 3;
       }
     }
