@@ -4,6 +4,7 @@ import java.util.ArrayList;
 //Tests for Wayland support for aya, using grim and slurp for screen capture, and ffmpeg for feature-parity with x11 aya
 public class wayland {
   public static void main(String[] args) {//maybe the only way is by using startPipeline
+    grim_test();
     String[] slurp_cmd = new String[]{"slurp"};
     String[] ffmpeg_cmd = new String[]{"ffmpeg", "-y", "-i", "-", "-pred", "-mixed", "test-image.png"};
     
@@ -60,19 +61,20 @@ public class wayland {
     catch(IOException | InterruptedException e) {e.printStackTrace();}
   }
   
-  //static void grim_test() {
-    //try {
-      //print("Running Grim");
-      //String[] grim_cmd = new String[]{"grim", "-l", "0", "-"};
-      //Process g = new ProcessBuilder(grim_cmd)
-        ////.redirectInput(ProcessBuilder.Redirect.INHERIT)
-        ////.redirectOutput(ProcessBuilder.Redirect.INHERIT)
-        //.start();
+  static void grim_test() {
+    try {
+      print("Running Grim (standalone)");
+      String[] grim_cmd = new String[]{"grim", "-l", "0", "-"};
+      Process g = new ProcessBuilder(grim_cmd)
+        //.redirectInput(ProcessBuilder.Redirect.INHERIT)
+        //.redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        .start();
       
-      //var stream1 = g.getInputStream();
-      //var stream2 = g.getErrorStream();
-      //g.waitFor();
-      ////print(test);
-    //} catch(IOException | InterruptedException e) {e.printStackTrace();}
-  //}
+      var stream1 = g.getInputStream();
+      byte[] data = stream1.readAllBytes();
+      var stream2 = g.getErrorStream();
+      g.waitFor();
+      print("Image size is " + data.length + " bytes");
+    } catch(IOException | InterruptedException e) {e.printStackTrace();}
+  }
 }

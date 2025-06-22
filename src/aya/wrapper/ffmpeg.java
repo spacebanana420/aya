@@ -13,6 +13,10 @@ public class ffmpeg {
     base_list.addAll(final_list);
     return base_list;
   }
+  
+  public static ArrayList<String> getWaylandArgs() {
+    return process.mkList(new String[]{"-loglevel", "quiet", "-y", "-i", "-"});
+  }
 
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};

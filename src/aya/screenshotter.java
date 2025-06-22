@@ -4,6 +4,7 @@ import aya.wrapper.ffmpeg;
 import aya.wrapper.magick;
 import aya.wrapper.process;
 import aya.wrapper.xwininfo;
+import aya.wrapper.wayland;
 
 import aya.cli.parser;
 import aya.config.config;
@@ -29,8 +30,17 @@ public class screenshotter {
     }
     
     stdio.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
-    ArrayList<String> cmd = opts.mkCommand();
-    int result = process.run(cmd, false);
+    int result;
+    if (opts.wayland_mode) {
+      byte[] screenshot = wayland.captureScreen(opts.region_select, opts.capture_cursor);
+      if (screenshot == null) {return 1;}
+      ArrayList<String> cmd = opts.mkCommand_wayland();
+      result = process.run_stdin(cmd, screenshot);
+    }
+    else {
+      ArrayList<String> cmd = opts.mkCommand_x11();
+      result = process.run(cmd, false);
+    }
     switch (result) {
       case 0:
         stdio.print("Screenshot saved successfully!");
@@ -79,15 +89,17 @@ class CaptureOpts {
   private String ffmpeg_path = null;
   private String magick_path = null;
   
-  private boolean window_select = false;
-  private boolean region_select = false;
-  private boolean capture_cursor = false;
+  boolean window_select = false;
+  boolean region_select = false;
+  boolean capture_cursor = false;
+  boolean wayland_mode = false;
   
   CaptureOpts(String[] args) {
     //Config reading comes first, so CLI arguments override respective settings
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
+    wayland_mode = parser.hasArgument(args, "-wayland");
     if (!use_magick) {
       ffmpeg_path = config.getFFmpegPath(conf);
       setCursorCapture(args, conf); //ffmpeg only
@@ -108,7 +120,7 @@ class CaptureOpts {
     if (format.equals("avif")) {setAvifSpeed(args, conf);}
   }
 
-  ArrayList<String> mkCommand() {
+  ArrayList<String> mkCommand_x11() {
     var args = new ArrayList<String>();
     if (use_magick) {
       args.add(magick_path);
@@ -123,19 +135,7 @@ class CaptureOpts {
     else {
       args.add(ffmpeg_path);
       args.addAll(ffmpeg.getCaptureArgs(region_select, capture_cursor));
-      switch(format) {
-        case "png":
-          args.addAll(ffmpeg.encodeArgs_png(quality));
-          break;
-        case "avif":
-          args.addAll(ffmpeg.encodeArgs_avif(quality, avif_speed));
-          break;
-        case "bmp":
-          args.addAll(ffmpeg.encodeArgs_bmp());
-          break;
-        default:
-          args.addAll(ffmpeg.encodeArgs_jpg(quality));
-      }
+      args.addAll(ffmpeg_extraArgs());
       String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
       String arg_scale = ffmpeg.scaleArgs(scale);
       args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
@@ -143,6 +143,32 @@ class CaptureOpts {
     
     args.add(filename);
     return args;
+  }
+  
+  ArrayList<String> mkCommand_wayland() {
+    var args = new ArrayList<String>();
+    args.add(ffmpeg_path);
+    args.addAll(ffmpeg.getWaylandArgs());
+    args.addAll(ffmpeg_extraArgs());
+    String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
+    String arg_scale = ffmpeg.scaleArgs(scale);
+    args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
+    
+    args.add(filename);
+    return args;
+  }
+  
+  private ArrayList<String> ffmpeg_extraArgs() {
+    switch(format) {
+      case "png":
+        return ffmpeg.encodeArgs_png(quality);
+      case "avif":
+        return ffmpeg.encodeArgs_avif(quality, avif_speed);
+      case "bmp":
+        return ffmpeg.encodeArgs_bmp();
+      default:
+        return ffmpeg.encodeArgs_jpg(quality);
+    }
   }
 
   private void setCrop(String[] args) {
@@ -152,7 +178,7 @@ class CaptureOpts {
       if (value >= 0) {crop[i] = value;}
     }
 
-    if (parser.hasArgument(args, "-window")) {
+    if (parser.hasArgument(args, "-window") && !wayland_mode) {
       window_select = true;
       int[] window_coords = xwininfo.getWindowCoordinates();
       if (window_coords != null) {crop = window_coords;}
