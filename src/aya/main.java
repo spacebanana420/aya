@@ -25,7 +25,7 @@ public class main {
 
   public static boolean systemSupported() {
     String os = System.getProperty("os.name").toLowerCase();
-    return (!os.contains("windows") && !os.contains("mac") && !os.equals("haiku"));
+    return (!os.contains("windows") && !os.contains("mac") && !os.contains("darwin") && !os.equals("haiku"));
   }
 
   private static byte getVerbosityLevel(String[] args) {
