@@ -1,11 +1,11 @@
 # Aya
-Aya is a command-line screenshotter tool for UNIX-like systems that run on an X11 graphical environment such as Linux systems, FreeBSD, OpenBSD and more.
+Aya is a command-line screenshotter tool for UNIX-like systems that run on an raphical environment such as Linux systems, FreeBSD, OpenBSD and more.
 
 # Requirements and download
 
 ### Core requirements:
 
-- UNIX-like system that can run a graphical desktop (such as Linux-based systems, FreeBSD, OpenBSD, etc)
+- UNIX-like system that can run X11 or Wayland (such as Linux-based systems, FreeBSD, OpenBSD, etc)
 - Java 11 or newer
 - [FFmpeg](https://ffmpeg.org/) **or** [ImageMagick](https://imagemagick.org/)
 
