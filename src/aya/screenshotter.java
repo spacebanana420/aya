@@ -72,6 +72,7 @@ public class screenshotter {
   }
 }
 
+//Stores screenshot settings according to the provided CLI arguments and config file
 class CaptureOpts {
   int[] crop = new int[4];
   String format = "png";
@@ -237,6 +238,7 @@ class CaptureOpts {
     capture_cursor = parser.hasArgument(args, "-c") || config.captureCursor(conf);
   }
 
+  //Get the screenshot filename, either user-specified or generated
   private String generateFilename(String[] args, Setting[] conf) {
     String argname = parser.getFilename(args, format);
     if (argname != null) {return argname;}

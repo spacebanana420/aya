@@ -4,6 +4,7 @@ import aya.stdio;
 import java.util.ArrayList;
 
 public class ffmpeg {
+  //X11 screen capture
   public static ArrayList<String> getCaptureArgs(boolean select_region, boolean capture_cursor) {
     String cursor_value = (capture_cursor) ? "1" : "0";
     var base_list = process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", cursor_value});
@@ -14,6 +15,7 @@ public class ffmpeg {
     return base_list;
   }
   
+  //In Wayland, Grim captures the scren and passes the resulting image to FFmpeg
   public static ArrayList<String> getWaylandArgs() {
     return process.mkList(new String[]{"-loglevel", "quiet", "-y", "-i", "-"});
   }
