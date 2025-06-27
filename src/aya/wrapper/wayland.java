@@ -27,7 +27,7 @@ public class wayland {
   //Capture a region of the screen
   private static String runSlurp() {
     stdio.print_debug("Running Slurp");
-    var cmd = new ProcessBuilder(new String[]{"slurp"}).redirectInput(ProcessBuilder.Redirect.INHERIT);
+    var cmd = new ProcessBuilder(new String[]{"slurp", "-c", "#00000000", "-b", "#FFFFFF25"}).redirectInput(ProcessBuilder.Redirect.INHERIT);
     byte[] data = process.run_stdout(cmd);
     if (data == null) {return null;}
     return new String(data).trim();
