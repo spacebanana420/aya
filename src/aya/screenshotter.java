@@ -53,7 +53,7 @@ public class screenshotter {
         stdout.error("Aya's process was interrupted while taking a screenshot!");
         break;
       default:
-        stdout.error("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
+        stdout.error("Unknown error happened when taking a screenshot!\nMake sure you are running a graphical environment appropriate to your configuration (X11/Wayland)!");
     }
     if (result != 0) {return 1;}
     
