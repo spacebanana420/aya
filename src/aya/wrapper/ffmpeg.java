@@ -60,7 +60,8 @@ public class ffmpeg {
     byte quality_filtered = 0;
     if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
     else if (quality > -1) {
-      stdout.warnInvalidQuality("AVIF", 0, 63, 0);}
+      stdout.warnInvalidQuality("AVIF", 0, 63, 0);
+    }
     
     list.add("-crf"); list.add(""+quality_filtered);
     return list;

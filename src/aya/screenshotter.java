@@ -96,14 +96,14 @@ class CaptureOpts {
   boolean wayland_mode = false;
   
   CaptureOpts(String[] args) {
-    //Config reading comes first, so CLI arguments override respective settings
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
     wayland_mode = parser.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
+    override_file = parser.hasArgument(args, "-y") || config.overrideFile(conf);
     if (!use_magick) {
       ffmpeg_path = config.getFFmpegPath(conf);
-      setCursorCapture(args, conf); //ffmpeg only
+      capture_cursor = parser.hasArgument(args, "-c") || config.captureCursor(conf);
     }
     else {magick_path = config.getMagickPath(conf);}
     
@@ -112,8 +112,7 @@ class CaptureOpts {
     setFormat(args, conf, use_magick);
     setQuality(args, conf);
     setDelay(args, conf);
-    setOverrideFile(args, conf);
-    setRegionSelect(args);
+    region_select = parser.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
     
     filename = generateFilename(args, conf);
     open_image = parser.hasArgument(args, "-open");
@@ -216,26 +215,12 @@ class CaptureOpts {
     if (value > 0) {delay = value;}
     else {delay = config.getDelay(conf);}
   }
-
-  private void setRegionSelect(String[] args) {
-    if (parser.hasArgument(args, "-region") && !window_select) {region_select = true;}
-  }
-  
-  private void setOverrideFile(String[] args, Setting[] conf) {
-    boolean result = parser.hasArgument(args, "-y");
-    if (result) {override_file = result;}
-    else {override_file = config.overrideFile(conf);}
-  }
   
   private void setAvifSpeed(String[] args, Setting[] conf) {
     byte conf_speed = config.getAvifSpeed(conf);
     byte cli_speed = parser.getArgByte(args, "-avif-speed");
     if (cli_speed >= 0 && cli_speed <= 8) {avif_speed = cli_speed;}
     else {avif_speed = conf_speed;}
-  }
-  
-  private void setCursorCapture(String[] args, Setting[] conf) {
-    capture_cursor = parser.hasArgument(args, "-c") || config.captureCursor(conf);
   }
 
   //Get the screenshot filename, either user-specified or generated
