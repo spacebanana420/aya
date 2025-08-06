@@ -115,6 +115,8 @@ public class config {
   public static boolean captureCursor(Setting[] config) {
     return confio.readSetting_bool(config, "capture_cursor");
   }
+
+  public static boolean waylandModeEnabled(Setting[] config) {return confio.readSetting_bool(config, "wayland_Mode");}
 }
 
 class confwriter {
@@ -178,6 +180,9 @@ class confwriter {
         + "\n\n# Set the absolute path to the FFmpeg and ImageMagick binaries for custom ones"
         + "\n#ffmpeg_path=ffmpeg"
         + "\n#magick_path=magick"
+
+        + "\n\n#Configure Aya to work on Wayland instead of X11"
+        + "\n#wayland_mode=false"
       ).getBytes();
   }
 }

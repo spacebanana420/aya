@@ -100,7 +100,7 @@ class CaptureOpts {
     Setting[] conf = config.openConfig();
     
     use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
-    wayland_mode = parser.hasArgument(args, "-wayland");
+    wayland_mode = parser.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
     if (!use_magick) {
       ffmpeg_path = config.getFFmpegPath(conf);
       setCursorCapture(args, conf); //ffmpeg only
