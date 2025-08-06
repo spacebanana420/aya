@@ -21,7 +21,9 @@ public class wayland {
     byte[] image = process.run_stdout(new ProcessBuilder(cmd_grim));
     
     if (image == null) {
-      stdout.error("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
+      stdout.error("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");
+      return null;
+    }
     stdout.print_debug("Grim-captured screenshot size: " + image.length + " bytes");
     return image;
   }

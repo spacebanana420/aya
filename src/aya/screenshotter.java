@@ -94,7 +94,7 @@ class CaptureOpts {
   boolean region_select = false;
   boolean capture_cursor = false;
   boolean wayland_mode = false;
-  
+
   CaptureOpts(String[] args) {
     Setting[] conf = config.openConfig();
     
@@ -248,7 +248,7 @@ class CaptureOpts {
     config_directory = addDirSlash(config_directory);
     
     String value = parser.getArgValue(args, "-d");
-    if (value == null || value.length() == 0) {return config_directory;}
+    if (value == null || value.isEmpty()) {return config_directory;}
     if (value.equals("~")) {return System.getProperty("user.home");}
     
     File f = new File(value);
