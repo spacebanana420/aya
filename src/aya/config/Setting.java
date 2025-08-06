@@ -15,13 +15,13 @@ public class Setting {
       parsed_key += c;
     }
     parsed_key = parsed_key.trim();
-    if (value_start == -1 || parsed_key.length() == 0) {return;}
+    if (value_start == -1 || parsed_key.isEmpty()) {return;}
     
     for (int i = value_start; i < line.length(); i++) { //Get the value
       parsed_value += line.charAt(i);
     } 
     parsed_value = parsed_value.trim();
-    if (parsed_value.length() == 0) {return;}
+    if (parsed_value.isEmpty()) {return;}
     
     key = parsed_key;
     value = parsed_value;
