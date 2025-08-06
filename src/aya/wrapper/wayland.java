@@ -1,6 +1,6 @@
 package aya.wrapper;
 
-import aya.stdio;
+import aya.stdout;
 import java.util.ArrayList;
 
 public class wayland {
@@ -10,23 +10,25 @@ public class wayland {
     if (make_selection) {
       String coordinates = runSlurp();
       if (coordinates != null) {cmd_grim.add("-g"); cmd_grim.add(coordinates);}
-      else {stdio.print_error("Failed to grab selection! Make sure you have Slurp installed");}
+      else {
+        stdout.error("Failed to grab selection! Make sure you have Slurp installed");}
     }
     if (capture_cursor) {cmd_grim.add("-c");}
     cmd_grim.add("-l"); cmd_grim.add("0");
     cmd_grim.add("-");
     
-    stdio.print_debug("Running Grim", cmd_grim);
+    stdout.print_debug("Running Grim", cmd_grim);
     byte[] image = process.run_stdout(new ProcessBuilder(cmd_grim));
     
-    if (image == null) {stdio.print_error("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
-    stdio.print_debug("Grim-captured screenshot size: " + image.length + " bytes");
+    if (image == null) {
+      stdout.error("Failed to capture screen! Make sure you have Grim installed!\nIf you are not running a Wayland environment, use Aya in x11 mode instead!");}
+    stdout.print_debug("Grim-captured screenshot size: " + image.length + " bytes");
     return image;
   }
   
   //Capture a region of the screen
   private static String runSlurp() {
-    stdio.print_debug("Running Slurp");
+    stdout.print_debug("Running Slurp");
     var cmd = new ProcessBuilder(new String[]{"slurp", "-c", "#00000000", "-b", "#FFFFFF25"}).redirectInput(ProcessBuilder.Redirect.INHERIT);
     byte[] data = process.run_stdout(cmd);
     if (data == null) {return null;}

@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import aya.stdio;
+import aya.stdout;
 
 public class config {
   public static Setting[] openConfig() {
@@ -133,7 +133,8 @@ class confwriter {
         os.close();
       }
     }
-    catch (IOException e) {stdio.print("Error creating Aya config! Unable to create config directory or file!");}
+    catch (IOException e) {
+      stdout.print("Error creating Aya config! Unable to create config directory or file!");}
   }
 
   static byte[] getDefaultConfig() {

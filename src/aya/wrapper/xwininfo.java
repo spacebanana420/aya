@@ -1,6 +1,6 @@
 package aya.wrapper;
 
-import aya.stdio;
+import aya.stdout;
 import aya.main;
 
 import java.util.ArrayList;
@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class xwininfo {
   public static int[] getWindowCoordinates() {
     if (!main.systemSupported()) {
-      stdio.print_verbose("Ignoring -window argument, operating system unsupported");
+      stdout.print_verbose("Ignoring -window argument, operating system unsupported");
       return null;
     }
-    stdio.print("Please click on the window to capture"); 
+    stdout.print("Please click on the window to capture");
     String[] cmd = new String[]{"xwininfo"};
     String result = process.runAndGet(cmd);
     if (result == null) {
-      stdio.print_error("Error retrieving window coordinates! Make sure you have \"xwininfo\" installed!");
+      stdout.error("Error retrieving window coordinates! Make sure you have \"xwininfo\" installed!");
       return null;
     }
 
@@ -34,7 +34,7 @@ public class xwininfo {
       }
       else {buf += c;}
     }
-    stdio.print_debug("Parsed xwininfo output:", list);
+    stdout.print_debug("Parsed xwininfo output:", list);
     
     String[] settings = new String[]
     {
@@ -49,10 +49,10 @@ public class xwininfo {
     }
     reorderCoordinates(coordinates);
 
-    stdio.print_debug("Width:  " + coordinates[0]);
-    stdio.print_debug("Height:  " + coordinates[1]);
-    stdio.print_debug("X:  " + coordinates[2]);
-    stdio.print_debug("Y:  " + coordinates[3]);
+    stdout.print_debug("Width:  " + coordinates[0]);
+    stdout.print_debug("Height:  " + coordinates[1]);
+    stdout.print_debug("X:  " + coordinates[2]);
+    stdout.print_debug("Y:  " + coordinates[3]);
     return coordinates;
   }
   

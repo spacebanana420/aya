@@ -3,11 +3,11 @@ package aya.wrapper;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
-import aya.stdio;
+import aya.stdout;
 
 public class process {
   public static int run(ArrayList<String> args, boolean silent) {
-    stdio.print_debug("Running command:", args);
+    stdout.print_debug("Running command:", args);
     try {
       var pb = new ProcessBuilder(args);
       if (silent) {
@@ -24,7 +24,7 @@ public class process {
   }
 
   public static String runAndGet(String[] args) {
-    stdio.print_debug("Running command:", args);
+    stdout.print_debug("Running command:", args);
     try {
       Process p = new ProcessBuilder(args).start();
       var stdout = p.getInputStream();
@@ -48,7 +48,7 @@ public class process {
   
   //Used in Wayland capture for passing an image into FFmpeg's standard input
   public static int run_stdin(ArrayList<String> args, byte[] screenshot_image) {
-    stdio.print_debug("Running command:", args);
+    stdout.print_debug("Running command:", args);
     try {
       Process p = new ProcessBuilder(args).start();
       var stdin = p.getOutputStream();

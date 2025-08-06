@@ -1,6 +1,6 @@
 package aya.wrapper;
 
-import aya.stdio;
+import aya.stdout;
 import java.util.ArrayList;
 
 public class magick {
@@ -11,7 +11,8 @@ public class magick {
   public static ArrayList<String> encodeArgs_png(byte quality) {
     byte q_arg = 75;
     if (quality >= 1 && quality <= 100) {q_arg = quality;}
-    else if (quality > -1) {stdio.warnInvalidQuality("PNG", 1, 100, 75);}
+    else if (quality > -1) {
+      stdout.warnInvalidQuality("PNG", 1, 100, 75);}
 
     var list = new ArrayList<String>();
     list.add("-quality"); list.add(""+q_arg);
@@ -22,7 +23,8 @@ public class magick {
     var list = new ArrayList<String>();
     byte quality_filtered = 92;
     if (quality >= 1 && quality <= 100) {quality_filtered = quality;}
-    else if (quality > -1) {stdio.warnInvalidQuality("JPG", 1, 100, 92);}
+    else if (quality > -1) {
+      stdout.warnInvalidQuality("JPG", 1, 100, 92);}
     
     list.add("-quality"); list.add(""+quality_filtered);
     return list;

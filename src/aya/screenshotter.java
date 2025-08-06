@@ -20,16 +20,16 @@ public class screenshotter {
     
     if (!opts.override_file && new File(opts.filename).isFile()) {
       String message = "The file in path " + opts.filename + " already exists!\nOverride file? (y/N)";
-      String answer = stdio.readInput(message).trim();
+      String answer = stdout.readInput(message).trim();
       if (!answer.equals("y") && !answer.equals("yes")) {return 0;}
     }
     
     if (opts.delay > 0) {
-       stdio.print_verbose("Taking a screenshot in " + opts.delay + " seconds");
+       stdout.print_verbose("Taking a screenshot in " + opts.delay + " seconds");
        misc.sleep(opts.delay * 1000);
     }
     
-    stdio.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
+    stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
     int result;
     if (opts.wayland_mode) { //Wayland screen capture
       byte[] screenshot = wayland.captureScreen(opts.region_select, opts.capture_cursor);
@@ -43,28 +43,28 @@ public class screenshotter {
     }
     switch (result) {
       case 0:
-        stdio.print("Screenshot saved successfully!");
+        stdout.print("Screenshot saved successfully!");
         break;
       case -1:
         String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
-        stdio.print_error("Aya failed to take a screenshot! " + process_name + " not found in your system!");
+        stdout.error("Aya failed to take a screenshot! " + process_name + " not found in your system!");
         break;
       case -2:
-        stdio.print_error("Aya's process was interrupted while taking a screenshot!");
+        stdout.error("Aya's process was interrupted while taking a screenshot!");
         break;
       default:
-        stdio.print_error("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
+        stdout.error("Unknown error happened when taking a screenshot!\nMake sure you are running an x11-based graphical environment!");
     }
     if (result != 0) {return 1;}
     
     if (opts.open_image) {
       if (opts.image_viewer_cmd == null) {
-        stdio.print_error("Error opening screenshot, image viewer command is missing!");
+        stdout.error("Error opening screenshot, image viewer command is missing!");
         return 2;
       }
       result = process.run(opts.image_viewer_cmd, true);
       if (result != 0) {
-        stdio.print_error("Error opening screenshot, command is invalid or program is not present in system!");
+        stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
         return 3;
       }
     }
@@ -200,7 +200,7 @@ class CaptureOpts {
     value = value.toLowerCase();
     if (!config.unsupportedFormat(value, image_magick)) {format = value;}
     else {
-      stdio.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
+      stdout.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
       format = config.getFormat(conf, image_magick);
     }
   }
@@ -268,11 +268,11 @@ class CaptureOpts {
     
     File f = new File(value);
     if (!f.isDirectory()) {
-      stdio.print("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory or config-specified directory");
+      stdout.print("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory or config-specified directory");
       return config_directory;
     }
     if (!f.canWrite()) {
-      stdio.print("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory or config-specified directory");
+      stdout.print("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory or config-specified directory");
       return config_directory;
     }
     

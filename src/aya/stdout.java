@@ -3,7 +3,7 @@ package aya;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class stdio {
+public class stdout {
   public static byte VERBOSITY_LEVEL = 1;
   
   public static void print(String message) {
@@ -42,7 +42,7 @@ public class stdio {
     if (VERBOSITY_LEVEL > 2) {printSeq(title, contents);}
   }
   
-  public static void print_error(String message) {
+  public static void error(String message) {
     if (VERBOSITY_LEVEL > 0) {System.err.println(message);}
   }
   

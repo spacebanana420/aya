@@ -5,18 +5,18 @@ import aya.cli.help;
 
 public class main {
   public static void main(String[] args) {
-    stdio.VERBOSITY_LEVEL = getVerbosityLevel(args);
+    stdout.VERBOSITY_LEVEL = getVerbosityLevel(args);
     
     if (parser.hasArgument(args, "-h")) {
-      stdio.print(help.getHelp());
+      stdout.print(help.getHelp());
       return;
     }
     else if (parser.hasArgument(args, "-v")) {
-      stdio.print("Aya version " + help.VERSION);
+      stdout.print("Aya version " + help.VERSION);
       return;
     }
     if (!systemSupported()) {
-      stdio.print_error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
+      stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
     int result = screenshotter.takeScreenshot(args);
