@@ -43,7 +43,7 @@ public class screenshotter {
     }
     switch (result) {
       case 0:
-        stdout.print("Screenshot saved successfully!");
+        stdout.print("Screenshot saved at path " + opts.filename);
         break;
       case -1:
         String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
