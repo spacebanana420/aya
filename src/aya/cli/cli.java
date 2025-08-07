@@ -5,16 +5,9 @@ import aya.stdout;
 
 //CLI parsing functions
 public class cli {
-  public static int argIndex(String[] args, String arg) {
-    for (int i = 0; i < args.length; i++) {
-      if (args[i].equals(arg)) {return i;}
-    }
-    return -1;
-  }
+
   
-  public static boolean hasArgument(String[] args, String arg) {
-    return argIndex(args, arg) != -1;
-  }
+  public static boolean hasArgument(String[] args, String arg) {return argIndex(args, arg) != -1;}
   
   public static String getArgValue(String[] args, String arg) {
     int i = argIndex(args, arg);
@@ -25,9 +18,6 @@ public class cli {
     }
     return args[i+1];
   }
-
-  //CLI arguments that start with "-" are meant to be options and not values of an option
-  private static boolean invalidValue(String value) {return value.isEmpty() || value.charAt(0) == '-';}
 
   public static String getFilename(String[] args, String extension) {
     for (int i = 0; i < args.length; i++) {
@@ -76,4 +66,14 @@ public class cli {
     }
     return (byte)num;
   }
+
+  private static int argIndex(String[] args, String arg) {
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equals(arg)) {return i;}
+    }
+    return -1;
+  }
+
+  //CLI arguments that start with "-" are meant to be options and not values of an option
+  private static boolean invalidValue(String value) {return value.isEmpty() || value.charAt(0) == '-';}
 }
