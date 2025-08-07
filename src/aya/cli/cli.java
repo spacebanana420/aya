@@ -1,7 +1,9 @@
 package aya.cli;
 
 import aya.misc;
+import aya.stdout;
 
+//CLI parsing functions
 public class cli {
   public static int argIndex(String[] args, String arg) {
     for (int i = 0; i < args.length; i++) {
@@ -16,9 +18,16 @@ public class cli {
   
   public static String getArgValue(String[] args, String arg) {
     int i = argIndex(args, arg);
-    if (i == -1 || i == args.length-1) {return null;}
+    if (i == -1) {return null;}
+    if (i == args.length-1 || invalidValue(args[i+1])) {
+      stdout.error("The argument " + arg + " must be followed by a value!");
+      return null;
+    }
     return args[i+1];
   }
+
+  //CLI arguments that start with "-" are meant to be options and not values of an option
+  private static boolean invalidValue(String value) {return value.isEmpty() || value.charAt(0) == '-';}
 
   public static String getFilename(String[] args, String extension) {
     for (int i = 0; i < args.length; i++) {
@@ -32,21 +41,39 @@ public class cli {
   public static int getArgInt(String[] args, String arg) {
     String value = getArgValue(args, arg);
     if (value == null) {return -1;}
-    try {return Integer.parseInt(value);}
+    try {
+      int num = Integer.parseInt(value);
+      if (num < 0) {
+        stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be negative, ignoring");
+        return -1;
+      }
+      return num;
+    }
     catch (NumberFormatException e) {return -1;}
   }
   
   public static float getArgFloat(String[] args, String arg) {
     String value = getArgValue(args, arg);
     if (value == null) {return -1;}
-    try {return Float.parseFloat(value);}
+    try {
+      float num = Float.parseFloat(value);
+      if (num < 0) {
+        stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be negative, ignoring");
+        return -1;
+      }
+      return num;
+    }
     catch (NumberFormatException e) {return -1;}
   }
-  
-  public static byte getArgByte(String[] args, String arg) {
-    String value = getArgValue(args, arg);
-    if (value == null) {return -1;}
-    try {return Byte.parseByte(value);}
-    catch (NumberFormatException e) {return -1;}
+
+  //Byte value with an upper limit of 100
+  public static byte getArgQuality(String[] args, String arg) {
+    int num = getArgInt(args, arg);
+    if (num == -1) {return -1;}
+    if (num > 100) {
+      stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be above 100, ignoring");
+      return -1;
+    }
+    return (byte)num;
   }
 }

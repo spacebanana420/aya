@@ -205,7 +205,7 @@ class CaptureOpts {
   }
 
   private void setQuality(String[] args, Setting[] conf) {
-    byte value = cli.getArgByte(args, "-q");
+    byte value = cli.getArgQuality(args, "-q");
     if (value >= 0) {quality = value;}
     else {quality = config.getQuality(conf);}
   }
@@ -218,7 +218,7 @@ class CaptureOpts {
   
   private void setAvifSpeed(String[] args, Setting[] conf) {
     byte conf_speed = config.getAvifSpeed(conf);
-    byte cli_speed = cli.getArgByte(args, "-avif-speed");
+    byte cli_speed = cli.getArgQuality(args, "-avif-speed");
     if (cli_speed >= 0 && cli_speed <= 8) {avif_speed = cli_speed;}
     else {avif_speed = conf_speed;}
   }
