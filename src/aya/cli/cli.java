@@ -20,9 +20,9 @@ public class cli {
   }
 
   public static String getFilename(String[] args, String extension) {
-    for (int i = 0; i < args.length; i++) {
-      if (args[i].charAt(0) != '-' && misc.hasExtension(args[i], extension)) {
-        return args[i];
+    for (String arg : args) {
+      if (arg.charAt(0) != '-' && misc.hasExtension(arg, extension)) {
+        return arg;
       }
     }
     return null;
