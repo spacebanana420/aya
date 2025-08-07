@@ -15,7 +15,7 @@ public class main {
       stdout.print("Aya version " + help.VERSION);
       return;
     }
-    if (!systemSupported()) {
+    if (unsupportedSystem()) {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
@@ -23,9 +23,9 @@ public class main {
     System.exit(result);
   }
 
-  public static boolean systemSupported() {
+  private static boolean unsupportedSystem() {
     String os = System.getProperty("os.name").toLowerCase();
-    return (!os.contains("windows") && !os.contains("mac") && !os.contains("darwin") && !os.equals("haiku"));
+    return (os.contains("windows") || os.contains("mac") || os.contains("darwin") || os.equals("haiku"));
   }
 
   private static byte getVerbosityLevel(String[] args) {
