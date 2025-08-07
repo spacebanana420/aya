@@ -6,7 +6,7 @@ import aya.wrapper.process;
 import aya.wrapper.xwininfo;
 import aya.wrapper.wayland;
 
-import aya.cli.parser;
+import aya.cli.cli;
 import aya.config.config;
 import aya.config.Setting;
 
@@ -98,12 +98,12 @@ class CaptureOpts {
   CaptureOpts(String[] args) {
     Setting[] conf = config.openConfig();
     
-    use_magick = config.useMagick(conf) || parser.hasArgument(args, "-magick");
-    wayland_mode = parser.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
-    override_file = parser.hasArgument(args, "-y") || config.overrideFile(conf);
+    use_magick = config.useMagick(conf) || cli.hasArgument(args, "-magick");
+    wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
+    override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
     if (!use_magick) {
       ffmpeg_path = config.getFFmpegPath(conf);
-      capture_cursor = parser.hasArgument(args, "-c") || config.captureCursor(conf);
+      capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
     }
     else {magick_path = config.getMagickPath(conf);}
     
@@ -112,10 +112,10 @@ class CaptureOpts {
     setFormat(args, conf, use_magick);
     setQuality(args, conf);
     setDelay(args, conf);
-    region_select = parser.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
+    region_select = cli.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
     
     filename = generateFilename(args, conf);
-    open_image = parser.hasArgument(args, "-open");
+    open_image = cli.hasArgument(args, "-open");
     if (open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
     if (format.equals("avif")) {setAvifSpeed(args, conf);}
   }
@@ -176,11 +176,11 @@ class CaptureOpts {
   private void setCrop(String[] args) {
     String[] opts = new String[]{"-width", "-height", "-x", "-y"};
     for (int i = 0; i < opts.length; i++) {
-      int value = parser.getArgInt(args, opts[i]);
+      int value = cli.getArgInt(args, opts[i]);
       if (value >= 0) {crop[i] = value;}
     }
 
-    if (parser.hasArgument(args, "-window") && !wayland_mode) {
+    if (cli.hasArgument(args, "-window") && !wayland_mode) {
       window_select = true;
       int[] window_coords = xwininfo.getWindowCoordinates();
       if (window_coords != null) {crop = window_coords;}
@@ -188,12 +188,12 @@ class CaptureOpts {
   }
 
   private void setScale(String[] args) {
-    float value = parser.getArgFloat(args, "-s");
+    float value = cli.getArgFloat(args, "-s");
     if (value > 0.0) {scale = value;}
   }
   
   private void setFormat(String[] args, Setting[] conf, boolean image_magick) {
-    String value = parser.getArgValue(args, "-f");
+    String value = cli.getArgValue(args, "-f");
     if (value == null) {return;}
     
     value = value.toLowerCase();
@@ -205,27 +205,27 @@ class CaptureOpts {
   }
 
   private void setQuality(String[] args, Setting[] conf) {
-    byte value = parser.getArgByte(args, "-q");
+    byte value = cli.getArgByte(args, "-q");
     if (value >= 0) {quality = value;}
     else {quality = config.getQuality(conf);}
   }
 
   private void setDelay(String[] args, Setting[] conf) {
-    int value = parser.getArgInt(args, "-t");
+    int value = cli.getArgInt(args, "-t");
     if (value > 0) {delay = value;}
     else {delay = config.getDelay(conf);}
   }
   
   private void setAvifSpeed(String[] args, Setting[] conf) {
     byte conf_speed = config.getAvifSpeed(conf);
-    byte cli_speed = parser.getArgByte(args, "-avif-speed");
+    byte cli_speed = cli.getArgByte(args, "-avif-speed");
     if (cli_speed >= 0 && cli_speed <= 8) {avif_speed = cli_speed;}
     else {avif_speed = conf_speed;}
   }
 
   //Get the screenshot filename, either user-specified or generated
   private String generateFilename(String[] args, Setting[] conf) {
-    String argname = parser.getFilename(args, format);
+    String argname = cli.getFilename(args, format);
     if (argname != null) {return argname;}
 
     String currentTime = LocalDate.now().toString();
@@ -247,7 +247,7 @@ class CaptureOpts {
     String config_directory = config.getDirectory(conf);
     config_directory = addDirSlash(config_directory);
     
-    String value = parser.getArgValue(args, "-d");
+    String value = cli.getArgValue(args, "-d");
     if (value == null || value.isEmpty()) {return config_directory;}
     if (value.equals("~")) {return System.getProperty("user.home");}
     

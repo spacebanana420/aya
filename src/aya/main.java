@@ -1,17 +1,17 @@
 package aya;
 
-import aya.cli.parser;
+import aya.cli.cli;
 import aya.cli.help;
 
 public class main {
   public static void main(String[] args) {
     stdout.VERBOSITY_LEVEL = getVerbosityLevel(args);
     
-    if (parser.hasArgument(args, "-h")) {
+    if (cli.hasArgument(args, "-h")) {
       stdout.print(help.getHelp());
       return;
     }
-    else if (parser.hasArgument(args, "-v")) {
+    else if (cli.hasArgument(args, "-v")) {
       stdout.print("Aya version " + help.VERSION);
       return;
     }
@@ -29,9 +29,9 @@ public class main {
   }
 
   private static byte getVerbosityLevel(String[] args) {
-    if (parser.hasArgument(args, "-quiet")) {return 0;}
-    else if (parser.hasArgument(args, "-verbose")) {return 2;}
-    else if (parser.hasArgument(args, "-debug")) {return 3;}
+    if (cli.hasArgument(args, "-quiet")) {return 0;}
+    else if (cli.hasArgument(args, "-verbose")) {return 2;}
+    else if (cli.hasArgument(args, "-debug")) {return 3;}
     else {return 1;}
   }
 }

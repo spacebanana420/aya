@@ -2,7 +2,7 @@ package aya.cli;
 
 import aya.misc;
 
-public class parser {
+public class cli {
   public static int argIndex(String[] args, String arg) {
     for (int i = 0; i < args.length; i++) {
       if (args[i].equals(arg)) {return i;}
