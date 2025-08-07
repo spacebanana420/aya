@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.io.File;
 import java.time.LocalDate;
 
-public class screenshotter {
+public class capture {
   public static int takeScreenshot(String[] args) {
     CaptureOpts opts = new CaptureOpts(args);
     

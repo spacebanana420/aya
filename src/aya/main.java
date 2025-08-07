@@ -19,7 +19,7 @@ public class main {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
-    int result = screenshotter.takeScreenshot(args);
+    int result = capture.takeScreenshot(args);
     System.exit(result);
   }
 
