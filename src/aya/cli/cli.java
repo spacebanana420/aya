@@ -31,6 +31,10 @@ public class cli {
   public static int getArgInt(String[] args, String arg) {
     String value = getArgValue(args, arg);
     if (value == null) {return -1;}
+    if (value.length() > 9) {
+      stdout.error("The value provided " + value + " for the argument " + arg + " is too big! Ignoring");
+      return -1;
+    }
     try {
       int num = Integer.parseInt(value);
       if (num < 0) {
