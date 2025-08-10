@@ -60,19 +60,20 @@ public class config {
     return (delay < 0) ? 0 : delay;
   }
 
-  public static String getFormat(Setting[] config, boolean use_magick) {
+  public static String getFormat(Setting[] config) {
     String fmt = confio.readSetting(config, "screenshot_format");
     if (fmt == null) {return "png";}
     fmt = fmt.toLowerCase();
-    if (!unsupportedFormat(fmt, use_magick)) {return "png";}  
+    if (!unsupportedFormat(fmt)) {return "png";}
     return fmt;
   }
   
-  public static boolean unsupportedFormat(String format, boolean use_magick) { //also used in screenshotter.java
+  public static boolean unsupportedFormat(String format) { //also used in screenshotter.java
     return
       !format.equals("png")
       && !format.equals("jpg")
-      && ((!format.equals("avif") && !format.equals("bmp")) || use_magick)
+      && !format.equals("avif")
+      && !format.equals("bmp")
     ;
   }
 
@@ -86,22 +87,11 @@ public class config {
     return (value >= 0 && value <= 8) ? value : 8;
   }
 
-  public static boolean useMagick(Setting[] config) {
-    return confio.readSetting_bool(config, "use_magick");
-  }
-
   public static String getFFmpegPath(Setting[] config) {
     String path = confio.readSetting(config, "ffmpeg_path");
     if (path == null) {return "ffmpeg";}
     var f = new File(path);
     if (f.isFile() && f.isAbsolute() && f.canExecute()) {return path;} else {return "ffmpeg";}
-  }
-  
-  public static String getMagickPath(Setting[] config) {
-    String path = confio.readSetting(config, "magick_path");
-    if (path == null) {return "magick";}
-    var f = new File(path);
-    if (f.isFile() && f.isAbsolute() && f.canExecute()) {return path;} else {return "magick";}
   }
   
   public static ArrayList<String> getImageViewer(Setting[] config, String filename) {
@@ -151,11 +141,10 @@ class confwriter {
         + "\n\n# Set a default delay in seconds for taking screenshots"
         + "\n#screenshot_delay=0"
 
-        + "\n\n# Supported formats (FFmpeg): \"png\" \"jpg\" \"avif\" \"bmp\""
-        + "\n# Supported formats (ImageMagick): \"png\" \"jpg\""
+        + "\n\n# Supported formats: \"png\" \"jpg\" \"avif\" \"bmp\""
         + "\n#screenshot_format=png"
 
-        + "\n\n# PNG: quality ranges from 0 to 5 (FFmpeg), or 1 to 100 (ImageMagick). Higher is better"
+        + "\n\n# PNG: quality ranges from 0 to 5 (FFmpeg). Higher is better"
         + "\n# JPG: quality ranges from 1 to 100. Higher is better"
         + "\n# AVIF: quality ranges from 0 to 63. Lower is better. 0 implies lossless compression"
         + "\n#screenshot_quality=5"
@@ -174,13 +163,9 @@ class confwriter {
         
         + "\n\n# If another image with the same filename exists, Aya will override it"
         + "\n#override_file=false"
-        
-        + "\n\n# Set to \"true\" to use ImageMagick as a screenshotting backend rather than FFmpeg"
-        + "\n#use_magick=false"
 
         + "\n\n# Set the absolute path to the FFmpeg and ImageMagick binaries for custom ones"
         + "\n#ffmpeg_path=ffmpeg"
-        + "\n#magick_path=magick"
 
         + "\n\n#Configure Aya to work on Wayland instead of X11"
         + "\n#wayland_mode=false"

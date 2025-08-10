@@ -1,7 +1,6 @@
 package aya;
 
 import aya.wrapper.ffmpeg;
-import aya.wrapper.magick;
 import aya.wrapper.process;
 import aya.wrapper.xwininfo;
 import aya.wrapper.wayland;
@@ -46,8 +45,7 @@ public class capture {
         stdout.print("Screenshot saved at path " + opts.filename);
         break;
       case -1:
-        String process_name = (opts.use_magick) ? "ImageMagick" : "FFmpeg";
-        stdout.error("Aya failed to take a screenshot! " + process_name + " not found in your system!");
+        stdout.error("Aya failed to take a screenshot! FFmpeg was not found in your system!");
         break;
       case -2:
         stdout.error("Aya's process was interrupted while taking a screenshot!");
@@ -80,7 +78,6 @@ class CaptureOpts {
   float scale = 0f;
   byte avif_speed = 8;
 
-  boolean use_magick = false;
   boolean override_file = false;
   String filename = "";
   int delay = 0;
@@ -88,7 +85,6 @@ class CaptureOpts {
   ArrayList<String> image_viewer_cmd = null;
   
   private String ffmpeg_path = null;
-  private String magick_path = null;
   
   boolean window_select = false;
   boolean region_select = false;
@@ -97,19 +93,15 @@ class CaptureOpts {
 
   CaptureOpts(String[] args) {
     Setting[] conf = config.openConfig();
-    
-    use_magick = config.useMagick(conf) || cli.hasArgument(args, "-magick");
+
     wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
     override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
-    if (!use_magick) {
-      ffmpeg_path = config.getFFmpegPath(conf);
-      capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
-    }
-    else {magick_path = config.getMagickPath(conf);}
+    ffmpeg_path = config.getFFmpegPath(conf);
+    capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
     
     setCrop(args);
     setScale(args);
-    setFormat(args, conf, use_magick);
+    setFormat(args, conf);
     setQuality(args, conf);
     setDelay(args, conf);
     region_select = cli.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
@@ -123,24 +115,12 @@ class CaptureOpts {
   //For x11, builds the FFmpeg or Imagemagick command that takes the screenshot and encodes it
   ArrayList<String> mkCommand_x11() {
     var args = new ArrayList<String>();
-    if (use_magick) {
-      args.add(magick_path);
-      args.addAll(magick.getCaptureArgs());
-      if (format.equals("png")) {
-        args.addAll(magick.encodeArgs_png(quality));
-      }
-      else {args.addAll(ffmpeg.encodeArgs_jpg(quality));}
-      args.addAll(magick.cropArgs(crop[0], crop[1], crop[2], crop[3]));
-      args.addAll(magick.scaleArgs(scale));
-    }
-    else {
-      args.add(ffmpeg_path);
-      args.addAll(ffmpeg.getCaptureArgs(region_select, capture_cursor));
-      args.addAll(ffmpeg_extraArgs());
-      String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
-      String arg_scale = ffmpeg.scaleArgs(scale);
-      args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
-    }
+    args.add(ffmpeg_path);
+    args.addAll(ffmpeg.getCaptureArgs(region_select, capture_cursor));
+    args.addAll(ffmpeg_extraArgs());
+    String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
+    String arg_scale = ffmpeg.scaleArgs(scale);
+    args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
     
     args.add(filename);
     return args;
@@ -192,15 +172,15 @@ class CaptureOpts {
     if (value > 0.0) {scale = value;}
   }
   
-  private void setFormat(String[] args, Setting[] conf, boolean image_magick) {
+  private void setFormat(String[] args, Setting[] conf) {
     String value = cli.getArgValue(args, "-f");
     if (value == null) {return;}
     
     value = value.toLowerCase();
-    if (!config.unsupportedFormat(value, image_magick)) {format = value;}
+    if (!config.unsupportedFormat(value)) {format = value;}
     else {
       stdout.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
-      format = config.getFormat(conf, image_magick);
+      format = config.getFormat(conf);
     }
   }
 

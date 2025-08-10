@@ -7,21 +7,18 @@ Aya is a command-line screenshotter tool for UNIX-like systems that run on an ra
 
 - UNIX-like system that can run X11 or Wayland (such as Linux-based systems, FreeBSD, OpenBSD, etc)
 - Java 11 or newer
-- [FFmpeg](https://ffmpeg.org/) **or** [ImageMagick](https://imagemagick.org/)
+- [FFmpeg](https://ffmpeg.org/)
 
-### Requirements for X11 users:
+### Additional requirements for X11 users:
 - Xwininfo (optional, for window capture)
 
-### Requirements for Wayland users:
+### Additional requirements for Wayland users:
 - Grim
-- FFmpeg (ImageMagick not supported)
 - Slurp (optional, for capturing a selection of the screen)
 
 Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
-Note 1: ImageMagick support is secondary and is planned to be removed in the future. It also only supports x11
-
-Note 2: Wayland support is currently experimental but seems to work well on wl-roots-based compositors.
+Note: Wayland support is currently experimental but seems to work well on wl-roots-based compositors.
 
 # How to use
 
@@ -34,8 +31,8 @@ Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`.
 ### Supported image formats
 * PNG
 * JPG
-* AVIF (FFmpeg only)
-* BMP (FFmpeg only)
+* AVIF
+* BMP
 
 # Build from source
 
