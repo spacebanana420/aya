@@ -26,8 +26,7 @@ public class ffmpeg {
     if (quality >= 0 && quality <= 5) {
       q_arg = qualities[quality];
     }
-    else if (quality > -1) {
-      stdout.warnInvalidQuality("PNG", 0, 5, 5);}
+    else if (quality > -1) {stdout.warnInvalidQuality("PNG", 0, 5, 5);}
 
     var list = new ArrayList<String>();
     list.add("-c:v"); list.add("png");
@@ -46,8 +45,7 @@ public class ffmpeg {
     byte quality_filtered = 1;
     //101-quality reverses the quality value so that 100 is highest quality and 1 is lowest
     if (quality >= 1 && quality <= 100) {quality_filtered = (byte)(101 - quality);}
-    else if (quality > -1) {
-      stdout.warnInvalidQuality("JPG", 1, 100, 1);}
+    else if (quality > -1) {stdout.warnInvalidQuality("JPG", 1, 100, 1);}
     
     list.add("-qmin"); list.add("1");
     list.add("-qmax"); list.add("100");
@@ -59,9 +57,7 @@ public class ffmpeg {
     var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true"});
     byte quality_filtered = 0;
     if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
-    else if (quality > -1) {
-      stdout.warnInvalidQuality("AVIF", 0, 63, 0);
-    }
+    else if (quality > -1) {stdout.warnInvalidQuality("AVIF", 0, 63, 0);}
     
     list.add("-crf"); list.add(""+quality_filtered);
     return list;

@@ -47,7 +47,7 @@ public class stdout {
   }
   
   public static String readInput(String message) {
-    if (message != null && message.length() > 0) {
+    if (message != null && !message.isEmpty()) {
       System.out.println(message);
     }
     return new Scanner(System.in).nextLine();
