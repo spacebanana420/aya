@@ -62,19 +62,7 @@ public class config {
 
   public static String getFormat(Setting[] config) {
     String fmt = confio.readSetting(config, "screenshot_format");
-    if (fmt == null) {return "png";}
-    fmt = fmt.toLowerCase();
-    if (!unsupportedFormat(fmt)) {return "png";}
-    return fmt;
-  }
-  
-  public static boolean unsupportedFormat(String format) { //also used in screenshotter.java
-    return
-      !format.equals("png")
-      && !format.equals("jpg")
-      && !format.equals("avif")
-      && !format.equals("bmp")
-    ;
+    return fmt == null ? null : fmt.toLowerCase();
   }
 
   public static byte getQuality(Setting[] config) {

@@ -173,15 +173,37 @@ class CaptureOpts {
   }
   
   private void setFormat(String[] args, Setting[] conf) {
+    String value = getFormat_cli(args);
+    if (value != null) {format = value; return;}
+
+    value = getFormat_config(conf);
+    if (value != null) {format = value;}
+  }
+
+  private static String getFormat_cli(String[] args) {
     String value = cli.getArgValue(args, "-f");
-    if (value == null) {return;}
-    
+    if (value == null) {return null;}
     value = value.toLowerCase();
-    if (!config.unsupportedFormat(value)) {format = value;}
-    else {
-      stdout.print("Ignored specified image format " + value + " for being invalid\nDefaulting to " + format);
-      format = config.getFormat(conf);
-    }
+
+    if (supportedFormat(value)) {return value;}
+    stdout.print("Ignored specified image format " + value + " found in CLI arguments for being invalid");
+    return null;
+  }
+  private static String getFormat_config(Setting[] conf) {
+    String value = config.getFormat(conf);
+    if (value == null) {return null;}
+    if (supportedFormat(value)) {return value;}
+    stdout.print("Ignored specified image format " + value + " found in aya configuration for being invalid");
+    return null;
+  }
+
+  private static boolean supportedFormat(String format) {
+    return
+      format.equals("png")
+      || format.equals("jpg")
+      || format.equals("avif")
+      || format.equals("bmp")
+    ;
   }
 
   private void setQuality(String[] args, Setting[] conf) {
