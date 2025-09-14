@@ -144,8 +144,8 @@ class CaptureOpts {
     
     this.filename = generateFilename(args, conf);
     this.open_image = cli.hasArgument(args, "-open");
-    if (this.open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
-    if (format.equals("avif")) {setAvifSpeed(args, conf);}
+    if (this.open_image) {this.image_viewer_cmd = config.getImageViewer(conf, filename);}
+    if (this.format.equals("avif")) {setAvifSpeed(args, conf);}
   }
 
   private void setCrop(String[] args) {
