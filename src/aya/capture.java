@@ -140,11 +140,11 @@ class CaptureOpts {
     this.format = getFormat(args, conf);
     this.quality = getQuality(args, conf);
     this.delay = getDelay(args, conf);
-    this.region_select = cli.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
+    this.region_select = cli.hasArgument(args, "-region") && !this.window_select; //window_select is defined earlier in setCrop()
     
     this.filename = generateFilename(args, conf);
     this.open_image = cli.hasArgument(args, "-open");
-    if (open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
+    if (this.open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
     if (format.equals("avif")) {setAvifSpeed(args, conf);}
   }
 
