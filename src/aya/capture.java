@@ -44,7 +44,7 @@ public class capture {
         stdout.print("Screenshot saved at path " + opts.filename);
         break;
       case -1:
-        stdout.error("Aya failed to take a screenshot! FFmpeg was not found in your system!");
+        stdout.error("Aya failed to take a screenshot! FFmpeg was not found in your system! You need to install FFmpeg to use Aya");
         break;
       case -2:
         stdout.error("Aya's process was interrupted while taking a screenshot!");
