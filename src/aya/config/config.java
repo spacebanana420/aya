@@ -152,7 +152,7 @@ class confwriter {
         + "\n\n# If another image with the same filename exists, Aya will override it"
         + "\n#override_file=false"
 
-        + "\n\n# Set the absolute path to the FFmpeg and ImageMagick binaries for custom ones"
+        + "\n\n# You can specify a custom path to the FFmpeg binary if you don't want to use the one installed in the system"
         + "\n#ffmpeg_path=ffmpeg"
 
         + "\n\n#Configure Aya to work on Wayland instead of X11"
