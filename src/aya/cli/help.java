@@ -1,7 +1,7 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.9";
+  public static final String VERSION = "0.9.1";
   
   public static String getHelp() {
     return
@@ -26,6 +26,7 @@ public class help {
       + "\n  * -s [factor]            scales the screenshot by a factor (>0 to +inf)"
       + "\n  * -f [format]            sets the image file format (supported formats: png, jpg, avif, bmp"
       + "\n  * -q [number]            sets the quality level (0-5 for PNG, 1-100 for JPG, 0-63 for AVIF)"
+      + "\n  * -qh                    Opens the help screen explaining picture quality control (for -q)"
       + "\n  * -avif-speed [number]   sets the AVIF encoding speed/efficiency tradeoff (0 to 8, higher is faster) (default 8)"
       + "\n"
       + "\n  * -wayland               enables experimental Wayland mode"
@@ -40,6 +41,15 @@ public class help {
       "Aya (version "+VERSION+")"
       + "\nUsage: Aya [options] [filename]"
       + "\nRun \"aya -h\" to view the full help screen"
+    ;
+  }
+
+  public static String getQualityHelp() {
+    return
+      "[Image quality values]"
+      + "\n\n* PNG (lossless): 0 to 5\nHigher value results in more efficient compression and a smaller image at the cost of speed"
+      + "\n\n* JPG (lossy): 1 to 100\nHigher value results in better picture quality at the expense of file size"
+      + "\n\n* AVIF (lossless+lossy): 0 to 63\n0 enables lossless compression, while 1 to 63 uses lossy compression. Lower value results in better picture quality at the expense of file size"
     ;
   }
 }
