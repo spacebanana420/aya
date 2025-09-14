@@ -130,20 +130,20 @@ class CaptureOpts {
   CaptureOpts(String[] args) {
     Setting[] conf = config.openConfig();
 
-    wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
-    override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
-    ffmpeg_path = config.getFFmpegPath(conf);
-    capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
+    this.wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
+    this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
+    this.ffmpeg_path = config.getFFmpegPath(conf);
+    this.capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
     
     setCrop(args);
-    setScale(args);
-    setFormat(args, conf);
-    setQuality(args, conf);
-    setDelay(args, conf);
-    region_select = cli.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
+    this.scale = getScale(args);
+    this.format = getFormat(args, conf);
+    this.quality = getQuality(args, conf);
+    this.delay = getDelay(args, conf);
+    this.region_select = cli.hasArgument(args, "-region") && !window_select; //window_select is defined earlier in setCrop()
     
-    filename = generateFilename(args, conf);
-    open_image = cli.hasArgument(args, "-open");
+    this.filename = generateFilename(args, conf);
+    this.open_image = cli.hasArgument(args, "-open");
     if (open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
     if (format.equals("avif")) {setAvifSpeed(args, conf);}
   }
@@ -152,27 +152,29 @@ class CaptureOpts {
     String[] opts = new String[]{"-width", "-height", "-x", "-y"};
     for (int i = 0; i < opts.length; i++) {
       int value = cli.getArgInt(args, opts[i]);
-      if (value >= 0) {crop[i] = value;}
+      if (value >= 0) {this.crop[i] = value;}
     }
 
-    if (cli.hasArgument(args, "-window") && !wayland_mode) {
-      window_select = true;
+    if (cli.hasArgument(args, "-window") && !this.wayland_mode) {
+      this.window_select = true;
       int[] window_coords = xwininfo.getWindowCoordinates();
-      if (window_coords != null) {crop = window_coords;}
+      if (window_coords != null) {this.crop = window_coords;}
     }
   }
 
-  private void setScale(String[] args) {
+  private float getScale(String[] args) {
     float value = cli.getArgFloat(args, "-s");
-    if (value > 0.0) {scale = value;}
+    if (value < 0) {value = 0;}
+    return value;
   }
   
-  private void setFormat(String[] args, Setting[] conf) {
+  private String getFormat(String[] args, Setting[] conf) {
     String value = getFormat_cli(args);
-    if (value != null) {format = value; return;}
+    if (value != null) {return value;}
 
     value = getFormat_config(conf);
-    if (value != null) {format = value;}
+    if (value != null) {return value;}
+    return "png";
   }
 
   private static String getFormat_cli(String[] args) {
@@ -201,16 +203,16 @@ class CaptureOpts {
     ;
   }
 
-  private void setQuality(String[] args, Setting[] conf) {
+  private byte getQuality(String[] args, Setting[] conf) {
     byte value = cli.getArgQuality(args, "-q");
-    if (value >= 0) {quality = value;}
-    else {quality = config.getQuality(conf);}
+    if (value >= 0) {return value;}
+    else {return config.getQuality(conf);}
   }
 
-  private void setDelay(String[] args, Setting[] conf) {
+  private int getDelay(String[] args, Setting[] conf) {
     int value = cli.getArgInt(args, "-t");
-    if (value > 0) {delay = value;}
-    else {delay = config.getDelay(conf);}
+    if (value > 0) {return value;}
+    else {return config.getDelay(conf);}
   }
   
   private void setAvifSpeed(String[] args, Setting[] conf) {
