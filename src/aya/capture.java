@@ -24,16 +24,13 @@ public class capture {
     }
     
     if (opts.delay > 0) {
-       stdout.print_verbose("Taking a screenshot in " + opts.delay + " seconds");
+       stdout.print("Taking a screenshot in " + opts.delay + " seconds");
        misc.sleep(opts.delay * 1000);
     }
-    
+
+    //Take the screenshot and save it, x11 or Wayland
     stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
-    int result;
-    //Wayland screen capture
-    if (opts.wayland_mode) {result = wayland_takeScreenshot(opts);}
-    //x11 capture
-    else {result = x11_takeScreenshot(opts);}
+    int result = opts.wayland_mode ? wayland_takeScreenshot(opts) : x11_takeScreenshot(opts);
 
     switch (result) {
       case 0:
@@ -95,7 +92,7 @@ public class capture {
     return process.run_stdin(cmd, picture);
   }
 
-   static ArrayList<String> ffmpeg_extraArgs(CaptureOpts opts) {
+   private static ArrayList<String> ffmpeg_extraArgs(CaptureOpts opts) {
     switch(opts.format) {
       case "png":
         return ffmpeg.encodeArgs_png(opts.quality);
