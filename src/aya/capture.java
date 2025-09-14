@@ -140,12 +140,12 @@ class CaptureOpts {
     this.format = getFormat(args, conf);
     this.quality = getQuality(args, conf);
     this.delay = getDelay(args, conf);
-    this.region_select = cli.hasArgument(args, "-region") && !this.window_select; //window_select is defined earlier in setCrop()
+    this.region_select = !this.window_select && cli.hasArgument(args, "-region"); //window_select is defined earlier in setCrop()
     
     this.filename = generateFilename(args, conf);
     this.open_image = cli.hasArgument(args, "-open");
     if (this.open_image) {this.image_viewer_cmd = config.getImageViewer(conf, filename);}
-    if (this.format.equals("avif")) {setAvifSpeed(args, conf);}
+    if (this.format.equals("avif")) {this.avif_speed = getAvifSpeed(args, conf);}
   }
 
   private void setCrop(String[] args) {
@@ -215,11 +215,10 @@ class CaptureOpts {
     else {return config.getDelay(conf);}
   }
   
-  private void setAvifSpeed(String[] args, Setting[] conf) {
-    byte conf_speed = config.getAvifSpeed(conf);
+  private byte getAvifSpeed(String[] args, Setting[] conf) {
     byte cli_speed = cli.getArgQuality(args, "-avif-speed");
-    if (cli_speed >= 0 && cli_speed <= 8) {avif_speed = cli_speed;}
-    else {avif_speed = conf_speed;}
+    if (cli_speed >= 0 && cli_speed <= 8) {return cli_speed;}
+    else {return config.getAvifSpeed(conf);}
   }
 
   //Get the screenshot filename, either user-specified or generated
