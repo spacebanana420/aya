@@ -31,11 +31,7 @@ public class capture {
     stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
     int result;
     //Wayland screen capture
-    if (opts.wayland_mode) {
-      byte[] screenshot = wayland.captureScreen(opts.region_select, opts.capture_cursor);
-      if (screenshot == null) {return 1;}
-      result = wayland_encodeScreenshot(opts, screenshot);
-    }
+    if (opts.wayland_mode) {result = wayland_takeScreenshot(opts);}
     //x11 capture
     else {result = x11_takeScreenshot(opts);}
 
@@ -68,7 +64,7 @@ public class capture {
     return 0;
   }
 
-  //For x11, this builds the FFmpeg command that takes the screenshot and encodes it
+  //For x11, FFmpeg both takes the screenshot and encodes it
   private static int x11_takeScreenshot(CaptureOpts opts) {
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
@@ -82,8 +78,11 @@ public class capture {
     return process.run(cmd, false);
   }
   
-  //For Wayland, FFmpeg only processes the screenshot taken by Grim for feature parity with x11 mode
-  private static int wayland_encodeScreenshot(CaptureOpts opts, byte[] picture) {
+  //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
+  private static int wayland_takeScreenshot(CaptureOpts opts) {
+    byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor);
+    if (picture == null) {return 1;}
+    
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getWaylandArgs());
