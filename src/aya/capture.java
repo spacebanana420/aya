@@ -249,12 +249,13 @@ class CaptureOpts {
     if (value.equals("~")) {return System.getProperty("user.home");}
     
     File f = new File(value);
+    String error_base = "\nDefaulting to current working directory or config-specified directory";
     if (!f.isDirectory()) {
-      stdout.print("The specified directory located at " + value + " is not a real directory\nDefaulting to current working directory or config-specified directory");
+      stdout.error("The specified directory located at " + value + " is not a real directory" + error_base);
       return config_directory;
     }
     if (!f.canWrite()) {
-      stdout.print("You lack the permission to write at the specified directory " + value + "\nDefaulting to current working directory or config-specified directory");
+      stdout.error("You lack the permission to write at the specified directory " + value + error_base);
       return config_directory;
     }
     
