@@ -30,16 +30,15 @@ public class capture {
     
     stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
     int result;
-    if (opts.wayland_mode) { //Wayland screen capture
+    //Wayland screen capture
+    if (opts.wayland_mode) {
       byte[] screenshot = wayland.captureScreen(opts.region_select, opts.capture_cursor);
       if (screenshot == null) {return 1;}
-      ArrayList<String> cmd = opts.mkCommand_wayland();
-      result = process.run_stdin(cmd, screenshot);
+      result = wayland_encodeScreenshot(opts, screenshot);
     }
-    else { //x11 screen capture
-      ArrayList<String> cmd = opts.mkCommand_x11();
-      result = process.run(cmd, false);
-    }
+    //x11 capture
+    else {result = x11_takeScreenshot(opts);}
+
     switch (result) {
       case 0:
         stdout.print("Screenshot saved at path " + opts.filename);
@@ -68,6 +67,47 @@ public class capture {
     }
     return 0;
   }
+
+  //For x11, this builds the FFmpeg command that takes the screenshot and encodes it
+  private static int x11_takeScreenshot(CaptureOpts opts) {
+    var cmd = new ArrayList<String>();
+    cmd.add(opts.ffmpeg_path);
+    cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
+    cmd.addAll(ffmpeg_extraArgs(opts));
+    String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
+    String arg_scale = ffmpeg.scaleArgs(opts.scale);
+    cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
+    
+    cmd.add(opts.filename);
+    return process.run(cmd, false);
+  }
+  
+  //For Wayland, FFmpeg only processes the screenshot taken by Grim for feature parity with x11 mode
+  private static int wayland_encodeScreenshot(CaptureOpts opts, byte[] picture) {
+    var cmd = new ArrayList<String>();
+    cmd.add(opts.ffmpeg_path);
+    cmd.addAll(ffmpeg.getWaylandArgs());
+    cmd.addAll(ffmpeg_extraArgs(opts));
+    String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
+    String arg_scale = ffmpeg.scaleArgs(opts.scale);
+    cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
+    
+    cmd.add(opts.filename);
+    return process.run_stdin(cmd, picture);
+  }
+
+   static ArrayList<String> ffmpeg_extraArgs(CaptureOpts opts) {
+    switch(opts.format) {
+      case "png":
+        return ffmpeg.encodeArgs_png(opts.quality);
+      case "avif":
+        return ffmpeg.encodeArgs_avif(opts.quality, opts.avif_speed);
+      case "bmp":
+        return ffmpeg.encodeArgs_bmp();
+      default:
+        return ffmpeg.encodeArgs_jpg(opts.quality);
+    }
+  }
 }
 
 //Stores screenshot settings according to the provided CLI arguments and config file
@@ -84,7 +124,7 @@ class CaptureOpts {
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
   
-  private String ffmpeg_path = null;
+  String ffmpeg_path = null;
   
   boolean window_select = false;
   boolean region_select = false;
@@ -110,47 +150,6 @@ class CaptureOpts {
     open_image = cli.hasArgument(args, "-open");
     if (open_image) {image_viewer_cmd = config.getImageViewer(conf, filename);}
     if (format.equals("avif")) {setAvifSpeed(args, conf);}
-  }
-
-  //For x11, builds the FFmpeg or Imagemagick command that takes the screenshot and encodes it
-  ArrayList<String> mkCommand_x11() {
-    var args = new ArrayList<String>();
-    args.add(ffmpeg_path);
-    args.addAll(ffmpeg.getCaptureArgs(region_select, capture_cursor));
-    args.addAll(ffmpeg_extraArgs());
-    String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
-    String arg_scale = ffmpeg.scaleArgs(scale);
-    args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
-    
-    args.add(filename);
-    return args;
-  }
-  
-  //For Wayland, FFmpeg only processes the screenshot taken by Grim for feature parity with x11 mode
-  ArrayList<String> mkCommand_wayland() {
-    var args = new ArrayList<String>();
-    args.add(ffmpeg_path);
-    args.addAll(ffmpeg.getWaylandArgs());
-    args.addAll(ffmpeg_extraArgs());
-    String arg_crop = ffmpeg.cropArgs(crop[0], crop[1], crop[2], crop[3]);
-    String arg_scale = ffmpeg.scaleArgs(scale);
-    args.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
-    
-    args.add(filename);
-    return args;
-  }
-  
-  private ArrayList<String> ffmpeg_extraArgs() {
-    switch(format) {
-      case "png":
-        return ffmpeg.encodeArgs_png(quality);
-      case "avif":
-        return ffmpeg.encodeArgs_avif(quality, avif_speed);
-      case "bmp":
-        return ffmpeg.encodeArgs_bmp();
-      default:
-        return ffmpeg.encodeArgs_jpg(quality);
-    }
   }
 
   private void setCrop(String[] args) {
