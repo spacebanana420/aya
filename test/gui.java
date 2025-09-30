@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
 
-public class gui {
+public class gui {  
   public static void main(String[] args) {
     Frame window = new Frame("Aya GUI Test");
     Panel panel = new Panel();
@@ -19,7 +19,7 @@ public class gui {
     Button button = new Button("Got it");
     button.setFont(button_font);
     button.setMaximumSize(new Dimension(100, button.getPreferredSize().height));
-    button.addActionListener((listener) -> System.out.println("Button clicked"));
+    button.addActionListener(listener -> System.out.println("Button clicked"));
     
 
     //window.add(message);
@@ -31,6 +31,10 @@ public class gui {
     window.add(panel);
     window.setMinimumSize(new Dimension(600, 200));
     window.pack();
+    WindowListener on_window_close = new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {System.out.println("Window Closing");}
+    };
+    window.addWindowListener(on_window_close);
     window.setVisible(true);
   }
 }
