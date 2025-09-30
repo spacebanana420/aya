@@ -36,5 +36,6 @@ public class gui {
     };
     window.addWindowListener(on_window_close);
     window.setVisible(true);
+    System.out.println("parallel");
   }
 }
