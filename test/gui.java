@@ -29,7 +29,7 @@ public class gui {
     panel.add(Box.createVerticalStrut(10));
     
     window.add(panel);
-    window.setMinimumSize(new Dimension(600, 200));
+    window.setMinimumSize(new Dimension(500, 180));
     window.pack();
     WindowListener on_window_close = new WindowAdapter() {
       public void windowClosing(WindowEvent e) {System.out.println("Window Closing");}

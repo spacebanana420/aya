@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import aya.stdout;
+import aya.ui.stdout;
 
 public class config {
   public static Setting[] openConfig() {

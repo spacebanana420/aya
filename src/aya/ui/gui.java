@@ -1,0 +1,62 @@
+package aya.ui;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.BoxLayout;
+import javax.swing.Box;
+import java.util.ArrayList;
+
+public class gui {
+  public static boolean GUI_ENABLED = false;
+  
+  public static void displayMessage(String title, String message) {
+    Font message_font = new Font("SansSeirf", Font.PLAIN, 28);
+    Font button_font = new Font("SansSeirf", Font.PLAIN, 24);
+    Frame window = new Frame(title);
+        
+    Button button = new Button("Got it");
+    button.setFont(button_font);
+    button.setMaximumSize(new Dimension(100, button.getPreferredSize().height));
+    button.addActionListener(listener -> window.setVisible(false));
+
+    Panel panel = new Panel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    for (String line : separateLines(message)) {
+      Label message_label = new Label(line);
+      message_label.setAlignment(Label.CENTER);
+      message_label.setFont(message_font);
+      panel.add(message_label);
+    }
+    panel.add(button);
+    panel.add(Box.createVerticalStrut(10));
+    
+    window.setResizable(false);
+    window.add(panel);
+    window.setMinimumSize(new Dimension(500, 180));
+    window.pack();
+    WindowListener on_window_close = new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {window.setVisible(false);}
+    };
+    window.addWindowListener(on_window_close);
+    window.setVisible(true);
+    while (window.isVisible()) {try{Thread.sleep(100);} catch (InterruptedException e) {return;}}
+  }
+
+  private static ArrayList<String> separateLines(String message) {
+    var line = new StringBuilder();
+    var lines = new ArrayList<String>();
+
+    for (int i = 0; i < message.length(); i++)  {
+      char c = message.charAt(i);
+      if (c == '\n') {
+        if (line.length() == 0) {continue;}
+        lines.add(line.toString());
+        line = new StringBuilder();
+      }
+      line.append(c);
+    }
+    if (line.length() != 0) {lines.add(line.toString());}
+    if (lines.size() == 0) {lines.add(message);}
+    return lines;
+  }
+}

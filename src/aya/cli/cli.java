@@ -1,7 +1,7 @@
 package aya.cli;
 
 import aya.misc;
-import aya.stdout;
+import aya.ui.stdout;
 
 //CLI parsing functions
 public class cli {

@@ -1,6 +1,6 @@
 package aya.wrapper;
 
-import aya.stdout;
+import aya.ui.stdout;
 import java.util.ArrayList;
 
 public class wayland {

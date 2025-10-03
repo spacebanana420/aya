@@ -2,10 +2,12 @@ package aya;
 
 import aya.cli.cli;
 import aya.cli.help;
+import aya.ui.*;
 
 public class main {
   public static void main(String[] args) {
     stdout.VERBOSITY_LEVEL = getVerbosityLevel(args);
+    gui.GUI_ENABLED = cli.hasArgument(args, "-gui");
     
     if (cli.hasArgument(args, "-h")) {
       stdout.print(help.getHelp());

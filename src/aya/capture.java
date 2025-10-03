@@ -6,6 +6,7 @@ import aya.wrapper.xwininfo;
 import aya.wrapper.wayland;
 
 import aya.cli.cli;
+import aya.ui.stdout;
 import aya.config.config;
 import aya.config.Setting;
 

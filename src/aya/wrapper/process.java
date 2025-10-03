@@ -3,7 +3,7 @@ package aya.wrapper;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
-import aya.stdout;
+import aya.ui.stdout;
 
 public class process {
   public static int run(ArrayList<String> args, boolean silent) {
