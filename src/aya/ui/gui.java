@@ -18,6 +18,7 @@ public class gui {
     button.setMaximumSize(new Dimension(100, button.getPreferredSize().height));
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.addActionListener(listener -> window.setVisible(false));
+    button.setFocusPainted(false);
 
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -35,10 +36,6 @@ public class gui {
     window.add(panel);
     window.setMinimumSize(new Dimension(500, 180));
     window.pack();
-    WindowListener on_window_close = new WindowAdapter() {
-      public void windowClosing(WindowEvent e) {window.setVisible(false);}
-    };
-    window.addWindowListener(on_window_close);
     window.setVisible(true);
     while (window.isVisible()) {try{Thread.sleep(100);} catch (InterruptedException e) {return;}}
   }
