@@ -27,6 +27,7 @@ public class gui {
       message_label.setFont(message_font);
       panel.add(message_label);
     }
+    panel.add(Box.createVerticalStrut(10));
     panel.add(button);
     panel.add(Box.createVerticalStrut(10));
     
