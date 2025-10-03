@@ -10,8 +10,8 @@ public class gui {
   public static boolean GUI_ENABLED = false;
   
   public static void displayMessage(String title, String message) {
-    Font message_font = new Font("SansSeirf", Font.PLAIN, 28);
-    Font button_font = new Font("SansSeirf", Font.PLAIN, 24);
+    Font message_font = new Font("SansSerif", Font.PLAIN, 28);
+    Font button_font = new Font("SansSerif", Font.PLAIN, 24);
     Frame window = new Frame(title);
         
     Button button = new Button("Got it");

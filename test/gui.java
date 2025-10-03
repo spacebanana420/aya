@@ -11,8 +11,8 @@ public class gui {
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     window.setResizable(false);
 
-    Font message_font = new Font("SansSeirf", Font.PLAIN, 32);
-    Font button_font = new Font("SansSeirf", Font.PLAIN, 24);
+    Font message_font = new Font("SansSerif", Font.PLAIN, 32);
+    Font button_font = new Font("SansSerif", Font.PLAIN, 24);
     Label message = new Label("Sample status message");
     message.setAlignment(Label.CENTER);
     message.setFont(message_font);
