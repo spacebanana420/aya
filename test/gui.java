@@ -5,6 +5,9 @@ import javax.swing.Box;
 
 public class gui {  
   public static void main(String[] args) {
+    int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+    System.out.println("System DPI: " + dpi);
+    
     Frame window = new Frame("Aya GUI Test");
     Panel panel = new Panel();
     //window.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

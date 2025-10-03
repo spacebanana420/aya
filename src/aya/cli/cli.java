@@ -5,8 +5,6 @@ import aya.ui.stdout;
 
 //CLI parsing functions
 public class cli {
-
-  
   public static boolean hasArgument(String[] args, String arg) {return argIndex(args, arg) != -1;}
   
   public static String getArgValue(String[] args, String arg) {
