@@ -2,8 +2,7 @@ package aya.ui;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.BoxLayout;
-import javax.swing.Box;
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class gui {
@@ -12,18 +11,19 @@ public class gui {
   public static void displayMessage(String title, String message) {
     Font message_font = new Font("SansSerif", Font.PLAIN, 28);
     Font button_font = new Font("SansSerif", Font.PLAIN, 24);
-    Frame window = new Frame(title);
+    JFrame window = new JFrame(title);
         
-    Button button = new Button("Got it");
+    JButton button = new JButton("Got it");
     button.setFont(button_font);
     button.setMaximumSize(new Dimension(100, button.getPreferredSize().height));
+    button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.addActionListener(listener -> window.setVisible(false));
 
-    Panel panel = new Panel();
+    JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     for (String line : separateLines(message)) {
-      Label message_label = new Label(line);
-      message_label.setAlignment(Label.CENTER);
+      JLabel message_label = new JLabel(line);
+      message_label.setAlignmentX(Component.CENTER_ALIGNMENT);
       message_label.setFont(message_font);
       panel.add(message_label);
     }
