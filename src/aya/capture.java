@@ -15,8 +15,8 @@ import java.io.File;
 import java.time.LocalDate;
 
 public class capture {
-  public static int takeScreenshot(String[] args) {
-    CaptureOpts opts = new CaptureOpts(args);
+  public static int takeScreenshot(String[] args, Setting[] conf) {
+    CaptureOpts opts = new CaptureOpts(args, conf);
     
     if (!opts.override_file && new File(opts.filename).isFile()) {
       String message = "The file in path " + opts.filename + " already exists!\nOverride file? (y/N)";
@@ -128,9 +128,7 @@ class CaptureOpts {
   boolean capture_cursor = false;
   boolean wayland_mode = false;
 
-  CaptureOpts(String[] args) {
-    Setting[] conf = config.openConfig();
-
+  CaptureOpts(String[] args, Setting[] conf) {
     this.wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
     this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
     this.ffmpeg_path = config.getFFmpegPath(conf);

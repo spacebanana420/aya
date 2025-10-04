@@ -2,13 +2,13 @@ package aya;
 
 import aya.cli.cli;
 import aya.cli.help;
+import aya.config.config;
+import aya.config.Setting;
 import aya.ui.*;
 
 public class main {
   public static void main(String[] args) {
-    stdout.VERBOSITY_LEVEL = getVerbosityLevel(args);
-    gui.GUI_ENABLED = cli.hasArgument(args, "-gui");
-    gui.setGUIScale(args);
+    stdout.VERBOSITY_LEVEL = getVerbosityLevel(args);    
     
     if (cli.hasArgument(args, "-h")) {
       stdout.print(help.getHelp());
@@ -26,7 +26,10 @@ public class main {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
-    int result = capture.takeScreenshot(args);
+    Setting[] conf = config.openConfig();
+    gui.GUI_ENABLED = cli.hasArgument(args, "-gui");
+    gui.setGUIScale(args, conf);
+    int result = capture.takeScreenshot(args, conf);
     System.exit(result);
   }
 

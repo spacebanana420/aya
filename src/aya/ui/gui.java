@@ -1,6 +1,8 @@
 package aya.ui;
 
 import aya.cli.cli;
+import aya.config.Setting;
+import aya.config.config;
 
 import java.awt.*;
 import javax.swing.*;
@@ -17,8 +19,10 @@ public class gui {
   private static int max_button_size = 100;
   private static int blank_gap = 10;
 
-  public static void setGUIScale(String[] args) {
+  public static void setGUIScale(String[] args, Setting[] conf) {
     byte scale = cli.getArgScale(args, "-gui-scale");
+    if (scale == -1) {scale = config.getGUIScale(conf);}
+    
     if (scale < 2) {return;}
     message_size *= scale;
     button_size *= scale;

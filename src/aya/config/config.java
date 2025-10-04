@@ -97,7 +97,7 @@ public class config {
   public static boolean waylandModeEnabled(Setting[] config) {return confio.readSetting_bool(config, "wayland_Mode");}
 
   public static byte getGUIScale(Setting[] config) {
-    byte scale = confio.readSetting_Byte(config, "gui_scale");
+    byte scale = confio.readSetting_byte(config, "gui_scale");
     return scale < 1 || scale > 3 ? -1 : scale;
   }
 }
@@ -163,7 +163,7 @@ class confwriter {
         + "\n\n#Configure Aya to work on Wayland instead of X11"
         + "\n#wayland_mode=false"
 
-        + "\n\n#Set the scale of GUI elements (supported values: 1, 2, 3)
+        + "\n\n#Set the scale of GUI elements (supported values: 1, 2, 3)"
         + "\n#gui_scale=1"
       ).getBytes();
   }
