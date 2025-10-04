@@ -1,20 +1,40 @@
 package aya.ui;
 
+import aya.cli.cli;
+
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
 public class gui {
   public static boolean GUI_ENABLED = false;
+
+  //UI size values
+  private static int message_size = 28;
+  private static int button_size = 24;
+  private static int[] min_window_size = new int[]{500, 180};
+  private static int max_button_size = 100;
+  private static int blank_gap = 10;
+
+  public static void setGUIScale(String[] args) {
+    byte scale = cli.getArgScale(args, "-gui-scale");
+    if (scale < 1) {return;}
+    message_size *= scale;
+    button_size *= scale;
+    min_window_size[0] *= scale;
+    min_window_size[1] *= scale;
+    max_button_size *= scale;
+    blank_gap *= scale;
+  }
   
   public static void displayMessage(String title, String message) {
-    Font message_font = new Font("SansSerif", Font.PLAIN, 28);
-    Font button_font = new Font("SansSerif", Font.PLAIN, 24);
+    Font message_font = new Font("SansSerif", Font.PLAIN, message_size);
+    Font button_font = new Font("SansSerif", Font.PLAIN, button_size);
     JFrame window = new JFrame(title);
         
     JButton button = new JButton("Got it");
     button.setFont(button_font);
-    button.setMaximumSize(new Dimension(100, button.getPreferredSize().height));
+    button.setMaximumSize(new Dimension(max_button_size, button.getPreferredSize().height));
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.addActionListener(listener -> window.setVisible(false));
     button.setFocusPainted(false);
@@ -27,13 +47,13 @@ public class gui {
       message_label.setFont(message_font);
       panel.add(message_label);
     }
-    panel.add(Box.createVerticalStrut(10));
+    panel.add(Box.createVerticalStrut(blank_gap));
     panel.add(button);
     panel.add(Box.createVerticalStrut(10));
     
     window.setResizable(false);
     window.add(panel);
-    window.setMinimumSize(new Dimension(500, 180));
+    window.setMinimumSize(new Dimension(min_window_size[0], min_window_size[1]));
     window.pack();
     window.setVisible(true);
     while (window.isVisible()) {try{Thread.sleep(100);} catch (InterruptedException e) {return;}}

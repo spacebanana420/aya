@@ -59,11 +59,16 @@ public class cli {
   }
 
   //Byte value with an upper limit of 100
-  public static byte getArgQuality(String[] args, String arg) {
+  public static byte getArgQuality(String[] args, String arg) {return getArgByte(args, arg, 100);}
+
+  //For GUI display scale
+  public static byte getArgScale(String[] args, String arg) {return getArgByte(args, arg, 3);}
+
+  private static byte getArgByte(String[] args, String arg, int upper_bound) {
     int num = getArgInt(args, arg);
     if (num == -1) {return -1;}
-    if (num > 100) {
-      stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be above 100, ignoring");
+    if (num > upper_bound) {
+      stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be above " + upper_bound + ", ignoring");
       return -1;
     }
     return (byte)num;
