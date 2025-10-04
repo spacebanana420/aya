@@ -30,7 +30,7 @@ public class help {
       + "\n  * -avif-speed [number]   sets the AVIF encoding speed/efficiency tradeoff (0 to 8, higher is faster) (default 8)"
       + "\n"
       + "\n  * -gui                   displays a graphical window when error messages are also printed"
-      + "\n  * -gui-size [number]     scales the GUI windows, supported values: 1, 2, 3"
+      + "\n  * -gui-scale [number]    scales the GUI windows, supported values: 1, 2, 3"
       + "\n  * -wayland               enables experimental Wayland mode"
       + "\n  * -quiet                 disables all output messages"
       + "\n  * -verbose               displays more status messages"
