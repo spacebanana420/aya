@@ -57,7 +57,7 @@ public class gui {
     window.setMinimumSize(new Dimension(min_window_size[0], min_window_size[1]));
     window.pack();
     window.setVisible(true);
-    while (window.isVisible()) {try{Thread.sleep(100);} catch (InterruptedException e) {return;}}
+    while (window.isVisible()) {try{Thread.sleep(20);} catch (InterruptedException e) {return;}}
   }
 
   private static ArrayList<String> separateLines(String message) {
