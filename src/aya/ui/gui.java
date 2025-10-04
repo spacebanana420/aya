@@ -4,6 +4,7 @@ import aya.cli.cli;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.util.ArrayList;
 
 public class gui {
@@ -41,6 +42,7 @@ public class gui {
 
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(new EmptyBorder(blank_gap, blank_gap, blank_gap, blank_gap));
     for (String line : separateLines(message)) {
       JLabel message_label = new JLabel(line);
       message_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -49,7 +51,6 @@ public class gui {
     }
     panel.add(Box.createVerticalStrut(blank_gap));
     panel.add(button);
-    panel.add(Box.createVerticalStrut(blank_gap));
     
     window.setResizable(false);
     window.add(panel);
