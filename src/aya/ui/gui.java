@@ -10,9 +10,9 @@ public class gui {
   public static boolean GUI_ENABLED = false;
 
   //UI size values
-  private static int message_size = 28;
-  private static int button_size = 24;
-  private static int[] min_window_size = new int[]{500, 180};
+  private static int message_size = 20;
+  private static int button_size = 18;
+  private static int[] min_window_size = new int[]{450, 100};
   private static int max_button_size = 100;
   private static int blank_gap = 10;
 
@@ -49,7 +49,7 @@ public class gui {
     }
     panel.add(Box.createVerticalStrut(blank_gap));
     panel.add(button);
-    panel.add(Box.createVerticalStrut(10));
+    panel.add(Box.createVerticalStrut(blank_gap));
     
     window.setResizable(false);
     window.add(panel);
