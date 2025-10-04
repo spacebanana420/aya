@@ -18,7 +18,7 @@ public class gui {
 
   public static void setGUIScale(String[] args) {
     byte scale = cli.getArgScale(args, "-gui-scale");
-    if (scale < 1) {return;}
+    if (scale < 2) {return;}
     message_size *= scale;
     button_size *= scale;
     min_window_size[0] *= scale;
