@@ -11,31 +11,32 @@ public class confio {
   public static Config openConfig() {
     createConfig();
     String home = System.getProperty("user.home");
+    String conf = null;
     try {
       var is = new FileInputStream(home + "/.config/aya/aya.conf");
-      String conf = new String(is.readAllBytes());
+      conf = new String(is.readAllBytes());
       is.close();
-      
-      var line = new StringBuilder();
-      ArrayList<String> conflist = new ArrayList<String>();
-      for (int i = 0; i < conf.length(); i++)
-      {
-        char c = conf.charAt(i);
-        if (c == '\n') {
-          addLine(conflist, line);
-          line = new StringBuilder();
-        }
-        else {line.append(conf.charAt(i));}
-      }
-      addLine(conflist, line);
-      Config c = new Config();
-      for (String confline : conflist) {c.addSetting(confline);}
-      return c;
     }
     catch (IOException e) {
       stdout.error("Failed to read Aya config in path ~/.config/aya/aya.conf");
       return new Config();
     }    
+      
+    var line = new StringBuilder();
+    ArrayList<String> conflist = new ArrayList<String>();
+    for (int i = 0; i < conf.length(); i++)
+    {
+      char c = conf.charAt(i);
+      if (c == '\n') {
+        addLine(conflist, line);
+        line = new StringBuilder();
+      }
+      else {line.append(conf.charAt(i));}
+    }
+    addLine(conflist, line);
+    Config c = new Config();
+    for (String confline : conflist) {c.addSetting(confline);}
+    return c;
   }
 
   private static void addLine(ArrayList<String> lines, StringBuilder line) {
