@@ -1,5 +1,6 @@
 package aya.config;
 
+import aya.ui.stdout;
 import java.util.ArrayList;
 
 public class Config {
@@ -32,7 +33,11 @@ public class Config {
     for (int i = 0; i < keys.size(); i++) {
       if (key.equals(this.keys.get(i))) {value_i = i; break;}
     }
-    return value_i == -1 ? null : this.values.get(value_i);
+    if (value_i == -1) {
+      stdout.error_verbose("The value for key " + key + " was not found as the key is not in the configuration!");
+      return null;
+    }
+    return this.values.get(value_i);
   }
 
   public int readSetting_int(String setting) {
@@ -41,7 +46,10 @@ public class Config {
     try {
       return Integer.parseInt(svalue);
     }
-    catch (NumberFormatException e) {return -1;}
+    catch (NumberFormatException e) {
+      printSettingError(setting, svalue, "int");
+      return -1;
+    }
   }
 
   public byte readSetting_byte(String setting) {
@@ -50,7 +58,10 @@ public class Config {
     try {
       return Byte.parseByte(svalue);
     }
-    catch (NumberFormatException e) {return -1;}
+    catch (NumberFormatException e) {
+      printSettingError(setting, svalue, "byte");
+      return -1;
+    }
   }
   
   public boolean readSetting_bool(String setting) {
@@ -87,5 +98,9 @@ public class Config {
     }
     if (!has_filename_position) {cmd.add(filename);}
     return cmd;
+  }
+
+  private static void printSettingError(String key, String value, String type) {
+    stdout.error_verbose("Failed to convert the value " + value + " of key " + key + " from a String to a " + type);
   }
 }

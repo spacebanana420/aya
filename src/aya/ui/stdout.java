@@ -46,6 +46,10 @@ public class stdout {
     if (VERBOSITY_LEVEL > 0) {System.err.println(message);}
     if (gui.GUI_ENABLED) {gui.displayMessage("Aya Error", message);}
   }
+
+  public static void error_verbose(String message) {
+    if (VERBOSITY_LEVEL > 1) {System.err.println(message);}
+  }
   
   public static String readInput(String message) {
     if (message != null && !message.isEmpty()) {
