@@ -2,8 +2,7 @@ package aya;
 
 import aya.cli.cli;
 import aya.cli.help;
-import aya.config.config;
-import aya.config.Setting;
+import aya.config.*;
 import aya.ui.*;
 
 public class main {
@@ -26,7 +25,7 @@ public class main {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
-    Setting[] conf = config.openConfig();
+    Config conf = confio.openConfig();
     gui.GUI_ENABLED = cli.hasArgument(args, "-gui");
     gui.setGUIScale(args, conf);
     int result = capture.takeScreenshot(args, conf);

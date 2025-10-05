@@ -1,7 +1,7 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.10";
+  public static final String VERSION = "0.10.1";
   
   public static String getHelp() {
     return

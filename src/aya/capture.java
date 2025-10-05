@@ -8,14 +8,14 @@ import aya.wrapper.wayland;
 import aya.cli.cli;
 import aya.ui.stdout;
 import aya.config.config;
-import aya.config.Setting;
+import aya.config.Config;
 
 import java.util.ArrayList;
 import java.io.File;
 import java.time.LocalDate;
 
 public class capture {
-  public static int takeScreenshot(String[] args, Setting[] conf) {
+  public static int takeScreenshot(String[] args, Config conf) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
     if (!opts.override_file && new File(opts.filename).isFile()) {
@@ -128,7 +128,7 @@ class CaptureOpts {
   boolean capture_cursor = false;
   boolean wayland_mode = false;
 
-  CaptureOpts(String[] args, Setting[] conf) {
+  CaptureOpts(String[] args, Config conf) {
     this.wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
     this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
     this.ffmpeg_path = config.getFFmpegPath(conf);
@@ -167,7 +167,7 @@ class CaptureOpts {
     return value;
   }
   
-  private String getFormat(String[] args, Setting[] conf) {
+  private String getFormat(String[] args, Config conf) {
     String value = getFormat_cli(args);
     if (value != null) {return value;}
 
@@ -185,7 +185,7 @@ class CaptureOpts {
     stdout.print("Ignored specified image format " + value + " found in CLI arguments for being invalid");
     return null;
   }
-  private static String getFormat_config(Setting[] conf) {
+  private static String getFormat_config(Config conf) {
     String value = config.getFormat(conf);
     if (value == null) {return null;}
     if (supportedFormat(value)) {return value;}
@@ -202,26 +202,26 @@ class CaptureOpts {
     ;
   }
 
-  private byte getQuality(String[] args, Setting[] conf) {
+  private byte getQuality(String[] args, Config conf) {
     byte value = cli.getArgQuality(args, "-q");
     if (value >= 0) {return value;}
     else {return config.getQuality(conf);}
   }
 
-  private int getDelay(String[] args, Setting[] conf) {
+  private int getDelay(String[] args, Config conf) {
     int value = cli.getArgInt(args, "-t");
     if (value > 0) {return value;}
     else {return config.getDelay(conf);}
   }
   
-  private byte getAvifSpeed(String[] args, Setting[] conf) {
+  private byte getAvifSpeed(String[] args, Config conf) {
     byte cli_speed = cli.getArgQuality(args, "-avif-speed");
     if (cli_speed >= 0 && cli_speed <= 8) {return cli_speed;}
     else {return config.getAvifSpeed(conf);}
   }
 
   //Get the screenshot filename, either user-specified or generated
-  private String generateFilename(String[] args, Setting[] conf) {
+  private String generateFilename(String[] args, Config conf) {
     String argname = cli.getFilename(args, format);
     if (argname != null) {return argname;}
 
@@ -240,7 +240,7 @@ class CaptureOpts {
     return full;    
   }
   
-  private static String getDirectory(String[] args, Setting[] conf) {
+  private static String getDirectory(String[] args, Config conf) {
     String config_directory = config.getDirectory(conf);
     config_directory = addDirSlash(config_directory);
     
