@@ -10,15 +10,16 @@ import java.util.ArrayList;
 public class confio {
   public static Config openConfig() {
     createConfig();
+    String config_path = System.getProperty("user.home") + "/.config/aya/aya.conf";
     String home = System.getProperty("user.home");
     String conf = null;
     try {
-      var is = new FileInputStream(home + "/.config/aya/aya.conf");
+      var is = new FileInputStream(config_path);
       conf = new String(is.readAllBytes());
       is.close();
     }
     catch (IOException e) {
-      stdout.error("Failed to read Aya config in path ~/.config/aya/aya.conf");
+      stdout.error("Failed to read Aya config in path " + config_path);
       return new Config();
     }    
       
