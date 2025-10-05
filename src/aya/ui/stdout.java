@@ -43,7 +43,8 @@ public class stdout {
   }
   
   public static void error(String message) {
-    if (VERBOSITY_LEVEL > 0) {System.err.println(message);}
+    if (VERBOSITY_LEVEL < 1) {return;}
+    System.err.println(message);
     if (gui.GUI_ENABLED) {gui.displayMessage("Aya Error", message);}
   }
 
