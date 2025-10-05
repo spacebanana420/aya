@@ -32,7 +32,10 @@ public class confio {
       for (String confline : conflist) {c.addSetting(confline);}
       return c;
     }
-    catch (IOException e) {return new Config();}    
+    catch (IOException e) {
+      stdout.error("Failed to read Aya config in path ~/.config/aya/aya.conf");
+      return new Config();
+    }    
   }
 
   private static void addLine(ArrayList<String> lines, StringBuilder line) {
@@ -49,14 +52,13 @@ public class confio {
     
     try {
       if (!dir_f.isDirectory()) {dir_f.mkdir();}
-      if (!conf_f.isFile()) {
-        var os = new FileOutputStream(conf_f);
-        os.write(getDefaultConfig());
-        os.close();
-      }
+      if (conf_f.isFile()) {return;}
+      var os = new FileOutputStream(conf_f);
+      os.write(getDefaultConfig());
+      os.close();
     }
     catch (IOException e) {
-      stdout.print("Error creating Aya config! Unable to create config directory or file!");}
+      stdout.error("Error creating Aya config! Unable to create config directory or file!");}
   }
 
   private static byte[] getDefaultConfig() {
