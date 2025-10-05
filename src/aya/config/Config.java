@@ -65,23 +65,22 @@ public class Config {
     if (cmd_str == null) {return null;}
     
     var cmd = new ArrayList<String>();
-    String buffer = "";
+    var arg = new StringBuilder();
     
     for (int i = 0; i < cmd_str.length(); i++) {
       char c = cmd_str.charAt(i);
       if (c == ' ' || c == '\t') {
-        if (buffer.length() == 0) {continue;}
-        cmd.add(buffer);
-        buffer = "";
+        if (arg.length() == 0) {continue;}
+        cmd.add(arg.toString());
+        arg = new StringBuilder();
       }
-      else {buffer += c;}
+      else {arg.append(c);}
     }
-    if (buffer.length() > 0) {cmd.add(buffer);}
+    if (arg.length() > 0) {cmd.add(arg.toString());}
     
     boolean has_filename_position = false;
     for (int i = 0; i < cmd.size(); i++) {
-      String arg = cmd.get(i);
-      if (arg.equals("%F")) {
+      if (cmd.get(i).equals("%F")) {
         has_filename_position = true;
         cmd.set(i, filename);
       }
