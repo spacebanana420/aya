@@ -16,24 +16,30 @@ public class confio {
       String conf = new String(is.readAllBytes());
       is.close();
       
-      String buffer = "";
+      var line = new StringBuilder();
       ArrayList<String> conflist = new ArrayList<String>();
       for (int i = 0; i < conf.length(); i++)
       {
         char c = conf.charAt(i);
         if (c == '\n') {
-          if (buffer.length() > 0 && buffer.charAt(0) != '#') {conflist.add(buffer);}
-          buffer = "";
-          continue;
+          addLine(conflist, line);
+          line = new StringBuilder();
         }
-        buffer += conf.charAt(i);
+        else {line.append(conf.charAt(i));}
       }
-      if (buffer.length() > 0 && buffer.charAt(0) != '#') {conflist.add(buffer);}
+      addLine(conflist, line);
       Config c = new Config();
-      for (String line : conflist) {c.addSetting(line);}
+      for (String confline : conflist) {c.addSetting(confline);}
       return c;
     }
     catch (IOException e) {return new Config();}    
+  }
+
+  private static void addLine(ArrayList<String> lines, StringBuilder line) {
+    if (line.length() == 0) {return;}
+    String line_str = line.toString().trim();
+    if (line_str.length() == 0 || line_str.charAt(0) == '#') {return;}
+    lines.add(line_str);
   }
 
   private static void createConfig() {
