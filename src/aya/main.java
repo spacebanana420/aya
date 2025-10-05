@@ -7,7 +7,7 @@ import aya.ui.*;
 
 public class main {
   public static void main(String[] args) {
-    stdout.VERBOSITY_LEVEL = getVerbosityLevel(args);    
+    setVerbosityLevel(args);    
     
     if (cli.hasArgument(args, "-h")) {
       stdout.print(help.getHelp());
@@ -37,10 +37,9 @@ public class main {
     return (os.contains("windows") || os.contains("mac") || os.contains("darwin") || os.equals("haiku"));
   }
 
-  private static byte getVerbosityLevel(String[] args) {
-    if (cli.hasArgument(args, "-quiet")) {return 0;}
-    else if (cli.hasArgument(args, "-verbose")) {return 2;}
-    else if (cli.hasArgument(args, "-debug")) {return 3;}
-    else {return 1;}
+  private static void setVerbosityLevel(String[] args) {
+    if (cli.hasArgument(args, "-quiet")) {stdout.setQuiet();}
+    else if (cli.hasArgument(args, "-verbose")) {stdout.setVerbose();}
+    else if (cli.hasArgument(args, "-debug")) {stdout.setDebug();}
   }
 }

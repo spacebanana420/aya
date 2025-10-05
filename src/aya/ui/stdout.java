@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class stdout {
-  public static byte VERBOSITY_LEVEL = 1;
+  private static byte VERBOSITY_LEVEL = 1;
+
+  public static void setQuiet() {VERBOSITY_LEVEL = 0;}
+  public static void setVerbose() {VERBOSITY_LEVEL = 2;}
+  public static void setDebug() {VERBOSITY_LEVEL = 3;}
   
   public static void print(String message) {
     if (VERBOSITY_LEVEL > 0) {System.out.println(message);}
