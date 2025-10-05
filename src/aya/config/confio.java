@@ -11,7 +11,6 @@ public class confio {
   public static Config openConfig() {
     createConfig();
     String config_path = System.getProperty("user.home") + "/.config/aya/aya.conf";
-    String home = System.getProperty("user.home");
     String conf = null;
     try {
       var is = new FileInputStream(config_path);

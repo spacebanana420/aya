@@ -43,6 +43,7 @@ public class Config {
   public int readSetting_int(String setting) {
     String svalue = readSetting(setting);
     if (svalue == null) {return -1;}
+
     try {
       return Integer.parseInt(svalue);
     }
