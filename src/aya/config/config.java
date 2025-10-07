@@ -9,7 +9,10 @@ public class config {
     String dir = c.readSetting("screenshot_directory");
     if (dir == null) {return "";}
     var f = new File(dir);
-    if (!f.isDirectory() || !f.isAbsolute()) {return "";}
+    if (!f.isDirectory() || !f.isAbsolute()) {
+      stdout.error_verbose("[Aya config] error in screenshot_directory setting: the path " + dir + " does not point to the absolute path of a directory!");
+      return "";
+    }
     return dir;
   }
 

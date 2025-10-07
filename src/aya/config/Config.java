@@ -102,6 +102,6 @@ public class Config {
   }
 
   private static void printSettingError(String key, String value, String type) {
-    stdout.error_verbose("Failed to convert the value " + value + " of key " + key + " from a String to a " + type);
+    stdout.error_verbose("[Aya config] Failed to convert the value " + value + " of key " + key + " from a String to a " + type);
   }
 }
