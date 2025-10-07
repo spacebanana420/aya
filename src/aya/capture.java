@@ -209,7 +209,7 @@ class CaptureOpts {
   }
 
   private int getDelay(String[] args, Config conf) {
-    int value = cli.getArgInt(args, "-t");
+    int value = cli.getScreenshotDelay(args);
     if (value > 0) {return value;}
     else {return config.getDelay(conf);}
   }
