@@ -20,7 +20,7 @@ public class gui {
   private static int blank_gap = 10;
 
   public static void setGUIScale(String[] args, Config conf) {
-    float scale = cli.getGUIScale(args, "-gui-scale");
+    float scale = cli.getGUIScale(args);
     if (scale == -1) {scale = config.getGUIScale(conf);}
     
     if (scale == 1 || scale == -1) {return;}

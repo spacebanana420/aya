@@ -53,11 +53,11 @@ public class cli {
   public static byte getAvifSpeed(String[] args) {return getArgByte(args, "-avif-speed", 8);}
   
   //For GUI display scale
-  public static float getGUIScale(String[] args, String arg) {
-    float scale = getArgFloat(args, arg);
+  public static float getGUIScale(String[] args) {
+    float scale = getArgFloat(args, "-gui-scale");
     if (scale == -1) {return -1;}
     if (scale < 0.5 || scale > 3) {
-      printError(arg, "The GUI scale must be a value between 0.5 and 3 (e.g 1.25 or 0.75 or 2)");
+      printError("-gui-scale", "The GUI scale must be a value between 0.5 and 3 (e.g 1.25 or 0.75 or 2)");
       return 0;
     }
     return scale;
