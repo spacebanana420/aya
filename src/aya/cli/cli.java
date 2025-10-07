@@ -11,7 +11,7 @@ public class cli {
     int i = argIndex(args, arg);
     if (i == -1) {return null;}
     if (i == args.length-1 || invalidValue(args[i+1])) {
-      stdout.error("The argument " + arg + " must be followed by a value!");
+      printError(arg, "The argument must be followed by a value!");
       return null;
     }
     return args[i+1];
@@ -30,48 +30,62 @@ public class cli {
     String value = getArgValue(args, arg);
     if (value == null) {return -1;}
     if (value.length() > 9) {
-      stdout.error("The value provided " + value + " for the argument " + arg + " is too big! Ignoring");
+      printError(arg, "The value provided " + value + " is too big! Ignoring");
       return -1;
     }
     try {
       int num = Integer.parseInt(value);
       if (num < 0) {
-        stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be negative, ignoring");
+        printError(arg, "The value must not be negative, ignoring");
         return -1;
       }
       return num;
     }
-    catch (NumberFormatException e) {return -1;}
-  }
-  
-  public static float getArgFloat(String[] args, String arg) {
-    String value = getArgValue(args, arg);
-    if (value == null) {return -1;}
-    try {
-      float num = Float.parseFloat(value);
-      if (num < 0) {
-        stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be negative, ignoring");
-        return -1;
-      }
-      return num;
+    catch (NumberFormatException e) {
+      printError(arg, "Failed to convert value " + value + " into a signed int number (32bit)");
+      return -1;
     }
-    catch (NumberFormatException e) {return -1;}
   }
 
+  public static float getScreenshotScale(String[] args, String arg) {return getArgFloat(args, arg);}
   //Byte value with an upper limit of 100
   public static byte getArgQuality(String[] args, String arg) {return getArgByte(args, arg, 100);}
-
   //For GUI display scale
-  public static byte getArgScale(String[] args, String arg) {return getArgByte(args, arg, 3);}
+  public static float getGUIScale(String[] args, String arg) {
+    float scale = getArgFloat(args, arg);
+    if (scale == -1) {return -1;}
+    if (scale < 0.5 || scale > 3) {
+      printError(arg, "The GUI scale must be a value between 0.5 and 3 (e.g 1.25 or 0.75 or 2)");
+      return 0;
+    }
+    return scale;
+  }
 
   private static byte getArgByte(String[] args, String arg, int upper_bound) {
     int num = getArgInt(args, arg);
     if (num == -1) {return -1;}
     if (num > upper_bound) {
-      stdout.error("Incorrect value provided with CLI argument " + arg + "\nThe value must not be above " + upper_bound + ", ignoring");
+      printError(arg, "The value must not be above " + upper_bound + ", ignoring");
       return -1;
     }
     return (byte)num;
+  }
+
+  private static float getArgFloat(String[] args, String arg) {
+    String value = getArgValue(args, arg);
+    if (value == null) {return -1;}
+    try {
+      float num = Float.parseFloat(value);
+      if (num < 0) {
+        printError(arg, "The value must not be negative, ignoring");
+        return -1;
+      }
+      return num;
+    }
+    catch (NumberFormatException e) {
+      printError(arg, "Failed to convert value " + value + " into a float number");
+      return -1;
+    }
   }
 
   private static int argIndex(String[] args, String arg) {
@@ -83,4 +97,8 @@ public class cli {
 
   //CLI arguments that start with "-" are meant to be options and not values of an option
   private static boolean invalidValue(String value) {return value.isEmpty() || value.charAt(0) == '-';}
+
+  private static void printError(String arg, String message) {
+    stdout.error("[Aya CLI] Incorrect value provided with CLI argument " + arg + "\n" + message);
+  }
 }

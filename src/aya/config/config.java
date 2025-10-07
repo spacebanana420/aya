@@ -57,8 +57,8 @@ public class config {
 
   public static boolean waylandModeEnabled(Config c) {return c.readSetting_bool("wayland_Mode");}
 
-  public static byte getGUIScale(Config c) {
-    byte scale = c.readSetting_byte("gui_scale");
-    return scale < 1 || scale > 3 ? -1 : scale;
+  public static float getGUIScale(Config c) {
+    float scale = c.readSetting_float("gui_scale");
+    return scale < 0.5 || scale > 3 ? -1 : scale;
   }
 }

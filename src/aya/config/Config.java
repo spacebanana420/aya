@@ -64,6 +64,18 @@ public class Config {
       return -1;
     }
   }
+
+  public float readSetting_float(String setting) {
+    String svalue = readSetting(setting);
+    if (svalue == null) {return -1;}
+    try {
+      return Float.parseFloat(svalue);
+    }
+    catch (NumberFormatException e) {
+      printSettingError(setting, svalue, "float");
+      return -1;
+    }
+  }
   
   public boolean readSetting_bool(String setting) {
     String value = readSetting(setting);

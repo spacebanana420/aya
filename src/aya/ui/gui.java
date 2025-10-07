@@ -20,10 +20,10 @@ public class gui {
   private static int blank_gap = 10;
 
   public static void setGUIScale(String[] args, Config conf) {
-    byte scale = cli.getArgScale(args, "-gui-scale");
+    float scale = cli.getGUIScale(args, "-gui-scale");
     if (scale == -1) {scale = config.getGUIScale(conf);}
     
-    if (scale < 2) {return;}
+    if (scale == 1 || scale == -1) {return;}
     message_size *= scale;
     button_size *= scale;
     min_window_size[0] *= scale;

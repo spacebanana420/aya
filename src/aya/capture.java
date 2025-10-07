@@ -162,7 +162,7 @@ class CaptureOpts {
   }
 
   private float getScale(String[] args) {
-    float value = cli.getArgFloat(args, "-s");
+    float value = cli.getScreenshotScale(args, "-s");
     if (value < 0) {value = 0;}
     return value;
   }
