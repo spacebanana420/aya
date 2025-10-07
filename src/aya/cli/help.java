@@ -1,7 +1,7 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.10.1";
+  public static final String VERSION = "0.10.2";
   
   public static String getHelp() {
     return
@@ -24,9 +24,9 @@ public class help {
       + "\n  * -open                  opens the screenshot after saving it (requires configuration in dotfile)"
       + "\n"
       + "\n  * -s [factor]            scales the screenshot by a factor (>0 to +inf)"
-      + "\n  * -f [format]            sets the image file format (supported formats: png, jpg, avif, bmp"
+      + "\n  * -f [format]            sets the image file format (supported formats: png, jpg, avif, bmp)"
       + "\n  * -q [number]            sets the quality level (0-5 for PNG, 1-100 for JPG, 0-63 for AVIF)"
-      + "\n  * -qh                    Opens the help screen explaining picture quality control (for -q)"
+      + "\n  * -qh                    opens the help screen explaining picture quality control (for -q)"
       + "\n  * -avif-speed [number]   sets the AVIF encoding speed/efficiency tradeoff (0 to 8, higher is faster) (default 8)"
       + "\n"
       + "\n  * -gui                   displays a graphical window when error messages are also printed"
