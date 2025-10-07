@@ -162,7 +162,7 @@ class CaptureOpts {
   }
 
   private float getScale(String[] args) {
-    float value = cli.getScreenshotScale(args, "-s");
+    float value = cli.getScreenshotScale(args);
     if (value < 0) {value = 0;}
     return value;
   }
@@ -203,7 +203,7 @@ class CaptureOpts {
   }
 
   private byte getQuality(String[] args, Config conf) {
-    byte value = cli.getArgQuality(args, "-q");
+    byte value = cli.getScreenshotQuality(args);
     if (value >= 0) {return value;}
     else {return config.getQuality(conf);}
   }
@@ -215,8 +215,8 @@ class CaptureOpts {
   }
   
   private byte getAvifSpeed(String[] args, Config conf) {
-    byte cli_speed = cli.getArgQuality(args, "-avif-speed");
-    if (cli_speed >= 0 && cli_speed <= 8) {return cli_speed;}
+    byte cli_speed = cli.getAvifSpeed(args);
+    if (cli_speed != -1) {return cli_speed;}
     else {return config.getAvifSpeed(conf);}
   }
 

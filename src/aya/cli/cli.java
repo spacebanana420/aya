@@ -47,9 +47,10 @@ public class cli {
     }
   }
 
-  public static float getScreenshotScale(String[] args, String arg) {return getArgFloat(args, arg);}
-  //Byte value with an upper limit of 100
-  public static byte getArgQuality(String[] args, String arg) {return getArgByte(args, arg, 100);}
+  public static float getScreenshotScale(String[] args) {return getArgFloat(args, "-s");}
+  public static byte getScreenshotQuality(String[] args) {return getArgByte(args, "-q", 100);}
+  public static byte getAvifSpeed(String[] args) {return getArgByte(args, "-avif-speed", 8);}
+  
   //For GUI display scale
   public static float getGUIScale(String[] args, String arg) {
     float scale = getArgFloat(args, arg);
