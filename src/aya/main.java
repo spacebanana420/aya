@@ -26,8 +26,8 @@ public class main {
       return;
     }
     Config conf = confio.openConfig();
-    gui.GUI_ENABLED = cli.hasArgument(args, "-gui");
-    gui.setGUIScale(args, conf);
+    gui.setupGUI(args, conf);
+    
     int result = capture.takeScreenshot(args, conf);
     System.exit(result);
   }

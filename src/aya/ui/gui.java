@@ -19,24 +19,29 @@ public class gui {
   private static int max_button_size = 100;
   private static int blank_gap = 10;
 
-  public static void setGUIScale(String[] args, Config conf) {
+  private static Font message_font = null;
+  private static Font button_font = null;
+
+  public static void setupGUI(String[] args, Config conf) {
+    GUI_ENABLED = cli.hasArgument(args, "-gui");
+    if (!GUI_ENABLED) {return;}
     float scale = cli.getGUIScale(args);
     if (scale == -1) {scale = config.getGUIScale(conf);}
     
-    if (scale == 1 || scale == -1) {return;}
-    message_size *= scale;
-    button_size *= scale;
-    min_window_size[0] *= scale;
-    min_window_size[1] *= scale;
-    max_button_size *= scale;
-    blank_gap *= scale;
+    if (scale != 1 && scale != -1) {
+      message_size *= scale;
+      button_size *= scale;
+      min_window_size[0] *= scale;
+      min_window_size[1] *= scale;
+      max_button_size *= scale;
+      blank_gap *= scale;
+    }
+    message_font = new Font("SansSerif", Font.PLAIN, message_size);
+    button_font = new Font("SansSerif", Font.PLAIN, button_size);
   }
   
   public static void displayMessage(String title, String message) {
-    Font message_font = new Font("SansSerif", Font.PLAIN, message_size);
-    Font button_font = new Font("SansSerif", Font.PLAIN, button_size);
     JFrame window = new JFrame(title);
-        
     JButton button = new JButton("Got it");
     button.setFont(button_font);
     button.setMaximumSize(new Dimension(max_button_size, button.getPreferredSize().height));
