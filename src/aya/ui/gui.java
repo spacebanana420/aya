@@ -23,7 +23,7 @@ public class gui {
   private static Font button_font = null;
 
   public static void setupGUI(String[] args, Config conf) {
-    GUI_ENABLED = cli.hasArgument(args, "-gui");
+    GUI_ENABLED = cli.hasArgument(args, "-gui") || config.getGUIToggle(conf);
     if (!GUI_ENABLED) {return;}
     float scale = cli.getGUIScale(args);
     if (scale == -1) {scale = config.getGUIScale(conf);}

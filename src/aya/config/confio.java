@@ -105,6 +105,9 @@ public class confio {
         + "\n\n#Configure Aya to work on Wayland instead of X11"
         + "\n#wayland_mode=false"
 
+        + "\n\n#Enable GUI mode to open graphical windows when an error happens"
+        + "\n#use_gui=false"
+        
         + "\n\n#Set the scale of GUI elements (supported values: 1, 2, 3)"
         + "\n#gui_scale=1"
       ).getBytes();
