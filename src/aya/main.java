@@ -13,11 +13,11 @@ public class main {
       stdout.print(help.getHelp());
       return;
     }
-    else if (cli.hasArgument(args, "-qh")) {
+    if (cli.hasArgument(args, "-qh")) {
       stdout.print(help.getQualityHelp());
       return;
     }
-    else if (cli.hasArgument(args, "-v")) {
+    if (cli.hasArgument(args, "-v")) {
       stdout.print("Aya version " + help.VERSION);
       return;
     }
