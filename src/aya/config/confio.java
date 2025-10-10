@@ -108,7 +108,7 @@ public class confio {
         + "\n\n#Enable GUI mode to open graphical windows when an error happens"
         + "\n#use_gui=false"
         
-        + "\n\n#Set the scale of GUI elements (supported values: 1, 2, 3)"
+        + "\n\n#Set the scale of GUI elements, supports any value between 0.5 and 3 (inclusive) (e.g. 1.75)"
         + "\n#gui_scale=1"
       ).getBytes();
   }
