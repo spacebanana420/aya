@@ -55,7 +55,7 @@ public class config {
     return c.readSetting_bool("capture_cursor");
   }
 
-  public static boolean waylandModeEnabled(Config c) {return c.readSetting_bool("wayland_Mode");}
+  public static boolean waylandModeEnabled(Config c) {return c.readSetting_bool("wayland_mode");}
 
   public static boolean getGUIToggle(Config c) {return c.readSetting_bool("use_gui");}
 
