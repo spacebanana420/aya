@@ -31,7 +31,7 @@ public class help {
       + "\n  * -avif-fast             uses faster but less efficient encoding for AVIF pictures, overrides -avif-speed"
       + "\n"
       + "\n  * -gui                   displays a graphical window when error messages are also printed"
-      + "\n  * -gui-scale <number>    scales the GUI windows, supported values: 1, 2, 3"
+      + "\n  * -gui-scale <number>    scales the GUI windows, supports values between 0.5 and 3 (e.g. 1.25)"
       + "\n  * -wayland               enables experimental Wayland mode"
       + "\n  * -quiet                 disables all output messages"
       + "\n  * -verbose               displays more status messages"
