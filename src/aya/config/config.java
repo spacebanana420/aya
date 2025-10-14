@@ -5,16 +5,7 @@ import java.util.ArrayList;
 import aya.ui.stdout;
 
 public class config {
-  public static String getDirectory(Config c) {
-    String dir = c.readSetting("screenshot_directory");
-    if (dir == null) {return "";}
-    var f = new File(dir);
-    if (!f.isDirectory() || !f.isAbsolute()) {
-      stdout.error_verbose("[Aya config] error in screenshot_directory setting: the path " + dir + " does not point to the absolute path of a directory!");
-      return "";
-    }
-    return dir;
-  }
+  public static String getDirectory(Config c) {return c.readSetting("screenshot_directory");}
 
   public static int getDelay(Config c) {
     int delay = c.readSetting_int("screenshot_delay");

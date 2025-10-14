@@ -249,26 +249,26 @@ class CaptureOpts {
   }
   
   private static String getDirectory(String[] args, Config conf) {
-    String config_directory = config.getDirectory(conf);
-    config_directory = addDirSlash(config_directory);
-    
-    String value = cli.getArgValue(args, "-d");
-    if (value == null || value.isEmpty()) {return config_directory;}
-    if (value.equals("~")) {return System.getProperty("user.home");}
-    
-    File f = new File(value);
-    String error_base = "\nDefaulting to current working directory or config-specified directory";
+    String dir = cli.getScreenshotDirectory(args);
+    if (dir == null) {dir = config.getDirectory(conf);}
+    if (dir == null) {
+      stdout.print_verbose("No custom screenshot directory was specified, defaulting to working directory");
+      return "";
+    }
+    if (dir.equals("~")) {return System.getProperty("user.home");}
+
+    dir = addDirSlash(dir);
+    File f = new File(dir);
+    String error_base = "\nDefaulting to current working directory";
     if (!f.isDirectory()) {
-      stdout.error("The specified directory located at " + value + " is not a real directory" + error_base);
-      return config_directory;
+      stdout.error("The specified directory located at " + dir + " is not a real directory" + error_base);
+      return "";
     }
     if (!f.canWrite()) {
-      stdout.error("You lack the permission to write at the specified directory " + value + error_base);
-      return config_directory;
+      stdout.error("You lack the permission to write at the specified directory " + dir + error_base);
+      return "";
     }
-    
-    value = addDirSlash(value);
-    return value;
+    return dir;
   }
   
   private static String addDirSlash(String dir) {

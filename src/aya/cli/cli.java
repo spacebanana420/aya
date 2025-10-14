@@ -47,6 +47,7 @@ public class cli {
     }
   }
 
+  public static String getScreenshotDirectory(String[] args) {return getArgValue(args, "-d");}
   public static float getScreenshotScale(String[] args) {return getArgFloat(args, "-s");}
   public static byte getScreenshotQuality(String[] args) {return getArgByte(args, "-q", 100);}
   public static int getScreenshotDelay(String[] args) {return getArgInt(args, "-t");}
