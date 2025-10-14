@@ -150,7 +150,7 @@ class CaptureOpts {
       this.image_viewer_cmd = config.getImageViewer(conf, filename);
     }
     if (this.format.equals("avif")) {
-      this.avif_fast = fastAvifMode(args, conf);
+      this.avif_fast = cli.fastAvif(args) || config.getAvifMode(conf);
       if (!this.avif_fast) {this.avif_speed = getAvifSpeed(args, conf);}
     }
   }
@@ -220,10 +220,6 @@ class CaptureOpts {
     int value = cli.getScreenshotDelay(args);
     if (value > 0) {return value;}
     else {return config.getDelay(conf);}
-  }
-
-  private boolean fastAvifMode(String[] args, Config conf) {
-    return cli.fastAvif(args) || config.getAvifMode(conf);
   }
   
   private byte getAvifSpeed(String[] args, Config conf) {
