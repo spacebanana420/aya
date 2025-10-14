@@ -25,19 +25,23 @@ public class gui {
   public static void setupGUI(String[] args, Config conf) {
     GUI_ENABLED = cli.hasArgument(args, "-gui") || config.getGUIToggle(conf);
     if (!GUI_ENABLED) {return;}
-    float scale = cli.getGUIScale(args);
-    if (scale == -1) {scale = config.getGUIScale(conf);}
-    
-    if (scale != 1 && scale != -1) {
-      message_size *= scale;
-      button_size *= scale;
-      min_window_size[0] *= scale;
-      min_window_size[1] *= scale;
-      max_button_size *= scale;
-      blank_gap *= scale;
-    }
     message_font = new Font("SansSerif", Font.PLAIN, message_size);
     button_font = new Font("SansSerif", Font.PLAIN, button_size);
+
+    float scale = cli.getGUIScale(args);
+    if (scale == -1) {scale = config.getGUIScale(conf);}
+
+    if (scale < 0.5 || scale > 3) {
+      stdout.error("The GUI scale value must not be below 0.5 or 3\nDefaulting to 1x scale");
+      return;
+    }
+    if (scale == 1 || scale == -1) {return;}
+    message_size *= scale;
+    button_size *= scale;
+    min_window_size[0] *= scale;
+    min_window_size[1] *= scale;
+    max_button_size *= scale;
+    blank_gap *= scale;
   }
   
   public static void displayMessage(String title, String message) {

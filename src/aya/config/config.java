@@ -59,8 +59,5 @@ public class config {
 
   public static boolean getGUIToggle(Config c) {return c.readSetting_bool("use_gui");}
 
-  public static float getGUIScale(Config c) {
-    float scale = c.readSetting_float("gui_scale");
-    return scale < 0.5 || scale > 3 ? -1 : scale;
-  }
+  public static float getGUIScale(Config c) {return c.readSetting_float("gui_scale");}
 }
