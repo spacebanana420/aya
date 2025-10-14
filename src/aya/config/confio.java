@@ -70,7 +70,7 @@ public class confio {
         + "\n# CLI arguments override their respective settings here"
 
         + "\n\n==Settings=="
-        + "\n# Set an absolute path as the directory to where the screenshots are saved"
+        + "\n# Set path to where the screenshots are saved"
         + "\n#screenshot_directory=."
         
         + "\n\n# Set a default delay in seconds for taking screenshots"
@@ -91,7 +91,7 @@ public class confio {
         + "\n# Value ranges from 0 to 8, default value is 8. Higher values represent faster encoding at the cost of lower compression efficiency"
         + "\n#avif_speed=8"
 
-        + "\n\n#Turn this on to increase AVIF encoding speed at the cost of lower encoding efficiency. Overrides avif_speed"
+        + "\n\n# Turn this on to increase AVIF encoding speed at the cost of lower encoding efficiency. Overrides avif_speed"
         + "\n#avif_fast_mode=false"
         
         + "\n\n# The command to use for opening screenshot images"
@@ -105,13 +105,13 @@ public class confio {
         + "\n\n# You can specify a custom path to the FFmpeg binary if you don't want to use the one installed in the system"
         + "\n#ffmpeg_path=ffmpeg"
 
-        + "\n\n#Configure Aya to work on Wayland instead of X11"
+        + "\n\n# Configure Aya to work on Wayland instead of X11"
         + "\n#wayland_mode=false"
 
-        + "\n\n#Enable GUI mode to open graphical windows when an error happens"
+        + "\n\n# Enable GUI mode to open graphical windows when an error happens"
         + "\n#use_gui=false"
         
-        + "\n\n#Set the scale of GUI elements, supports any value between 0.5 and 3 (inclusive) (e.g. 1.75)"
+        + "\n\n# Set the scale of GUI elements, supports any value between 0.5 and 3 (inclusive) (e.g. 1.75)"
         + "\n#gui_scale=1"
       ).getBytes();
   }
