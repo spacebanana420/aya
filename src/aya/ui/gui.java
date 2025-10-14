@@ -29,12 +29,15 @@ public class gui {
     float scale = cli.getGUIScale(args);
     if (scale == -1) {scale = config.getGUIScale(conf);}
 
-    if (scale < 0.5 || scale > 3) {
-      stdout.error("The GUI scale value must not be below 0.5 or 3\nDefaulting to 1x scale");
+    if (scale == 1 || scale == -1) {
       createFontObjects();
       return;
     }
-    if (scale == 1 || scale == -1) {createFontObjects(); return;}
+    if (scale < 0.5 || scale > 3) {
+      createFontObjects();
+      stdout.error("The GUI scale value must not be below 0.5 or above 3\nDefaulting to 1x scale");
+      return;
+    }
     
     message_size *= scale;
     button_size *= scale;
