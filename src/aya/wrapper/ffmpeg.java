@@ -63,6 +63,16 @@ public class ffmpeg {
     return list;
   }
 
+  public static ArrayList<String> encodeArgs_avif(byte quality) {
+    var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-usage", "realtime", "-row-mt", "true"});
+    byte quality_filtered = 0;
+    if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
+    else if (quality > -1) {stdout.warnInvalidQuality("AVIF", 0, 63, 0);}
+    
+    list.add("-crf"); list.add(""+quality_filtered);
+    return list;    
+  }
+
   public static String cropArgs(int w, int h, int x, int y) {
     if (w <= 0 && h <= 0) {return "";}
    

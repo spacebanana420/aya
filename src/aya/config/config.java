@@ -35,6 +35,7 @@ public class config {
     byte value = c.readSetting_byte("avif_speed");
     return (value >= 0 && value <= 8) ? value : 8;
   }
+  public static boolean getAvifMode(Config c) {return c.readSetting_bool("avif_fast_mode");}
 
   public static String getFFmpegPath(Config c) {
     String path = c.readSetting("ffmpeg_path");

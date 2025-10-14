@@ -98,7 +98,9 @@ public class capture {
       case "png":
         return ffmpeg.encodeArgs_png(opts.quality);
       case "avif":
-        return ffmpeg.encodeArgs_avif(opts.quality, opts.avif_speed);
+        return opts.avif_fast
+          ? ffmpeg.encodeArgs_avif(opts.quality)
+          : ffmpeg.encodeArgs_avif(opts.quality, opts.avif_speed);
       case "bmp":
         return ffmpeg.encodeArgs_bmp();
       default:
@@ -114,6 +116,7 @@ class CaptureOpts {
   byte quality = -1;
   float scale = 0f;
   byte avif_speed = 8;
+  boolean avif_fast = false;
 
   boolean override_file = false;
   String filename = "";
@@ -143,8 +146,13 @@ class CaptureOpts {
     
     this.filename = generateFilename(args, conf);
     this.open_image = cli.hasArgument(args, "-open");
-    if (this.open_image) {this.image_viewer_cmd = config.getImageViewer(conf, filename);}
-    if (this.format.equals("avif")) {this.avif_speed = getAvifSpeed(args, conf);}
+    if (this.open_image) {
+      this.image_viewer_cmd = config.getImageViewer(conf, filename);
+    }
+    if (this.format.equals("avif")) {
+      this.avif_fast = fastAvifMode(args, conf);
+      if (!this.avif_fast) {this.avif_speed = getAvifSpeed(args, conf);}
+    }
   }
 
   private void setCrop(String[] args) {
@@ -212,6 +220,10 @@ class CaptureOpts {
     int value = cli.getScreenshotDelay(args);
     if (value > 0) {return value;}
     else {return config.getDelay(conf);}
+  }
+
+  private boolean fastAvifMode(String[] args, Config conf) {
+    return cli.fastAvif(args) || config.getAvifMode(conf);
   }
   
   private byte getAvifSpeed(String[] args, Config conf) {

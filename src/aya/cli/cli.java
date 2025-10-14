@@ -51,6 +51,7 @@ public class cli {
   public static byte getScreenshotQuality(String[] args) {return getArgByte(args, "-q", 100);}
   public static int getScreenshotDelay(String[] args) {return getArgInt(args, "-t");}
   public static byte getAvifSpeed(String[] args) {return getArgByte(args, "-avif-speed", 8);}
+  public static boolean fastAvif(String[] args) {return hasArgument(args, "-avif-fast");}
   public static float getGUIScale(String[] args) {return getArgFloat(args, "-gui-scale");}
 
   private static byte getArgByte(String[] args, String arg, int upper_bound) {

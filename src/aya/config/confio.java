@@ -90,6 +90,9 @@ public class confio {
         + "\n\n# AVIF speed defines the tradeoff between compression speed and compresion efficiency"
         + "\n# Value ranges from 0 to 8, default value is 8. Higher values represent faster encoding at the cost of lower compression efficiency"
         + "\n#avif_speed=8"
+
+        + "\n\n#Turn this on to increase AVIF encoding speed at the cost of lower encoding efficiency. Overrides avif_speed"
+        + "\n#avif_fast_mode=false"
         
         + "\n\n# The command to use for opening screenshot images"
         + "\n# Use the special keyword %F to place the filename"

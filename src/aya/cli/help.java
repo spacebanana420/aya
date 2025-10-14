@@ -28,6 +28,7 @@ public class help {
       + "\n  * -q [number]            sets the quality level (0-5 for PNG, 1-100 for JPG, 0-63 for AVIF)"
       + "\n  * -qh                    opens the help screen explaining picture quality control (for -q)"
       + "\n  * -avif-speed [number]   sets the AVIF encoding speed/efficiency tradeoff (0 to 8, higher is faster) (default 8)"
+      + "\n  * -avif-fast             uses faster but less efficient encoding for AVIF pictures, overrides -avif-speed"
       + "\n"
       + "\n  * -gui                   displays a graphical window when error messages are also printed"
       + "\n  * -gui-scale [number]    scales the GUI windows, supported values: 1, 2, 3"
