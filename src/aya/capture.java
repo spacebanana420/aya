@@ -255,7 +255,20 @@ class CaptureOpts {
       stdout.print_verbose("No custom screenshot directory was specified, defaulting to working directory");
       return "";
     }
-    if (dir.equals("~")) {return System.getProperty("user.home");}
+    String home = System.getProperty("user.home");
+    if (dir.equals("~")) {
+      stdout.print_verbose("Interpreting the provided path " + dir + " as " + home);
+      return home;
+    }
+    
+    if (dir.length() > 2 && dir.charAt(0) == '~' && dir.charAt(1) == '/') {
+      String new_dir = dir.replaceFirst("~/", home);
+      File new_dir_f = new File(new_dir);
+      if (new_dir_f.isFile() && new_dir_f.canWrite()) {
+        stdout.print_verbose("Interpreting the provided path " + dir + " as " + new_dir);
+        return new_dir;
+      }
+    }
 
     dir = addDirSlash(dir);
     File f = new File(dir);
