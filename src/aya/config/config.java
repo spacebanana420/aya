@@ -32,7 +32,21 @@ public class config {
     String path = c.readSetting("ffmpeg_path");
     if (path == null) {return "ffmpeg";}
     var f = new File(path);
-    if (f.isFile() && f.isAbsolute() && f.canExecute()) {return path;} else {return "ffmpeg";}
+    String error_base = "[Aya config] Error in value attribute \"ffmpeg_path\"\n";
+      
+    if (!f.isFile()) {
+      stdout.error(error_base + "The provided path does not lead to a file!");
+      return "ffmpeg";
+    }
+    if (!f.isAbsolute()) {
+      stdout.error(error_base + "The provided path is not an absolute path!");
+      return "ffmpeg";
+    }
+    if (!f.canExecute()) {
+      stdout.error(error_base + "The binary lacks the permission to be executed!");
+      return "ffmpeg";
+    }
+    return path;
   }
   
   public static ArrayList<String> getImageViewer(Config c, String filename) {
