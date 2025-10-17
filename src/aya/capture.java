@@ -19,8 +19,7 @@ public class capture {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
     if (!opts.override_file && new File(opts.filename).isFile()) {
-      String message = "The file in path " + opts.filename + " already exists!\nOverride file? (y/N)";
-      String answer = stdout.readInput(message).trim();
+      String answer = stdout.readInput("The file in path " + opts.filename + " already exists!\nOverride file? (y/N)").trim();
       if (!answer.equals("y") && !answer.equals("yes")) {return 0;}
     }
     
