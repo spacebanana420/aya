@@ -18,8 +18,8 @@ public class capture {
   public static int takeScreenshot(String[] args, Config conf) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
-    if (!opts.override_file && new File(opts.filename).isFile()) {
-      String answer = stdout.readInput("The file in path " + opts.filename + " already exists!\nOverride file? (y/N)").trim();
+    if (!opts.override_file && new File(opts.file_path).isFile()) {
+      String answer = stdout.readInput("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)").trim();
       if (!answer.equals("y") && !answer.equals("yes")) {return 0;}
     }
     
@@ -29,12 +29,12 @@ public class capture {
     }
 
     //Take the screenshot and save it, x11 or Wayland
-    stdout.print_verbose("Taking screenshot as file \"" + opts.filename + "\"");
+    stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
     int result = opts.wayland_mode ? wayland_takeScreenshot(opts) : x11_takeScreenshot(opts);
 
     switch (result) {
       case 0:
-        stdout.print("Screenshot saved at path " + opts.filename);
+        stdout.print("Screenshot saved at path " + opts.file_path);
         break;
       case -1:
         stdout.error("Aya failed to take a screenshot! FFmpeg was not found in your system! You need to install FFmpeg to use Aya");
@@ -71,7 +71,7 @@ public class capture {
     String arg_scale = ffmpeg.scaleArgs(opts.scale);
     cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
     
-    cmd.add(opts.filename);
+    cmd.add(opts.file_path);
     return process.run(cmd, false);
   }
   
@@ -88,7 +88,7 @@ public class capture {
     String arg_scale = ffmpeg.scaleArgs(opts.scale);
     cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
     
-    cmd.add(opts.filename);
+    cmd.add(opts.file_path);
     return process.run_stdin(cmd, picture);
   }
 
@@ -118,12 +118,12 @@ class CaptureOpts {
   boolean avif_fast = false;
 
   boolean override_file = false;
-  String filename = "";
+  String file_path = "";
   int delay = 0;
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
   
-  String ffmpeg_path = null;
+  String ffmpeg_path = "ffmpeg";
   
   boolean window_select = false;
   boolean region_select = false;
@@ -135,18 +135,19 @@ class CaptureOpts {
     this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
     this.ffmpeg_path = config.getFFmpegPath(conf);
     this.capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
+    this.window_select = cli.hasArgument(args, "-window");
+    this.region_select = !this.window_select && cli.hasArgument(args, "-region");
+    this.open_image = cli.hasArgument(args, "-open");
     
-    setCrop(args);
+    this.crop = getCrop(args, this.window_select, this.wayland_mode);
     this.scale = getScale(args);
     this.format = getFormat(args, conf);
     this.quality = getQuality(args, conf);
     this.delay = getDelay(args, conf);
-    this.region_select = !this.window_select && cli.hasArgument(args, "-region"); //window_select is defined earlier in setCrop()
     
-    this.filename = generateFilename(args, conf);
-    this.open_image = cli.hasArgument(args, "-open");
+    this.file_path = generateFilename(args, conf, this.format);
     if (this.open_image) {
-      this.image_viewer_cmd = config.getImageViewer(conf, filename);
+      this.image_viewer_cmd = config.getImageViewer(conf, file_path);
     }
     if (this.format.equals("avif")) {
       this.avif_fast = cli.fastAvif(args) || config.getAvifMode(conf);
@@ -154,27 +155,33 @@ class CaptureOpts {
     }
   }
 
-  private void setCrop(String[] args) {
+  private static int[] getCrop(String[] args, boolean window_select, boolean wayland_enabled) {
     String[] opts = new String[]{"-width", "-height", "-x", "-y"};
+    int[] crop_coords = new int[4];
+    
     for (int i = 0; i < opts.length; i++) {
       int value = cli.getArgInt(args, opts[i]);
-      if (value >= 0) {this.crop[i] = value;}
+      if (value >= 0) {crop_coords[i] = value;}
     }
 
-    if (cli.hasArgument(args, "-window") && !this.wayland_mode) {
-      this.window_select = true;
+    if (window_select) {
+      if (wayland_enabled) {
+        stdout.error("Window capture (-window) is not supported in Wayland mode!");
+        return crop_coords;
+      }
       int[] window_coords = xwininfo.getWindowCoordinates();
-      if (window_coords != null) {this.crop = window_coords;}
+      if (window_coords != null) {crop_coords = window_coords;}
     }
+    return crop_coords;
   }
 
-  private float getScale(String[] args) {
+  private static float getScale(String[] args) {
     float value = cli.getScreenshotScale(args);
     if (value < 0) {value = 0;}
     return value;
   }
   
-  private String getFormat(String[] args, Config conf) {
+  private static String getFormat(String[] args, Config conf) {
     String value = getFormat_cli(args);
     if (value != null) {return value;}
 
@@ -189,14 +196,14 @@ class CaptureOpts {
     value = value.toLowerCase();
 
     if (supportedFormat(value)) {return value;}
-    stdout.print("Ignored specified image format " + value + " found in CLI arguments for being invalid");
+    stdout.error("Ignored specified image format " + value + " found in CLI arguments for being invalid");
     return null;
   }
   private static String getFormat_config(Config conf) {
     String value = config.getFormat(conf);
     if (value == null) {return null;}
     if (supportedFormat(value)) {return value;}
-    stdout.print("Ignored specified image format " + value + " found in aya configuration for being invalid");
+    stdout.error("Ignored specified image format " + value + " found in aya configuration for being invalid");
     return null;
   }
 
@@ -209,27 +216,27 @@ class CaptureOpts {
     ;
   }
 
-  private byte getQuality(String[] args, Config conf) {
+  private static byte getQuality(String[] args, Config conf) {
     byte value = cli.getScreenshotQuality(args);
-    if (value >= 0) {return value;}
-    else {return config.getQuality(conf);}
+    if (value == -1) {value = config.getQuality(conf);}
+    return value;
   }
 
-  private int getDelay(String[] args, Config conf) {
+  private static int getDelay(String[] args, Config conf) {
     int value = cli.getScreenshotDelay(args);
-    if (value > 0) {return value;}
-    else {return config.getDelay(conf);}
+    if (value == -1) {value = config.getDelay(conf);}
+    return value;
   }
   
-  private byte getAvifSpeed(String[] args, Config conf) {
+  private static byte getAvifSpeed(String[] args, Config conf) {
     byte cli_speed = cli.getAvifSpeed(args);
-    if (cli_speed != -1) {return cli_speed;}
-    else {return config.getAvifSpeed(conf);}
+    if (cli_speed == -1) {cli_speed = config.getAvifSpeed(conf);}
+    return cli_speed;
   }
 
   //Get the screenshot filename, either user-specified or generated
-  private String generateFilename(String[] args, Config conf) {
-    String argname = cli.getFilename(args, format);
+  private static String generateFilename(String[] args, Config conf, String image_format) {
+    String argname = cli.getFilename(args, image_format);
     if (argname != null) {return argname;}
 
     String currentTime = LocalDate.now().toString();
@@ -238,11 +245,11 @@ class CaptureOpts {
       (misc.isWorkingDirectory(directory)) ? "AyaScreenshot-"+currentTime
       : directory + "AyaScreenshot-"+currentTime;
     int num = 0;
-    String full = name + "-" + num + "." + format;
+    String full = name + "-" + num + "." + image_format;
 
     while (new File(full).isFile()) {
       num++;
-      full = name + "-" + num + "." + format;
+      full = name + "-" + num + "." + image_format;
     }
     return full;    
   }
