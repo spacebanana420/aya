@@ -110,20 +110,20 @@ public class capture {
 
 //Stores screenshot settings according to the provided CLI arguments and config file
 class CaptureOpts {
-  int[] crop = new int[4];
-  String format = "png";
-  byte quality = -1;
-  float scale = 0f;
-  byte avif_speed = 8;
-  boolean avif_fast = false;
-
-  boolean override_file = false;
+  String ffmpeg_path = "ffmpeg";
   String file_path = "";
   int delay = 0;
+  boolean override_file = false;
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
   
-  String ffmpeg_path = "ffmpeg";
+  String format = "png";
+  int[] crop = new int[4];
+  byte quality = -1;
+  float scale = 0f;
+  
+  byte avif_speed = 8;
+  boolean avif_fast = false;
   
   boolean window_select = false;
   boolean region_select = false;
