@@ -130,22 +130,32 @@ class CaptureOpts {
   boolean capture_cursor = false;
   boolean wayland_mode = false;
 
+  //Assign most of Aya's settings based on both the CLI arguments and the configuration file
   CaptureOpts(String[] args, Config conf) {
-    this.wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
-    this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
-    this.ffmpeg_path = config.getFFmpegPath(conf);
-    this.capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
-    this.window_select = cli.hasArgument(args, "-window");
-    this.region_select = !this.window_select && cli.hasArgument(args, "-region");
-    this.open_image = cli.hasArgument(args, "-open");
+    Thread[] threads = new Thread[3];
+    threads[0] = new Thread(() -> {
+      this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
+      this.ffmpeg_path = config.getFFmpegPath(conf);
+      this.capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
+    });
+
+    threads[1] = new Thread(() -> {
+      this.wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
+      this.window_select = cli.hasArgument(args, "-window");
+      this.region_select = !this.window_select && cli.hasArgument(args, "-region");
+      this.open_image = cli.hasArgument(args, "-open");
+      this.crop = getCrop(args, this.window_select, this.wayland_mode);
+    });
+
+    threads[2] = new Thread(() -> {
+      this.scale = getScale(args);
+      this.format = getFormat(args, conf);
+      this.quality = getQuality(args, conf);
+      this.delay = getDelay(args, conf);
+      this.file_path = generateFilename(args, conf, this.format);
+    });
+    runThreads(threads);
     
-    this.crop = getCrop(args, this.window_select, this.wayland_mode);
-    this.scale = getScale(args);
-    this.format = getFormat(args, conf);
-    this.quality = getQuality(args, conf);
-    this.delay = getDelay(args, conf);
-    
-    this.file_path = generateFilename(args, conf, this.format);
     if (this.open_image) {
       this.image_viewer_cmd = config.getImageViewer(conf, file_path);
     }
@@ -295,5 +305,13 @@ class CaptureOpts {
     char final_char = dir.charAt(dir.length()-1);
     if (final_char != '/' && final_char != '\\') {return dir + System.getProperty("file.separator");}
     return dir;
+  }
+
+  private static void runThreads(Thread[] threads) {
+    for (Thread t : threads) {t.start();}
+    try {
+      for (Thread t : threads) {t.join();}
+    }
+    catch (InterruptedException e) {stdout.error("An error happened while waiting for the completion of CaptureOpts threads!");}
   }
 }
