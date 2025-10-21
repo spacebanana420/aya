@@ -311,6 +311,6 @@ class CaptureOpts {
     try {
       for (Thread t : threads) {t.join();}
     }
-    catch (InterruptedException e) {stdout.error("An error happened while waiting for the completion of CaptureOpts threads!");}
+    catch (InterruptedException e) {e.printStackTrace(); stdout.error("An error happened during thread execution while initializing Aya settings!");}
   }
 }
