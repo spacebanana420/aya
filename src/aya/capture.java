@@ -130,7 +130,6 @@ class CaptureOpts {
   boolean capture_cursor = false;
   boolean wayland_mode = false;
 
-  //Assign most of Aya's settings based on both the CLI arguments and the configuration file
   CaptureOpts(String[] args, Config conf) {
     Thread[] threads = new Thread[3];
     threads[0] = new Thread(() -> {
