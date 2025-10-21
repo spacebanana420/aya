@@ -137,13 +137,13 @@ class CaptureOpts {
       this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
       this.ffmpeg_path = config.getFFmpegPath(conf);
       this.capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
+      this.open_image = cli.hasArgument(args, "-open");
     });
 
     threads[1] = new Thread(() -> {
       this.wayland_mode = cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
       this.window_select = cli.hasArgument(args, "-window");
       this.region_select = !this.window_select && cli.hasArgument(args, "-region");
-      this.open_image = cli.hasArgument(args, "-open");
       this.crop = getCrop(args, this.window_select, this.wayland_mode);
     });
 
