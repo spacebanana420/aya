@@ -34,8 +34,8 @@ public class main {
     Config conf = confio.openConfig();
     gui.setupGUI(args, conf);
     
-    int result = capture.takeScreenshot(args, conf, copy_to_clipboard, save_to_file);
-    System.exit(result);
+    boolean result = capture.takeScreenshot(args, conf, copy_to_clipboard, save_to_file);
+    System.exit(result ? 1 : 0);
   }
 
   private static boolean unsupportedSystem() {

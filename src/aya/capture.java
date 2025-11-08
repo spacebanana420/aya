@@ -15,12 +15,12 @@ import java.io.File;
 import java.time.LocalDate;
 
 public class capture {
-  public static int takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
+  public static boolean takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
     if (!opts.override_file && new File(opts.file_path).isFile()) {
       String answer = stdout.readInput("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)").trim();
-      if (!answer.equals("y") && !answer.equals("yes")) {return 0;}
+      if (!answer.equals("y") && !answer.equals("yes")) {return true;}
     }
     
     if (opts.delay > 0) {
@@ -30,41 +30,30 @@ public class capture {
 
     //Take the screenshot and save it, x11 or Wayland
     stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
-    int result;
+    boolean result;
     if (opts.wayland_mode) {result = wayland_takeScreenshot(opts, clipboard_copy, file_save);}
     else {result = x11_takeScreenshot(opts, clipboard_copy, file_save);}
 
-    switch (result) {
-      case 0:
-        stdout.print("Screenshot saved at path " + opts.file_path);
-        break;
-      case -1:
-        stdout.error("Aya failed to take a screenshot! FFmpeg was not found in your system! You need to install FFmpeg to use Aya");
-        break;
-      case -2:
-        stdout.error("Aya's process was interrupted while taking a screenshot!");
-        break;
-      default:
-        stdout.error("Unknown error happened when taking a screenshot!\nMake sure you are running a graphical environment appropriate to your configuration (X11/Wayland)!");
-    }
-    if (result != 0) {return 1;}
+    if (result) {stdout.print("Screenshot saved at path " + opts.file_path);}
+    else {stdout.error("Failed to capture or save screenshot");}
+    if (!result) {return false;}
     
     if (opts.open_image) {
       if (opts.image_viewer_cmd == null) {
         stdout.error("Error opening screenshot, image viewer command is missing!");
-        return 2;
+        return false;
       }
       result = process.run(opts.image_viewer_cmd, true);
-      if (result != 0) {
+      if (!result) {
         stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
-        return 3;
+        return false;
       }
     }
-    return 0;
+    return true;
   }
 
   //For x11, FFmpeg both takes the screenshot and encodes it
-  private static int x11_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
+  private static boolean x11_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
@@ -74,27 +63,30 @@ public class capture {
     cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
     if (savefile) { //Save the screenshot to a file, optionally also copy it to clipboard
       cmd.add(opts.file_path);
-      int result = process.run(cmd, false);
-      if (clipboard && result == 0) {x11.xclip_copyToClipboard(opts.file_path);}
+      boolean result = process.run(cmd, false);
+      if (clipboard) {
+        result = result && x11.xclip_copyToClipboard(opts.file_path);
+      }
       return result;
     }
     else { //Copy the screenshot data directly into clipboard
       cmd.add("-");
       byte[] image_data = process.run_stdout(new ProcessBuilder(cmd));
-      if (image_data != null) {x11.xclip_copyToClipboard(image_data);}
-      return 0;
+      if (image_data == null) {return false;}
+      x11.xclip_copyToClipboard(image_data);
+      return true;
     }
   }
   
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
-  private static int wayland_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
+  private static boolean wayland_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
     if (clipboard) {
       stdout.error("Clipboard functionality is not yet supported in Wayland mode!");
     }
-    if (!savefile) {return 1;}
+    if (!savefile) {return false;}
     
     byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor);
-    if (picture == null) {return 1;}
+    if (picture == null) {return false;}
     
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
