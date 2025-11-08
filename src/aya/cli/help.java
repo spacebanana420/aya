@@ -1,12 +1,17 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.11.1";
+  public static final String VERSION = "0.12";
   
   public static String getHelp() {
     return
       "Aya (version "+VERSION+")"
-      + "\nUsage: Aya [options] [optional filename]"
+      + "\n[Usage examples]"
+      + "\n  aya -clip <options>            capture screen and save on clipboard"
+      + "\n  aya -file <options>            capture screen and save it as an image file"
+      + "\n  aya -file -clip <options>      capture a screenshot and save it as a file and copy it to clipboard"
+      + "\n  aya -file <options> FILENAME   capture screen and save it as an image file with a custom name"
+      
       + "\n\nAvailable Options:"
       + "\n  * -h                     opens this menu"
       + "\n  * -v                     displays Aya's version"
@@ -42,8 +47,11 @@ public class help {
   public static String getSmallHelp() {
     return
       "Aya (version "+VERSION+")"
-      + "\nUsage: Aya [options] [filename]"
-      + "\nRun \"aya -h\" to view the full help screen"
+      + "\n[Usage]"
+      + "\n  aya -file <options>         capture screenshot and save as a file"
+      + "\n  aya -clip <options>         capture screenshot and copy to clipboard"
+      + "\n  aya -file -clip <options>   capture a screenshot and save it as a file and copy it to clipboard"
+      + "\n  aya -h                      opens the help menu"
     ;
   }
 

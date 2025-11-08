@@ -15,7 +15,7 @@ import java.io.File;
 import java.time.LocalDate;
 
 public class capture {
-  public static int takeScreenshot(String[] args, Config conf) {
+  public static int takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
     if (!opts.override_file && new File(opts.file_path).isFile()) {
@@ -30,7 +30,9 @@ public class capture {
 
     //Take the screenshot and save it, x11 or Wayland
     stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
-    int result = opts.wayland_mode ? wayland_takeScreenshot(opts) : x11_takeScreenshot(opts);
+    int result;
+    if (opts.wayland_mode) {result = wayland_takeScreenshot(opts, clipboard_copy, file_save);}
+    else {result = x11_takeScreenshot(opts, clipboard_copy, file_save);}
 
     switch (result) {
       case 0:
@@ -62,7 +64,7 @@ public class capture {
   }
 
   //For x11, FFmpeg both takes the screenshot and encodes it
-  private static int x11_takeScreenshot(CaptureOpts opts) {
+  private static int x11_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
@@ -70,13 +72,27 @@ public class capture {
     String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
     String arg_scale = ffmpeg.scaleArgs(opts.scale);
     cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
-    
-    cmd.add(opts.file_path);
-    return process.run(cmd, false);
+    if (savefile) { //Save the screenshot to a file, optionally also copy it to clipboard
+      cmd.add(opts.file_path);
+      int result = process.run(cmd, false);
+      if (clipboard && result == 0) {x11.xclip_copyToClipboard(opts.file_path);}
+      return result;
+    }
+    else { //Copy the screenshot data directly into clipboard
+      cmd.add("-");
+      byte[] image_data = process.run_stdout(new ProcessBuilder(cmd));
+      if (image_data != null) {x11.xclip_copyToClipboard(image_data);}
+      return 0;
+    }
   }
   
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
-  private static int wayland_takeScreenshot(CaptureOpts opts) {
+  private static int wayland_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
+    if (clipboard) {
+      stdout.error("Clipboard functionality is not yet supported in Wayland mode!");
+    }
+    if (!savefile) {return 1;}
+    
     byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor);
     if (picture == null) {return 1;}
     

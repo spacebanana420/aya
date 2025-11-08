@@ -7,7 +7,9 @@ import aya.ui.*;
 
 public class main {
   public static void main(String[] args) {
-    setVerbosityLevel(args);    
+    setVerbosityLevel(args);
+    boolean copy_to_clipboard = cli.hasArgument(args, "-clip");
+    boolean save_to_file = cli.hasArgument(args, "-file");
     
     if (cli.hasArgument(args, "-h")) {
       stdout.print(help.getHelp());
@@ -21,6 +23,10 @@ public class main {
       stdout.print("Aya version " + help.VERSION);
       return;
     }
+    if (!copy_to_clipboard && !save_to_file) {
+      stdout.print(help.getSmallHelp());
+      return;
+    }
     if (unsupportedSystem()) {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
@@ -28,7 +34,7 @@ public class main {
     Config conf = confio.openConfig();
     gui.setupGUI(args, conf);
     
-    int result = capture.takeScreenshot(args, conf);
+    int result = capture.takeScreenshot(args, conf, copy_to_clipboard, save_to_file);
     System.exit(result);
   }
 
