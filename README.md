@@ -10,6 +10,7 @@ Aya is a command-line screenshot tool for UNIX-like systems running on X11 or Wa
 - [FFmpeg](https://ffmpeg.org/)
 
 ### Additional requirements for X11 users:
+- xclip (optional, for copying the screenshot to clipboard)
 - Xwininfo (optional, for window capture)
 
 ### Additional requirements for Wayland users:
@@ -22,7 +23,7 @@ Note: Wayland support is currently experimental but seems to work well on wl-roo
 
 # How to use
 
-Once downloaded, you can run Aya with the command `java -jar aya.jar`. Simply running Aya will make it take an immediate screenshot (unless your system is unsupported).
+Once downloaded, you can run Aya with the command `java -jar aya.jar`.
 
 To see a full list of options, run `java -jar aya.jar -h`.
 
@@ -36,12 +37,19 @@ Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`.
 
 # Build from source
 
-Download [Yuuka](https://github.com/spacebanana420/yuuka), open a terminal at the root of the project and run:
-```
-java -jar yuuka.jar package
-```
+Building Aya requires [Yuuka](https://github.com/spacebanana420/yuuka) as I use my build tool in this project. If you do not have Yuuka installed on your system, replace in the commands below `yuuka` with `java -jar yuuka.jar`.
 
-Or if you already have Yuuka installed on your system:
+The commands below must be ran at the root of this project.
+
+### Building a JAR file
+
 ```
 yuuka package
 ```
+
+### Installing Aya system-wide (run as root)
+
+```
+yuuka install
+```
+
