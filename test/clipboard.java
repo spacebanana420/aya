@@ -1,5 +1,6 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.io.OutputStream;
 
 public class clipboard {
     public static void main(String[] args) {
