@@ -18,7 +18,7 @@ public class capture {
   public static boolean takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
-    if (!opts.override_file && new File(opts.file_path).isFile()) {
+    if (file_save && !opts.override_file && new File(opts.file_path).isFile()) {
       String answer = stdout.readInput("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)").trim();
       if (!answer.equals("y") && !answer.equals("yes")) {return true;}
     }
@@ -27,16 +27,21 @@ public class capture {
        stdout.print("Taking a screenshot in " + opts.delay + " seconds");
        misc.sleep(opts.delay * 1000);
     }
-
-    //Take the screenshot and save it, x11 or Wayland
     stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
     boolean result;
+    //Wayland mode
     if (opts.wayland_mode) {result = wayland_takeScreenshot(opts, clipboard_copy, file_save);}
-    else {result = x11_takeScreenshot(opts, clipboard_copy, file_save);}
+    //X11 mode
+    else {
+      if (file_save) {result = x11_takeScreenshot_file(opts, clipboard_copy);}
+      else {result = x11_takeScreenshot_clip(opts);};
+    }
 
-    if (result) {stdout.print("Screenshot saved at path " + opts.file_path);}
-    else {stdout.error("Failed to capture or save screenshot");}
-    if (!result) {return false;}
+    if (!result) {
+      stdout.error("Failed to capture or save screenshot");
+      return false;
+    }
+    stdout.print("Screenshot saved at path " + opts.file_path);
     
     if (opts.open_image) {
       if (opts.image_viewer_cmd == null) {
@@ -52,37 +57,41 @@ public class capture {
     return true;
   }
 
-  //For x11, FFmpeg both takes the screenshot and encodes it
-  private static boolean x11_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
+  //x11, FFmpeg both takes the screenshot and encodes it
+  private static boolean x11_takeScreenshot_file(CaptureOpts opts, boolean clipboard) {
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
     cmd.addAll(ffmpeg_extraArgs(opts));
-    String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
-    String arg_scale = ffmpeg.scaleArgs(opts.scale);
-    cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
-    if (savefile) { //Save the screenshot to a file, optionally also copy it to clipboard
-      cmd.add(opts.file_path);
-      boolean result = process.run(cmd, false);
-      if (clipboard) {
-        result = result && x11.xclip_copyToClipboard(opts.file_path);
-      }
-      return result;
+    cmd.addAll(ffmpeg_filterArgs(opts));
+    cmd.add(opts.file_path);
+    
+    boolean result = process.run(cmd, false);
+    if (clipboard) {
+      result = result && x11.xclip_copyToClipboard(opts.file_path);
     }
-    else { //Copy the screenshot data directly into clipboard
-      cmd.add("-");
-      byte[] image_data = process.run_stdout(new ProcessBuilder(cmd));
-      if (image_data == null) {return false;}
-      x11.xclip_copyToClipboard(image_data);
-      return true;
-    }
+    return result;
   }
+
+  //x11, FFmpeg takes the screenshot and writes it to stdout, xclip is used to copy to clipboard
+  //In clipboard-only mode, the screenshot is encoded as PNG regardless of aya's settings
+  private static boolean x11_takeScreenshot_clip(CaptureOpts opts) {
+    var cmd = new ArrayList<String>();
+    cmd.add(opts.ffmpeg_path);
+    cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
+    cmd.addAll(ffmpeg.encodeArgs_png((byte)5));
+    cmd.addAll(ffmpeg_filterArgs(opts));
+    cmd.add("-");
+    
+    byte[] image_data = process.run_stdout(new ProcessBuilder(cmd));
+    if (image_data == null) {return false;}
+    return x11.xclip_copyToClipboard(image_data);
+  }  
   
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
+  //Clipboard support is not added to Wayland mode yet
   private static boolean wayland_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
-    if (clipboard) {
-      stdout.error("Clipboard functionality is not yet supported in Wayland mode!");
-    }
+    if (clipboard) {stdout.error("Clipboard functionality is not yet supported in Wayland mode!");}
     if (!savefile) {return false;}
     
     byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor);
@@ -92,15 +101,19 @@ public class capture {
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getWaylandArgs());
     cmd.addAll(ffmpeg_extraArgs(opts));
-    String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
-    String arg_scale = ffmpeg.scaleArgs(opts.scale);
-    cmd.addAll(ffmpeg.assembleFilters(arg_crop, arg_scale));
+    cmd.addAll(ffmpeg_filterArgs(opts));
     
     cmd.add(opts.file_path);
     return process.run_stdin(cmd, picture);
   }
 
-   private static ArrayList<String> ffmpeg_extraArgs(CaptureOpts opts) {
+  private static ArrayList<String> ffmpeg_filterArgs(CaptureOpts opts) {
+    String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
+    String arg_scale = ffmpeg.scaleArgs(opts.scale);
+    return ffmpeg.assembleFilters(arg_crop, arg_scale);
+  }
+
+  private static ArrayList<String> ffmpeg_extraArgs(CaptureOpts opts) {
     switch(opts.format) {
       case "png":
         return ffmpeg.encodeArgs_png(opts.quality);
