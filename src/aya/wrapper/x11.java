@@ -4,7 +4,8 @@ import aya.ui.stdout;
 
 import java.util.ArrayList;
 
-public class xwininfo {
+public class x11 {
+  //xwininfo function
   public static int[] getWindowCoordinates() {
     stdout.print("Please click on the window to capture");
     String[] cmd = new String[]{"xwininfo"};

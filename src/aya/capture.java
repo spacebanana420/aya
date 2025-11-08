@@ -2,7 +2,7 @@ package aya;
 
 import aya.wrapper.ffmpeg;
 import aya.wrapper.process;
-import aya.wrapper.xwininfo;
+import aya.wrapper.x11;
 import aya.wrapper.wayland;
 
 import aya.cli.cli;
@@ -178,7 +178,7 @@ class CaptureOpts {
         stdout.error("Window capture (-window) is not supported in Wayland mode!");
         return crop_coords;
       }
-      int[] window_coords = xwininfo.getWindowCoordinates();
+      int[] window_coords = x11.getWindowCoordinates();
       if (window_coords != null) {crop_coords = window_coords;}
     }
     return crop_coords;
