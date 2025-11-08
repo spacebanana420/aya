@@ -8,11 +8,9 @@ public class clipboard {
         String[] cmd = new String[]{"xclip", "-target", "image/png", "-selection", "clipboard"};
         System.out.println("Number of image bytes: " + image_file.length);
         
-        var pb = new ProcessBuilder(cmd);
-        var process = pb.start();
-        var stdin = process.getOutputStream();
+        Process process = new ProcessBuilder(cmd).start();
+        OutputStream stdin = process.getOutputStream();
         stdin.write(image_file);
-        //stdin.flush();
         stdin.close();
         process.waitFor();
       }
