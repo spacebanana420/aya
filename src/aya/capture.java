@@ -69,7 +69,7 @@ public class capture {
     
     boolean result = process.run(cmd, false);
     if (clipboard) {
-      result = result && x11.xclip_copyToClipboard(opts.file_path);
+      result = result && x11.xclip_copyToClipboard(new File(opts.file_path).getAbsolutePath());
     }
     return result;
   }
