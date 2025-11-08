@@ -62,6 +62,21 @@ public class process {
     catch (InterruptedException e) {return -2;}
   }
 
+  //Used by xclip when copying an image's bytes into clipboard
+   public static int run_stdin(String[] args, byte[] image) {
+    stdout.print_debug("Running command:", args);
+    try {
+      Process p = new ProcessBuilder(args).start();
+      var stdin = p.getOutputStream();
+      stdin.write(image);
+      stdin.close();
+      p.waitFor();
+      return p.exitValue();
+    }
+    catch (IOException e) {return -1;}
+    catch (InterruptedException e) {return -2;}
+  }
+
   public static ArrayList<String> mkList(String[] args) {
     var list = new ArrayList<String>();
     for (String a : args) {list.add(a);}

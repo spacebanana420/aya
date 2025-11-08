@@ -5,6 +5,17 @@ import aya.ui.stdout;
 import java.util.ArrayList;
 
 public class x11 {
+  public static int xclip_copyToClipboard(byte[] image_data) {
+    String[] cmd = new String[]{"xclip", "-target", "image/png", "-selection", "clipboard"};
+    return process.run_stdin(cmd, image_data);
+  }
+  
+  public static int xclip_copyToClipboard(String file_path) {
+    String[] cmd = new String[]{"xclip", "-target", "text/uri-list", "-selection", "clipboard"};
+    byte[] uri_path = ("file://"+file_path).getBytes();
+    return process.run_stdin(cmd, uri_path);
+  }
+  
   //xwininfo function
   public static int[] getWindowCoordinates() {
     stdout.print("Please click on the window to capture");
