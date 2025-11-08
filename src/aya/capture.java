@@ -41,7 +41,8 @@ public class capture {
       stdout.error("Failed to capture or save screenshot");
       return false;
     }
-    stdout.print("Screenshot saved at path " + opts.file_path);
+    if (file_save) {stdout.print("Screenshot saved at path " + opts.file_path);}
+    else {stdout.print("Screenshot copied to clipboard");}
     
     if (opts.open_image) {
       if (opts.image_viewer_cmd == null) {
@@ -81,10 +82,14 @@ public class capture {
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
     cmd.addAll(ffmpeg.encodeArgs_png((byte)5));
     cmd.addAll(ffmpeg_filterArgs(opts));
+    cmd.add("-f"); cmd.add("image2");
     cmd.add("-");
     
     byte[] image_data = process.run_stdout(new ProcessBuilder(cmd));
-    if (image_data == null) {return false;}
+    if (image_data == null) {
+      stdout.error("No screenshot data was retrieved, cannot copy to clipboard!");
+      return false;
+    }
     return x11.xclip_copyToClipboard(image_data);
   }  
   

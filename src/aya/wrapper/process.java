@@ -38,6 +38,7 @@ public class process {
   
   //Used for grim and slurp commands for Wayland screen capture, they need lower-level control of the data
   public static byte[] run_stdout(ProcessBuilder cmd) {
+    stdout.print_debug("Running command:", cmd.command());
     try {
       Process p = cmd.start();
       byte[] stdout = p.getInputStream().readAllBytes();

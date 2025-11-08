@@ -1,6 +1,7 @@
 package aya.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class stdout {
@@ -42,7 +43,7 @@ public class stdout {
     if (VERBOSITY_LEVEL > 2) {printSeq(title, contents);}
   }
 
-  public static void print_debug(String title, ArrayList<String> contents) {
+  public static void print_debug(String title, List<String> contents) {
     if (VERBOSITY_LEVEL > 2) {printSeq(title, contents);}
   }
   
@@ -79,7 +80,7 @@ public class stdout {
     System.out.println(txt);
   }
 
-  private static void printSeq(String title, ArrayList<String> contents) {
+  private static void printSeq(String title, List<String> contents) {
     String txt = title;
     for (int i = 0; i < contents.size(); i++) {txt += "\n  * " + contents.get(i);}
 
