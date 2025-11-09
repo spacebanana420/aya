@@ -1,7 +1,7 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.12";
+  public static final String VERSION = "0.12.1";
   
   public static String getHelp() {
     return
@@ -16,7 +16,7 @@ public class help {
       + "\n  * -h                     opens this menu"
       + "\n  * -v                     displays Aya's version"
       + "\n  * -t <delay>             sets the delay for screenshotting (in seconds)"
-      + "\n  * -d <path>              sets the directory to save the screenshot at"
+      + "\n  * -d <path>              sets the directory to save the screenshot at, you can use ~ for the home directory"
       + "\n  * -y                     overwrites the image file if it already exists"
       + "\n  * -c                     includes the cursor in the screenshot"
       + "\n"
