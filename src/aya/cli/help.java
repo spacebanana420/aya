@@ -13,8 +13,8 @@ public class help {
       + "\n  aya -file <options> FILENAME   capture screen and save it as an image file with a custom name"
       
       + "\n\nAvailable Options:"
-      + "\n  * -h                     opens this menu"
-      + "\n  * -v                     displays Aya's version"
+      + "\n  * -h  --help             opens this menu"
+      + "\n  * -v  --version          displays Aya's version"
       + "\n  * -t <delay>             sets the delay for screenshotting (in seconds)"
       + "\n  * -d <path>              sets the directory to save the screenshot at, you can use ~ for the home directory"
       + "\n  * -y                     overwrites the image file if it already exists"

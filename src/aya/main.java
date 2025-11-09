@@ -11,7 +11,7 @@ public class main {
     boolean copy_to_clipboard = cli.hasArgument(args, "-clip");
     boolean save_to_file = cli.hasArgument(args, "-file");
     
-    if (cli.hasArgument(args, "-h")) {
+    if (cli.hasArgument(args, "-h") || cli.hasArgument(args, "--help")) {
       stdout.print(help.getHelp());
       return;
     }
@@ -19,7 +19,7 @@ public class main {
       stdout.print(help.getQualityHelp());
       return;
     }
-    if (cli.hasArgument(args, "-v")) {
+    if (cli.hasArgument(args, "-v") || cli.hasArgument(args, "--version")) {
       stdout.print("Aya version " + help.VERSION);
       return;
     }
