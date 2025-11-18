@@ -1,7 +1,6 @@
 package aya;
 
-import aya.cli.cli;
-import aya.cli.help;
+import aya.cli.*;
 import aya.config.*;
 import aya.ui.*;
 
