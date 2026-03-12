@@ -1,7 +1,7 @@
 # Aya
 Aya is a command-line screenshot tool for UNIX-like systems running on X11 or Wayland.
 
-# Requirements and download
+## Requirements and download
 
 ### Core requirements:
 
@@ -20,9 +20,9 @@ Aya is a command-line screenshot tool for UNIX-like systems running on X11 or Wa
 
 Install the necessary and desired dependencies from your Linux system's package manager and download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
-Note: Wayland support is currently only tested in wl-roots compositors and Hyprland, it's not guaranteed to work on other environments.
+Note: Wayland support is currently only tested in wl-roots compositors and Hyprland, it's not guaranteed to work on other environments. GUI mode only supports x11, so using it in wayland might result in a blurry, glitchy or pixelated interface and requires xwayland.
 
-# How to use
+## How to use
 
 Once downloaded, you can run Aya with the command `java -jar aya.jar`.
 
@@ -36,11 +36,18 @@ Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`.
 * AVIF
 * BMP
 
-# Build from source
+## Build from source
 
-Building Aya requires [Yuuka](https://github.com/spacebanana420/yuuka) as I use my build tool in this project. If you do not have Yuuka installed on your system, replace in the commands below `yuuka` with `java -jar yuuka.jar`.
+Building Aya requires my own build tool [Yuuka](https://github.com/spacebanana420/yuuka).
 
-The commands below must be ran at the root of this project.
+The command `yuuka` as seen below applies if you have it installed system-wide. If you do not, then replace `yuuka` with `java -jar yuuka.jar`.
+
+### Getting the source code
+
+```
+git clone https://github.com/spacebanana420/aya.git
+cd aya
+```
 
 ### Building a JAR file
 
@@ -49,8 +56,16 @@ yuuka package
 ```
 
 ### Installing Aya system-wide (run as root)
+This installs Aya in /usr/local/bin so it can be accessed from anywhere by running `aya`.
 
 ```
 yuuka install
 ```
 
+### Build separate .class files
+
+If for some reason you don't want Aya built as a JAR and you want to have the raw bytecode:
+
+```
+yuuka build
+```
