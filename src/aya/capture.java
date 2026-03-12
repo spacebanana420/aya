@@ -19,6 +19,7 @@ public class capture {
   
   public static boolean takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
+    stdout.print_debug("Running for the graphical backend " + (opts.wayland_mode ? "\"Wayland\"" : "\"X11\""));
     
     if (file_save && !opts.override_file && new File(opts.file_path).isFile()) {
       boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");
