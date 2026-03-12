@@ -1,9 +1,6 @@
 package aya;
 
-import aya.wrapper.ffmpeg;
-import aya.wrapper.process;
-import aya.wrapper.x11;
-import aya.wrapper.wayland;
+import aya.wrapper.*;
 import aya.ui.stdout;
 import aya.config.Config;
 
@@ -24,8 +21,8 @@ public class capture {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
     if (file_save && !opts.override_file && new File(opts.file_path).isFile()) {
-      String answer = stdout.readInput("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)").trim();
-      if (!answer.equals("y") && !answer.equals("yes")) return true;
+      boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");
+      if (!answer) return true;
     }
     
     if (opts.delay > 0) {
@@ -35,11 +32,11 @@ public class capture {
     stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
     boolean result;
     //Wayland mode
-    if (opts.wayland_mode) {result = wayland_takeScreenshot(opts, clipboard_copy, file_save);}
+    if (opts.wayland_mode) result = wayland_takeScreenshot(opts, clipboard_copy, file_save);
     //X11 mode
     else {
-      if (file_save) {result = x11_takeScreenshot_file(opts, clipboard_copy);}
-      else {result = x11_takeScreenshot_clip(opts);};
+      if (file_save) result = x11_takeScreenshot_file(opts, clipboard_copy);
+      else result = x11_takeScreenshot_clip(opts);
     }
     if (!result) return false;
     if (!file_save) return true;

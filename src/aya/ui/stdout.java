@@ -63,6 +63,11 @@ public class stdout {
     }
     return new Scanner(System.in).nextLine();
   }
+
+  public static boolean promptQuestion(String message) {
+    String answer = readInput(message).trim().toLowerCase();
+    return answer.equals("y") || answer.equals("yes");
+  }
   
   public static void warnInvalidQuality(String format, int q_min, int q_max, int q_default) {
     print(
