@@ -28,11 +28,12 @@ public class wayland {
     return image;
   }
 
-  public static void copyToClipboard(byte[] data) {
+  public static boolean copyToClipboard(byte[] data) {
     boolean result = process.run_stdin(new String[]{"wl-copy"}, data);
     if (!result) {
       stdout.error("Failed to copy image to clipboard!\nMake sure you have wl-copy (provided by wl-clipboard) installed!");
     }
+    return result;
   }
   
   //Capture a region of the screen

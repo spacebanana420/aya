@@ -13,6 +13,13 @@ import java.io.File;
 //Handles the high-level logic for taking a screenshot and saving it
 //Implements the lower-level wrappers, CLI/config parsing, etc
 public class capture {
+
+  //Common status/error messages that are used in multiple places here
+  private static final String fileSuccess = "Screenshot saved successfully";
+  private static final String fileFailed = "Failed to take screenshot";
+  private static final String clipSuccess = "Screenshot copied to clipboard";
+  private static final String clipFailed = "Failed to copy screenshot to clipboard";
+  
   public static boolean takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     
@@ -34,14 +41,10 @@ public class capture {
       if (file_save) {result = x11_takeScreenshot_file(opts, clipboard_copy);}
       else {result = x11_takeScreenshot_clip(opts);};
     }
+    if (!result) return false;
+    if (!file_save) return true;
 
-    if (!result) {
-      stdout.error("Failed to capture or save screenshot");
-      return false;
-    }
-    if (file_save) {stdout.print("Screenshot saved at path " + opts.file_path);}
-    else {stdout.print("Screenshot copied to clipboard");}
-    
+    //Optionally open the image only if a file was successfully saved
     if (opts.open_image) {
       if (opts.image_viewer_cmd == null) {
         stdout.error("Error opening screenshot, image viewer command is missing!");
@@ -66,8 +69,15 @@ public class capture {
     cmd.add(opts.file_path);
     
     boolean result = process.run(cmd, false);
+    if (!result) {
+      stdout.print(fileFailed);
+      return false;
+    }
+    stdout.print(fileSuccess);
     if (clipboard) {
-      result = result && x11.xclip_copyToClipboard(new File(opts.file_path).getAbsolutePath());
+      result = x11.xclip_copyToClipboard(new File(opts.file_path).getAbsolutePath());
+      if (result) stdout.print(clipSuccess);
+      else stdout.print(clipFailed);
     }
     return result;
   }
@@ -88,7 +98,10 @@ public class capture {
       stdout.error("No screenshot data was retrieved, cannot copy to clipboard!");
       return false;
     }
-    return x11.xclip_copyToClipboard(image_data);
+    boolean result = x11.xclip_copyToClipboard(image_data);
+    if (result) stdout.print(clipSuccess);
+    else stdout.print(clipFailed);
+    return result;
   }  
   
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
@@ -98,8 +111,9 @@ public class capture {
     if (picture == null) return false;
 
     if (clipboard) {
-      stdout.print("Copying image to clipboard");
-      wayland.copyToClipboard(picture);
+      boolean result = wayland.copyToClipboard(picture);
+      if (result) stdout.print(clipSuccess);
+      else stdout.print(clipFailed);
     }
 
     if (!savefile) return true;
@@ -109,7 +123,10 @@ public class capture {
     cmd.addAll(ffmpeg_extraArgs(opts));
     cmd.addAll(ffmpeg_filterArgs(opts));    
     cmd.add(opts.file_path);
-    return process.run_stdin(cmd, picture);
+    boolean result = process.run_stdin(cmd, picture);
+    if (result) stdout.print(fileSuccess);
+    else stdout.print(fileFailed);
+    return result;
   }
 
   private static ArrayList<String> ffmpeg_filterArgs(CaptureOpts opts) {
