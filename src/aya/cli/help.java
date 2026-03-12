@@ -37,7 +37,7 @@ public class help {
       + "\n"
       + "\n  * -gui                   displays a graphical window when error messages are also printed"
       + "\n  * -gui-scale <number>    scales the GUI windows, supports values between 0.5 and 3 (e.g. 1.25)"
-      + "\n  * -wayland               enables Wayland mode"
+      + "\n  * -wayland               forces Wayland mode (automatic by default)"
       + "\n  * -quiet                 disables all output messages"
       + "\n  * -verbose               displays more status messages"
       + "\n  * -debug                 displays all messages for debugging"
