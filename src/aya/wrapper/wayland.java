@@ -4,7 +4,7 @@ import aya.ui.stdout;
 import java.util.ArrayList;
 
 public class wayland {
-  public static byte[] captureScreen(boolean make_selection, boolean capture_cursor) {
+  public static byte[] captureScreen(boolean make_selection, boolean capture_cursor, boolean better_compression) {
     var cmd_grim = new ArrayList<String>();
     cmd_grim.add("grim");
     if (make_selection) {
@@ -14,7 +14,7 @@ public class wayland {
         stdout.error("Failed to grab selection! Make sure you have Slurp installed");}
     }
     if (capture_cursor) {cmd_grim.add("-c");}
-    cmd_grim.add("-l"); cmd_grim.add("0");
+    cmd_grim.add("-l"); cmd_grim.add(better_compression ? "2" : "0");
     cmd_grim.add("-");
     
     stdout.print_debug("Running Grim", cmd_grim);
@@ -26,6 +26,13 @@ public class wayland {
     }
     stdout.print_debug("Grim-captured screenshot size: " + image.length + " bytes");
     return image;
+  }
+
+  public static void copyToClipboard(byte[] data) {
+    boolean result = process.run_stdin(new String[]{"wl-copy"}, data);
+    if (!result) {
+      stdout.error("Failed to copy image to clipboard!\nMake sure you have wl-copy (provided by wl-clipboard) installed!");
+    }
   }
   
   //Capture a region of the screen

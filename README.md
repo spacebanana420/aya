@@ -11,15 +11,16 @@ Aya is a command-line screenshot tool for UNIX-like systems running on X11 or Wa
 
 ### Additional requirements for X11 users:
 - xclip (optional, for copying the screenshot to clipboard)
-- Xwininfo (optional, for window capture)
+- xwininfo (optional, for window capture)
 
 ### Additional requirements for Wayland users:
-- Grim
-- Slurp (optional, for capturing a selection of the screen)
+- grim
+- slurp (optional, for capturing a selection of the screen)
+- wl-clipboard (optional, for copying the screenshot to clipboard)
 
-Download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
+Install the necessary and desired dependencies from your Linux system's package manager and download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
-Note: Wayland support is currently experimental but seems to work well on wl-roots-based compositors.
+Note: Wayland support is currently only tested in wl-roots compositors and Hyprland, it's not guaranteed to work on other environments.
 
 # How to use
 

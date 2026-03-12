@@ -94,20 +94,22 @@ public class capture {
   }  
   
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
-  //Clipboard support is not added to Wayland mode yet
+  //Clipboard support uses wl-copy, in clipboard mode the Grim image is slightly more compressed
   private static boolean wayland_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
-    if (clipboard) {stdout.error("Clipboard functionality is not yet supported in Wayland mode!");}
-    if (!savefile) {return false;}
-    
-    byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor);
-    if (picture == null) {return false;}
-    
+    byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor, clipboard);
+    if (picture == null) return false;
+
+    if (clipboard) {
+      stdout.print("Copying image to clipboard");
+      wayland.copyToClipboard(picture);
+    }
+
+    if (!savefile) return true;
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getWaylandArgs());
     cmd.addAll(ffmpeg_extraArgs(opts));
-    cmd.addAll(ffmpeg_filterArgs(opts));
-    
+    cmd.addAll(ffmpeg_filterArgs(opts));    
     cmd.add(opts.file_path);
     return process.run_stdin(cmd, picture);
   }
