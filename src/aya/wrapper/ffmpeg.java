@@ -7,7 +7,7 @@ public class ffmpeg {
   //X11 screen capture
   public static ArrayList<String> getCaptureArgs(boolean select_region, boolean capture_cursor) {
     String cursor_value = (capture_cursor) ? "1" : "0";
-    var base_list = process.mkList(new String[]{"-loglevel", "quiet", "-y", "-f", "x11grab", "-draw_mouse", cursor_value});
+    var base_list = process.mkList(new String[]{"-y", "-f", "x11grab", "-draw_mouse", cursor_value});
     if (select_region) {base_list.add("-select_region"); base_list.add("1");}
     
     var final_list = process.mkList(new String[]{"-i", ":0.0", "-frames:v", "1"});
@@ -17,7 +17,7 @@ public class ffmpeg {
   
   //In Wayland, Grim captures the scren and passes the resulting image to FFmpeg
   public static ArrayList<String> getWaylandArgs() {
-    return process.mkList(new String[]{"-loglevel", "quiet", "-y", "-i", "-"});
+    return process.mkList(new String[]{"-y", "-i", "-"});
   }
 
   public static ArrayList<String> encodeArgs_png(byte quality) {
