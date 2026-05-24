@@ -9,7 +9,7 @@ public class cli {
   
   public static String getArgValue(String[] args, String arg) {
     int i = argIndex(args, arg);
-    if (i == -1) {return null;}
+    if (i == -1) return null;
     if (i == args.length-1 || invalidValue(args[i+1])) {
       printError(arg, "The argument must be followed by a value!");
       return null;
@@ -28,7 +28,7 @@ public class cli {
 
   public static int getArgInt(String[] args, String arg) {
     String value = getArgValue(args, arg);
-    if (value == null) {return -1;}
+    if (value == null) return -1;
     if (value.length() > 9) {
       printError(arg, "The value provided " + value + " is too big! Ignoring");
       return -1;
@@ -57,7 +57,7 @@ public class cli {
 
   private static byte getArgByte(String[] args, String arg, int upper_bound) {
     int num = getArgInt(args, arg);
-    if (num == -1) {return -1;}
+    if (num == -1) return -1;
     if (num > upper_bound) {
       printError(arg, "The value must not be above " + upper_bound + ", ignoring");
       return -1;
@@ -67,7 +67,7 @@ public class cli {
 
   private static float getArgFloat(String[] args, String arg) {
     String value = getArgValue(args, arg);
-    if (value == null) {return -1;}
+    if (value == null) return -1;
     try {
       float num = Float.parseFloat(value);
       if (num < 0) {
@@ -84,7 +84,7 @@ public class cli {
 
   private static int argIndex(String[] args, String arg) {
     for (int i = 0; i < args.length; i++) {
-      if (args[i].equals(arg)) {return i;}
+      if (args[i].equals(arg)) return i;
     }
     return -1;
   }
