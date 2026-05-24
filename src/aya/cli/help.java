@@ -1,7 +1,7 @@
 package aya.cli;
 
 public class help {
-  public static final String VERSION = "0.13.1";
+  public static final String VERSION = "1.0";
   
   public static String getHelp() {
     return
@@ -38,6 +38,8 @@ public class help {
       + "\n  * -gui                   displays a graphical window when error messages are also printed"
       + "\n  * -gui-scale <number>    scales the GUI windows, supports values between 0.5 and 3 (e.g. 1.25)"
       + "\n  * -wayland               forces Wayland mode (automatic by default)"
+      + "\n  * -tty                   enables TTY screenshot mode (Linux-only) (overrides Wayland mode)"
+      + "\n"
       + "\n  * -quiet                 disables all output messages"
       + "\n  * -verbose               displays more status messages"
       + "\n  * -debug                 displays all messages for debugging"

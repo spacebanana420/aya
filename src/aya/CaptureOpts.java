@@ -32,7 +32,9 @@ class CaptureOpts {
   boolean window_select = false;
   boolean region_select = false;
   boolean capture_cursor = false;
+  
   boolean wayland_mode = false;
+  boolean tty_mode = false;
 
   CaptureOpts(String[] args, Config conf) {
     Thread[] threads = new Thread[3];
@@ -45,7 +47,8 @@ class CaptureOpts {
 
     threads[1] = new Thread(() -> {
       String waylandEnv = System.getenv("XDG_BACKEND");
-      this.wayland_mode = (waylandEnv != null && waylandEnv.equals("wayland")) || cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
+      this.tty_mode = cli.hasArgument(args, "-tty");
+      this.wayland_mode = (!this.tty_mode && waylandEnv != null && waylandEnv.equals("wayland")) || cli.hasArgument(args, "-wayland") || config.waylandModeEnabled(conf);
       this.window_select = cli.hasArgument(args, "-window");
       this.region_select = !this.window_select && cli.hasArgument(args, "-region");
       this.crop = getCrop(args, this.window_select, this.wayland_mode);

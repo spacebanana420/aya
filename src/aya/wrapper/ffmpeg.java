@@ -16,10 +16,13 @@ public class ffmpeg {
   }
   
   //In Wayland, Grim captures the scren and passes the resulting image to FFmpeg
-  public static ArrayList<String> getWaylandArgs() {
-    return process.mkList(new String[]{"-y", "-i", "-"});
-  }
+  public static ArrayList<String> getWaylandArgs() {return process.mkList(new String[]{"-y", "-i", "-"});}
 
+  //Linux framebuffer capture for TTY screenshot
+  public static ArrayList<String> getFramebufferArgs() {
+    return process.mkList(new String[]{"-y", "-f", "fbdev", "-i", "/dev/fb0", "-frames:v", "1", "-pix_fmt", "rgb0"});
+  }
+  
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};
     String q_arg = "avg";

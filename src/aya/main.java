@@ -9,6 +9,7 @@ public class main {
     setVerbosityLevel(args);
     boolean copy_to_clipboard = cli.hasArgument(args, "-clip");
     boolean save_to_file = cli.hasArgument(args, "-file");
+    String OS = System.getProperty("os.name").toLowerCase();
     
     if (cli.hasArgument(args, "-h") || cli.hasArgument(args, "--help")) {
       stdout.print(help.getHelp());
@@ -26,19 +27,18 @@ public class main {
       stdout.print(help.getSmallHelp());
       return;
     }
-    if (unsupportedSystem()) {
+    if (unsupportedSystem(OS)) {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
     Config conf = confio.openConfig();
     gui.setupGUI(args, conf);
     
-    boolean result = capture.takeScreenshot(args, conf, copy_to_clipboard, save_to_file);
+    boolean result = capture.takeScreenshot(args, conf, OS.equals("linux"), copy_to_clipboard, save_to_file);
     System.exit(result ? 0 : 1);
   }
 
-  private static boolean unsupportedSystem() {
-    String os = System.getProperty("os.name").toLowerCase();
+  private static boolean unsupportedSystem(String os) {
     return (os.contains("windows") || os.contains("mac") || os.contains("darwin") || os.equals("haiku"));
   }
 

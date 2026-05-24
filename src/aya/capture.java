@@ -17,7 +17,7 @@ public class capture {
   private static final String clipSuccess = "Screenshot copied to clipboard";
   private static final String clipFailed = "Failed to copy screenshot to clipboard";
   
-  public static boolean takeScreenshot(String[] args, Config conf, boolean clipboard_copy, boolean file_save) {
+  public static boolean takeScreenshot(String[] args, Config conf, boolean supportsTTY, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
     stdout.print_debug("Running for the graphical backend " + (opts.wayland_mode ? "\"Wayland\"" : "\"X11\""));
     
@@ -34,6 +34,17 @@ public class capture {
     boolean result;
     //Wayland mode
     if (opts.wayland_mode) result = wayland_takeScreenshot(opts, clipboard_copy, file_save);
+    else if (opts.tty_mode) {
+      if (!supportsTTY) {
+        stdout.error("TTY screenshot is only supported on Linux!");
+        return false;
+      }
+      if (!file_save) {
+        stdout.error("TTY screenshot mode does not support saving to clipboard!");
+        return false;
+      }
+      result = tty_takeScreenshot(opts);
+    }
     //X11 mode
     else {
       if (file_save) result = x11_takeScreenshot_file(opts, clipboard_copy);
@@ -127,6 +138,24 @@ public class capture {
 
     Process p = process.runProcess(cmd);
     process.writeToStdin(p, picture);
+    process.awaitCompletion(p, "FFmpeg");
+    boolean result = process.succeeded(p);
+
+    if (result) stdout.print(fileSuccess);
+    else stdout.print(fileFailed);
+    return result;
+  }
+
+  //Captures a screenshot of the TTY framebuffer, Linux-only
+  private static boolean tty_takeScreenshot(CaptureOpts opts) {
+    var cmd = new ArrayList<String>();
+    cmd.add(opts.ffmpeg_path);
+    cmd.addAll(ffmpeg.getFramebufferArgs());
+    cmd.addAll(ffmpeg_extraArgs(opts));
+    cmd.addAll(ffmpeg_filterArgs(opts));    
+    cmd.add(opts.file_path);
+
+    Process p = process.runProcess(cmd);
     process.awaitCompletion(p, "FFmpeg");
     boolean result = process.succeeded(p);
 
