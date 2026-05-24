@@ -34,7 +34,7 @@ public class main {
     gui.setupGUI(args, conf);
     
     boolean result = capture.takeScreenshot(args, conf, copy_to_clipboard, save_to_file);
-    System.exit(result ? 1 : 0);
+    System.exit(result ? 0 : 1);
   }
 
   private static boolean unsupportedSystem() {
