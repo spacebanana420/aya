@@ -48,8 +48,9 @@ public class capture {
         stdout.error("Error opening screenshot, image viewer command is missing!");
         return false;
       }
-      result = process.run(opts.image_viewer_cmd, true);
-      if (!result) {
+      Process p = process.runProcess(opts.image_viewer_cmd);
+      process.awaitCompletion(p, opts.image_viewer_cmd.get(0));
+      if (!process.succeeded(p)) {
         stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
         return false;
       }
@@ -65,8 +66,10 @@ public class capture {
     cmd.addAll(ffmpeg_extraArgs(opts));
     cmd.addAll(ffmpeg_filterArgs(opts));
     cmd.add(opts.file_path);
-    
-    boolean result = process.run(cmd, false);
+
+    Process p = process.runProcess(cmd);
+    process.awaitCompletion(p, "FFmpeg");
+    boolean result = process.succeeded(p);
     if (!result) {
       stdout.print(fileFailed);
       return false;

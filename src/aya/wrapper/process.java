@@ -47,24 +47,6 @@ public class process {
   public static boolean succeeded(Process process) {return process.exitValue() == 0;}
 
   //Legacy function, to be replaced by the latest refactor
-  public static boolean run(ArrayList<String> args, boolean silent) {
-    stdout.print_debug("Running command:", args);
-    try {
-      var pb = new ProcessBuilder(args);
-      if (silent) {
-        pb.redirectOutput(Redirect.DISCARD);
-        pb.redirectError(Redirect.DISCARD);
-      }
-      else {pb.inheritIO();}
-      Process p = pb.start();
-      p.waitFor();
-      return p.exitValue() == 0;
-    }
-    catch (IOException e) {error_missingProcess(args.get(0)); return false;}
-    catch (InterruptedException e) {error_interruptedProcess(args.get(0)); return false;}
-  }
-
-  //Legacy function, to be replaced by the latest refactor
   public static String runAndGet(String[] args) {
     stdout.print_debug("Running command:", args);
     try {
