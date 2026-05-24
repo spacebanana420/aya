@@ -10,10 +10,9 @@ public class wayland {
     if (make_selection) {
       String coordinates = runSlurp();
       if (coordinates != null) {cmd_grim.add("-g"); cmd_grim.add(coordinates);}
-      else {
-        stdout.error("Failed to grab selection! Make sure you have Slurp installed");}
+      else stdout.error("Failed to grab selection! Make sure you have Slurp installed");
     }
-    if (capture_cursor) {cmd_grim.add("-c");}
+    if (capture_cursor) cmd_grim.add("-c");
     cmd_grim.add("-l"); cmd_grim.add(better_compression ? "2" : "0");
     cmd_grim.add("-");
     
@@ -41,7 +40,7 @@ public class wayland {
     stdout.print_debug("Running Slurp");
     var cmd = new ProcessBuilder(new String[]{"slurp", "-c", "#00000000", "-b", "#FFFFFF25"}).redirectInput(ProcessBuilder.Redirect.INHERIT);
     byte[] data = process.run_stdout(cmd);
-    if (data == null) {return null;}
+    if (data == null) return null;
     return new String(data).trim();
   }
 }
