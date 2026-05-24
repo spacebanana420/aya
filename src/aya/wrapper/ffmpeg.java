@@ -108,7 +108,7 @@ public class ffmpeg {
     list.add("-filter:v");
     String arg = filters[0]; //First ffmpeg filter does not have comma
     for (int i = 1; i < filters.length; i++) {
-      if (filters[i].length() == 0) {continue;}
+      if (filters[i].length() == 0) continue;
       arg+=","+filters[i];
     }
     list.add(arg);

@@ -7,13 +7,20 @@ import java.util.ArrayList;
 public class x11 {
   public static boolean xclip_copyToClipboard(byte[] image_data) {
     String[] cmd = new String[]{"xclip", "-target", "image/png", "-selection", "clipboard"};
-    return process.run_stdin(cmd, image_data);
+    return xclip_execute("image/png", image_data);
   }
   
   public static boolean xclip_copyToClipboard(String file_path) {
-    String[] cmd = new String[]{"xclip", "-target", "text/uri-list", "-selection", "clipboard"};
     byte[] uri_path = ("file://"+file_path).getBytes();
-    return process.run_stdin(cmd, uri_path);
+    return xclip_execute("text/uri-list", uri_path);
+  }
+
+  private static boolean xclip_execute(String target, byte[] data) {
+    String[] cmd = new String[]{"xclip", "-target", target, "-selection", "clipboard"};
+    Process p = process.runProcess(cmd);
+    process.writeToStdin(p, data);
+    process.awaitCompletion(p, "xclip");
+    return process.succeeded(p);
   }
   
   //xwininfo function
