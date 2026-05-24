@@ -90,8 +90,8 @@ public class capture {
     cmd.addAll(ffmpeg_filterArgs(opts));
     cmd.add("-f"); cmd.add("image2");
     cmd.add("-");
-    
-    byte[] image_data = process.run_stdout(new ProcessBuilder(cmd));
+
+    byte[] image_data = process.readStdout(process.runProcess(cmd));
     if (image_data == null) {
       stdout.error("No screenshot data was retrieved, cannot copy to clipboard!");
       return false;
@@ -121,7 +121,12 @@ public class capture {
     cmd.addAll(ffmpeg_extraArgs(opts));
     cmd.addAll(ffmpeg_filterArgs(opts));    
     cmd.add(opts.file_path);
-    boolean result = process.run_stdin(cmd, picture);
+
+    Process p = process.runProcess(cmd);
+    process.writeToStdin(p, picture);
+    process.awaitCompletion(p, "FFmpeg");
+    boolean result = process.succeeded(p);
+
     if (result) stdout.print(fileSuccess);
     else stdout.print(fileFailed);
     return result;

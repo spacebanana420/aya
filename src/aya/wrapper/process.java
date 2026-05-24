@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import aya.ui.stdout;
 
+//Process execution and handling
 public class process {
-
   public static Process runProcess(ArrayList<String> args) {return runProcess(new ProcessBuilder(args));}
   public static Process runProcess(String[] args) {return runProcess(new ProcessBuilder(args));}
   public static Process runProcess(ProcessBuilder pb) {
@@ -46,6 +46,7 @@ public class process {
 
   public static boolean succeeded(Process process) {return process.exitValue() == 0;}
 
+  //Legacy function, to be replaced by the latest refactor
   public static boolean run(ArrayList<String> args, boolean silent) {
     stdout.print_debug("Running command:", args);
     try {
@@ -63,6 +64,7 @@ public class process {
     catch (InterruptedException e) {error_interruptedProcess(args.get(0)); return false;}
   }
 
+  //Legacy function, to be replaced by the latest refactor
   public static String runAndGet(String[] args) {
     stdout.print_debug("Running command:", args);
     try {
@@ -74,50 +76,6 @@ public class process {
     }
     catch (IOException e) {error_missingProcess(args[0]); return null;}
     catch (InterruptedException e) {error_interruptedProcess(args[0]); return null;}
-  }
-  
-  //Used for grim and slurp commands for Wayland screen capture, they need lower-level control of the data
-  public static byte[] run_stdout(ProcessBuilder cmd) {
-    stdout.print_debug("Running command:", cmd.command());
-    try {
-      Process p = cmd.start();
-      byte[] stdout = p.getInputStream().readAllBytes();
-      p.waitFor();
-      return stdout;
-    }
-    catch (IOException e) {error_missingProcess(cmd.command().get(0)); return null;}
-    catch (InterruptedException e) {error_interruptedProcess(cmd.command().get(0)); return null;}
-  }
-  
-  //Used in Wayland capture for passing an image into FFmpeg's standard input
-  public static boolean run_stdin(ArrayList<String> args, byte[] screenshot_image) {
-    stdout.print_debug("Running command:", args);
-    try {
-      Process p = new ProcessBuilder(args).start();
-      var stdin = p.getOutputStream();
-      stdin.write(screenshot_image);
-      stdin.flush(); //is this necessary?
-      stdin.close();
-      p.waitFor();
-      return p.exitValue() == 0;
-    }
-    catch (IOException e) {error_missingProcess(args.get(0)); return false;}
-    catch (InterruptedException e) {error_interruptedProcess(args.get(0)); return false;}
-  }
-
-  //Used by xclip when copying an image's bytes into clipboard
-   public static boolean run_stdin(String[] args, byte[] image) {
-    stdout.print_debug("Running command:", args);
-    try {
-      Process p = new ProcessBuilder(args).start();
-      var stdin = p.getOutputStream();
-      stdin.write(image);
-      stdin.close();
-      p.waitFor();
-      return p.exitValue() == 0;
-    }
-    catch (IOException e) {error_missingProcess(args[0]); return false;}
-    catch (InterruptedException e) {error_interruptedProcess(args[0]); return false;}
   }
 
   public static ArrayList<String> mkList(String[] args) {
