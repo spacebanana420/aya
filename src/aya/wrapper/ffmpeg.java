@@ -58,7 +58,7 @@ public class ffmpeg {
 
   public static ArrayList<String> encodeArgs_avif(byte quality, byte speed) {
     var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true"});
-    byte quality_filtered = 0;
+    byte quality_filtered = 8;
     if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
     else if (quality > -1) {stdout.warnInvalidQuality("AVIF", 0, 63, 0);}
     
@@ -68,7 +68,7 @@ public class ffmpeg {
 
   public static ArrayList<String> encodeArgs_avif(byte quality) {
     var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-usage", "realtime", "-row-mt", "true"});
-    byte quality_filtered = 0;
+    byte quality_filtered = 8;
     if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
     else if (quality > -1) {stdout.warnInvalidQuality("AVIF", 0, 63, 0);}
     
