@@ -22,7 +22,7 @@ public class ffmpeg {
 
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};
-    String q_arg = "mixed";
+    String q_arg = "avg";
     if (quality >= 0 && quality <= 5) {
       q_arg = qualities[quality];
     }
