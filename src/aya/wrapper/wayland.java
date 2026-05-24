@@ -17,7 +17,6 @@ public class wayland {
     cmd_grim.add("-l"); cmd_grim.add(better_compression ? "2" : "0");
     cmd_grim.add("-");
     
-    stdout.print_debug("Running Grim", cmd_grim);
     byte[] image = process.readStdout(process.runProcess(cmd_grim));
     
     if (image == null) {
@@ -41,7 +40,6 @@ public class wayland {
   
   //Capture a region of the screen
   private static String runSlurp() {
-    stdout.print_debug("Running Slurp");
     var cmd = new ProcessBuilder(new String[]{"slurp", "-c", "#00000000", "-b", "#FFFFFF25"}).redirectInput(ProcessBuilder.Redirect.INHERIT);
     Process p = process.runProcess(cmd);
     byte[] data = process.readStdout(p);
