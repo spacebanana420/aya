@@ -7,7 +7,7 @@ public class misc {
   }
 
   public static boolean hasExtension(String name, String extension) {
-    if (name.length() <= extension.length() || extension.length() == 0) {return false;}
+    if (name.length() <= extension.length() || extension.length() == 0) return false;
     
     int name_i = name.length()-extension.length();
     int extension_i = 0;
@@ -21,10 +21,10 @@ public class misc {
   }
 
   public static String getExtension(String name) {
-    if (name.length() < 3) {return "";} //1 char name + . + 1 char extension (minimum)
+    if (name.length() < 3) return ""; //1 char name + . + 1 char extension (minimum)
     int start = -1;
     for (int i = name.length()-1; i >= 0; i--) {if (name.charAt(i) == '.') {start = i; break;}}
-    if (start == -1 || start == name.length()-1) {return "";}
+    if (start == -1 || start == name.length()-1) return "";
    
      start++; //skips the . character
     String extension = "";
@@ -33,11 +33,11 @@ public class misc {
   }
 
   public static boolean isWorkingDirectory(String dir) {
-    if (dir == null || dir.equals("")) {return true;}
-    if (dir.charAt(0) == '/') {return false;}
+    if (dir == null || dir.equals("")) return true;
+    if (dir.charAt(0) == '/') return false;
     for (int i = 1; i < dir.length(); i++) {
       char c = dir.charAt(i);
-      if (c != '.' && c != ' ' && c != '/' && c != '\\') {return false;}
+      if (c != '.' && c != ' ' && c != '/' && c != '\\') return false;
     }
     return true;
   }
