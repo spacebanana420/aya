@@ -161,7 +161,7 @@ class CaptureOpts {
     return cli_speed;
   }
 
-  //Get the screenshot filename, either user-specified or generated, containing a path optionally
+  //Get the screenshot file name and path, either user-specified or generated, containing a path optionally
   private static String generateFilename(String fileName, String imageFormat) {
     String directory = ""; //By default it's the working directory
     String currentTime = LocalDate.now().toString();
@@ -229,9 +229,7 @@ class CaptureOpts {
 
   private static void runThreads(Thread[] threads) {
     for (Thread t : threads) {t.start();}
-    try {
-      for (Thread t : threads) {t.join();}
-    }
+    try {for (Thread t : threads) {t.join();}}
     catch (InterruptedException e) {e.printStackTrace(); stdout.error("An error happened during thread execution while initializing Aya settings!");}
   }
 }

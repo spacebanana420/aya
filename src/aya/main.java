@@ -24,8 +24,8 @@ public class main {
       return;
     }
     
-    Config conf = confio.openConfig();
-    CaptureOpts opts = new CaptureOpts(args, conf);
+    Config conf = confio.openConfig(); //The Aya dotfile
+    CaptureOpts opts = new CaptureOpts(args, conf); //Aya's configuration, processed from the CLI and dotfile
     String OS = System.getProperty("os.name").toLowerCase();
     if (!opts.save_file && !opts.copy_to_clipboard) {
       stdout.print(help.getSmallHelp());
