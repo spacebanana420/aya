@@ -7,22 +7,7 @@ import aya.ui.*;
 public class main {
   public static void main(String[] args) {
     setVerbosityLevel(args);
-    if (args.length == 0) {
-      stdout.print(help.getSmallHelp());
-      return;
-    }    
-    if (cli.hasArgument(args, "-h") || cli.hasArgument(args, "--help")) {
-      stdout.print(help.getHelp());
-      return;
-    }
-    if (cli.hasArgument(args, "-qh")) {
-      stdout.print(help.getQualityHelp());
-      return;
-    }
-    if (cli.hasArgument(args, "-v") || cli.hasArgument(args, "--version")) {
-      stdout.print("Aya version " + help.VERSION);
-      return;
-    }
+    if (checkForHelpScreen(args)) return;
     
     Config conf = confio.openConfig(); //The Aya dotfile
     CaptureOpts opts = new CaptureOpts(args, conf); //Aya's configuration, processed from the CLI and dotfile
@@ -39,6 +24,26 @@ public class main {
     
     boolean result = capture.takeScreenshot(opts, OS.equals("linux"));
     System.exit(result ? 0 : 1);
+  }
+
+  private static boolean checkForHelpScreen(String[] args) {
+    if (args.length == 0) {
+      stdout.print(help.getSmallHelp());
+      return true;
+    }    
+    if (cli.hasArgument(args, "-h") || cli.hasArgument(args, "--help")) {
+      stdout.print(help.getHelp());
+      return true;
+    }
+    if (cli.hasArgument(args, "-qh")) {
+      stdout.print(help.getQualityHelp());
+      return true;
+    }
+    if (cli.hasArgument(args, "-v") || cli.hasArgument(args, "--version")) {
+      stdout.print("Aya version " + help.VERSION);
+      return true;
+    }
+    return false;
   }
 
   private static boolean unsupportedSystem(String os) {
