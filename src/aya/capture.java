@@ -19,9 +19,9 @@ public class capture {
   
   public static boolean takeScreenshot(String[] args, Config conf, boolean supportsTTY, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
-    if (opts.tty_mode) {stdout.print_debug("Running in TTY mode");}
-    else if (opts.wayland_mode) {stdout.print_debug("Running in Wayland mode");}
-    else {stdout.print_debug("Running in X11 mode");}
+    if (opts.tty_mode) stdout.print_debug("Running in TTY mode");
+    else if (opts.wayland_mode) stdout.print_debug("Running in Wayland mode");
+    else stdout.print_debug("Running in X11 mode");
      
     if (file_save && !opts.override_file && new File(opts.file_path).isFile()) {
       boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");
@@ -54,6 +54,10 @@ public class capture {
     }
     if (!result) return false;
     if (!file_save || !opts.open_image) return true;
+    if (opts.tty_mode) {
+      stdout.print("Image view is not supported in TTY mode, skipping.");
+      return true;
+    }
 
     //Optionally open the image only if a file was successfully saved
     if (opts.image_viewer_cmd == null) {
