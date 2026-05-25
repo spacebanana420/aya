@@ -19,8 +19,10 @@ public class capture {
   
   public static boolean takeScreenshot(String[] args, Config conf, boolean supportsTTY, boolean clipboard_copy, boolean file_save) {
     CaptureOpts opts = new CaptureOpts(args, conf);
-    stdout.print_debug("Running for the graphical backend " + (opts.wayland_mode ? "\"Wayland\"" : "\"X11\""));
-    
+    if (opts.tty_mode) {stdout.print_debug("Running in TTY mode");}
+    else if (opts.wayland_mode) {stdout.print_debug("Running in Wayland mode");}
+    else {stdout.print_debug("Running in X11 mode");}
+     
     if (file_save && !opts.override_file && new File(opts.file_path).isFile()) {
       boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");
       if (!answer) return true;
@@ -34,6 +36,7 @@ public class capture {
     boolean result;
     //Wayland mode
     if (opts.wayland_mode) result = wayland_takeScreenshot(opts, clipboard_copy, file_save);
+    //TTY mode (Linux)
     else if (opts.tty_mode) {
       if (!supportsTTY) {
         stdout.error("TTY screenshot is only supported on Linux!");
@@ -47,24 +50,21 @@ public class capture {
     }
     //X11 mode
     else {
-      if (file_save) result = x11_takeScreenshot_file(opts, clipboard_copy);
-      else result = x11_takeScreenshot_clip(opts);
+      result = file_save ? x11_takeScreenshot_file(opts, clipboard_copy) : x11_takeScreenshot_clip(opts);
     }
     if (!result) return false;
-    if (!file_save) return true;
+    if (!file_save || !opts.open_image) return true;
 
     //Optionally open the image only if a file was successfully saved
-    if (opts.open_image) {
-      if (opts.image_viewer_cmd == null) {
-        stdout.error("Error opening screenshot, image viewer command is missing!");
-        return false;
-      }
-      Process p = process.runProcess(opts.image_viewer_cmd);
-      process.awaitCompletion(p, opts.image_viewer_cmd.get(0));
-      if (!process.succeeded(p)) {
-        stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
-        return false;
-      }
+    if (opts.image_viewer_cmd == null) {
+      stdout.error("Error opening screenshot, image viewer command is missing!");
+      return false;
+    }
+    Process p = process.runProcess(opts.image_viewer_cmd);
+    process.awaitCompletion(p, opts.image_viewer_cmd.get(0));
+    if (!process.succeeded(p)) {
+      stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
+      return false;
     }
     return true;
   }
