@@ -70,8 +70,6 @@ public class confio {
         + "\n# CLI arguments override their respective settings here"
 
         + "\n\n==Settings=="
-        + "\n# Set path to where the screenshots are saved"
-        + "\n#screenshot_directory=."
         
         + "\n\n# Set a default delay in seconds for taking screenshots"
         + "\n#screenshot_delay=0"

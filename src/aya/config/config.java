@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import aya.ui.stdout;
 
 public class config {
-  public static String getDirectory(Config c) {return c.readSetting("screenshot_directory");}
-
   public static int getDelay(Config c) {
     int delay = c.readSetting_int("screenshot_delay");
     return (delay < 0) ? 0 : delay;
