@@ -34,7 +34,7 @@ public class capture {
     stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
     boolean result;
     //Wayland mode
-    if (opts.wayland_mode) result = wayland_takeScreenshot(opts, opts.copy_to_clipboard, opts.save_file);
+    if (opts.wayland_mode) result = wayland_takeScreenshot(opts);
     //TTY mode (Linux)
     else if (opts.tty_mode) {
       if (!supportsTTY) {
@@ -48,9 +48,7 @@ public class capture {
       result = tty_takeScreenshot(opts);
     }
     //X11 mode
-    else {
-      result = opts.save_file ? x11_takeScreenshot_file(opts, opts.copy_to_clipboard) : x11_takeScreenshot_clip(opts);
-    }
+    else result = opts.save_file ? x11_takeScreenshot_file(opts) : x11_takeScreenshot_clip(opts);
     if (!result) return false;
     if (!opts.save_file || !opts.open_image) return true;
     if (opts.tty_mode) {
@@ -73,7 +71,7 @@ public class capture {
   }
 
   //x11, FFmpeg both takes the screenshot and encodes it
-  private static boolean x11_takeScreenshot_file(CaptureOpts opts, boolean clipboard) {
+  private static boolean x11_takeScreenshot_file(CaptureOpts opts) {
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
@@ -89,7 +87,7 @@ public class capture {
       return false;
     }
     stdout.print(fileSuccess);
-    if (clipboard) {
+    if (opts.copy_to_clipboard) {
       result = x11.xclip_copyToClipboard(new File(opts.file_path).getAbsolutePath());
       if (result) stdout.print(clipSuccess);
       else stdout.print(clipFailed);
@@ -121,17 +119,17 @@ public class capture {
   
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
   //Clipboard support uses wl-copy, in clipboard mode the image is PNG and slightly compressed
-  private static boolean wayland_takeScreenshot(CaptureOpts opts, boolean clipboard, boolean savefile) {
-    byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor, clipboard);
+  private static boolean wayland_takeScreenshot(CaptureOpts opts) {
+    byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor, opts.copy_to_clipboard);
     if (picture == null) return false;
 
-    if (clipboard) {
+    if (opts.copy_to_clipboard) {
       boolean result = wayland.copyToClipboard(picture);
       if (result) stdout.print(clipSuccess);
       else stdout.print(clipFailed);
     }
 
-    if (!savefile) return true;
+    if (!opts.save_file) return true;
     var cmd = new ArrayList<String>();
     cmd.add(opts.ffmpeg_path);
     cmd.addAll(ffmpeg.getWaylandArgs());
