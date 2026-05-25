@@ -43,8 +43,7 @@ class CaptureOpts {
   //Cancel if Aya wasn't instructed to save the screenshot file or copy to clipboard
   CaptureOpts(String[] args, Config conf) {
     this.copy_to_clipboard = cli.hasArgument(args, "-clip");
-    String filePath = cli.getArgValue(args, "-file");
-    this.save_file = filePath != null;
+    this.save_file = cli.hasArgument(args, "-file");
     if (!this.save_file && !this.copy_to_clipboard) return;
     
     Thread[] threads = new Thread[3];
@@ -70,7 +69,7 @@ class CaptureOpts {
       this.format = getFormat(args, conf);
       this.quality = getQuality(args, conf);
       this.delay = getDelay(args, conf);
-      this.file_path = generateFilename(filePath, this.format);
+      this.file_path = generateFilename(cli.getFilePath(args), this.format);
     });
     runThreads(threads);
     
@@ -167,7 +166,7 @@ class CaptureOpts {
     String directory = ""; //By default it's the working directory
     String currentTime = LocalDate.now().toString();
     
-    if (fileName != null) {
+    if (fileName != null && fileName.length() > 0) {
       File f = new File(fileName);
       if (f.isDirectory()) directory = convertDirectory(fileName); //User provided a directory but no filename
       else if (misc.hasExtension(fileName, imageFormat)) return fileName; //User provided a filename, with or without path

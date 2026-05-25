@@ -38,7 +38,8 @@ public class cli {
       return -1;
     }
   }
-  
+
+  public static String getFilePath(String[] args) {return getArgValue(args, "-p");}
   public static float getScreenshotScale(String[] args) {return getArgFloat(args, "-s");}
   public static byte getScreenshotQuality(String[] args) {return getArgByte(args, "-q", 100);}
   public static int getScreenshotDelay(String[] args) {return getArgInt(args, "-t");}

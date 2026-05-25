@@ -6,15 +6,21 @@ public class help {
   public static String getHelp() {
     return
       "Aya (version "+VERSION+")"
-      + "\n[Usage examples]"
-      + "\n  aya -clip <options>            capture screen and save on clipboard"
-      + "\n  aya -file <options>            capture screen and save it as an image file"
-      + "\n  aya -file -clip <options>      capture a screenshot and save it as a file and copy it to clipboard"
-      + "\n  aya -file <options> FILENAME   capture screen and save it as an image file with a custom name"
+      + "\n[Usage]"
+      + "\n  aya -clip <options>           capture screen and save on clipboard"
+      + "\n  aya -file <options>           capture screen and save it as an image file"
+      + "\n  aya -file -p <file name>      save a screenshot and specify its file name or path"
+      + "\n  aya -file -clip <options>     take a screenshot and copy it to clipboard"
+
+      +"\n\n[Examples]"
+      + "\n  aya -file -p screenshot.png"
+      + "\n  aya -file /home/space/ -f jpg"
+      + "\n  aya -clip -region"
       
       + "\n\nAvailable Options:"
       + "\n  * -h  --help             opens this menu"
       + "\n  * -v  --version          displays Aya's version"
+      + "\n  * -p  <file path>        set the file name, path or path and name for the screenshot file"
       + "\n  * -t <delay>             sets the delay for screenshotting (in seconds)"
       + "\n  * -y                     overwrites the image file if it already exists"
       + "\n  * -c                     includes the cursor in the screenshot"
@@ -49,10 +55,11 @@ public class help {
     return
       "Aya (version "+VERSION+")"
       + "\n[Usage]"
-      + "\n  aya -file <options>         capture screenshot and save as a file"
-      + "\n  aya -clip <options>         capture screenshot and copy to clipboard"
-      + "\n  aya -file -clip <options>   capture a screenshot and save it as a file and copy it to clipboard"
-      + "\n  aya -h                      opens the help menu"
+      + "\n  aya -h                        opens the help menu"
+      + "\n  aya -clip <options>           capture screen and save on clipboard"
+      + "\n  aya -file <options>           capture screen and save it as an image file"
+      + "\n  aya -file -p <file name>      save a screenshot and specify its file name or path"
+      + "\n  aya -file -clip <options>     take a screenshot and copy it to clipboard"
     ;
   }
 
