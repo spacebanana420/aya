@@ -79,7 +79,7 @@ class CaptureOpts {
     
     for (int i = 0; i < opts.length; i++) {
       int value = cli.getArgInt(args, opts[i]);
-      if (value >= 0) {crop_coords[i] = value;}
+      if (value >= 0) crop_coords[i] = value;
     }
 
     if (window_select) {
@@ -88,39 +88,39 @@ class CaptureOpts {
         return crop_coords;
       }
       int[] window_coords = x11.getWindowCoordinates();
-      if (window_coords != null) {crop_coords = window_coords;}
+      if (window_coords != null) crop_coords = window_coords;
     }
     return crop_coords;
   }
 
   private static float getScale(String[] args) {
     float value = cli.getScreenshotScale(args);
-    if (value < 0) {value = 0;}
+    if (value < 0) value = 0;
     return value;
   }
   
   private static String getFormat(String[] args, Config conf) {
     String value = getFormat_cli(args);
-    if (value != null) {return value;}
+    if (value != null) return value;
 
     value = getFormat_config(conf);
-    if (value != null) {return value;}
+    if (value != null) return value;
     return "png";
   }
 
   private static String getFormat_cli(String[] args) {
     String value = cli.getArgValue(args, "-f");
-    if (value == null) {return null;}
+    if (value == null) return null;
     value = value.toLowerCase();
 
-    if (supportedFormat(value)) {return value;}
+    if (supportedFormat(value)) return value;
     stdout.error("Ignored specified image format " + value + " found in CLI arguments for being invalid");
     return null;
   }
   private static String getFormat_config(Config conf) {
     String value = config.getFormat(conf);
-    if (value == null) {return null;}
-    if (supportedFormat(value)) {return value;}
+    if (value == null) return null;
+    if (supportedFormat(value)) return value;
     stdout.error("Ignored specified image format " + value + " found in aya configuration for being invalid");
     return null;
   }
@@ -136,26 +136,26 @@ class CaptureOpts {
 
   private static byte getQuality(String[] args, Config conf) {
     byte value = cli.getScreenshotQuality(args);
-    if (value == -1) {value = config.getQuality(conf);}
+    if (value == -1) value = config.getQuality(conf);
     return value;
   }
 
   private static int getDelay(String[] args, Config conf) {
     int value = cli.getScreenshotDelay(args);
-    if (value == -1) {value = config.getDelay(conf);}
+    if (value == -1) value = config.getDelay(conf);
     return value;
   }
   
   private static byte getAvifSpeed(String[] args, Config conf) {
     byte cli_speed = cli.getAvifSpeed(args);
-    if (cli_speed == -1) {cli_speed = config.getAvifSpeed(conf);}
+    if (cli_speed == -1) cli_speed = config.getAvifSpeed(conf);
     return cli_speed;
   }
 
   //Get the screenshot filename, either user-specified or generated
   private static String generateFilename(String[] args, Config conf, String image_format) {
     String argname = cli.getFilename(args, image_format);
-    if (argname != null) {return argname;}
+    if (argname != null) return argname;
 
     String currentTime = LocalDate.now().toString();
     String directory = getDirectory(args, conf);
@@ -174,7 +174,7 @@ class CaptureOpts {
   
   private static String getDirectory(String[] args, Config conf) {
     String dir = cli.getScreenshotDirectory(args);
-    if (dir == null) {dir = config.getDirectory(conf);}
+    if (dir == null) dir = config.getDirectory(conf);
     if (dir == null) {
       stdout.print_verbose("No custom screenshot directory was specified, defaulting to working directory");
       return "";
@@ -209,7 +209,7 @@ class CaptureOpts {
   }
   
   private static String addDirSlash(String dir) {
-    if (dir.length() <= 1) {return dir;}
+    if (dir.length() <= 1) return dir;
     char final_char = dir.charAt(dir.length()-1);
     if (final_char != '/' && final_char != '\\') {return dir + System.getProperty("file.separator");}
     return dir;
