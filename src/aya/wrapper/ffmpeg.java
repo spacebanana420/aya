@@ -1,5 +1,6 @@
 package aya.wrapper;
 
+import aya.CaptureOpts;
 import aya.ui.stdout;
 import java.util.ArrayList;
 
@@ -22,6 +23,27 @@ public class ffmpeg {
   public static ArrayList<String> getFramebufferArgs() {
     return process.mkList(new String[]{"-y", "-f", "fbdev", "-i", "/dev/fb0", "-frames:v", "1", "-pix_fmt", "rgb0"});
   }
+
+  public static ArrayList<String> getFilterArgs(CaptureOpts opts) {
+    String arg_crop = cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
+    String arg_scale = scaleArgs(opts.scale);
+    return assembleFilters(arg_crop, arg_scale);
+  }
+
+  public static ArrayList<String> getEncodingArgs(CaptureOpts opts) {
+    switch(opts.format) {
+      case "png":
+        return encodeArgs_png(opts.quality);
+      case "avif":
+        return opts.avif_fast
+          ? encodeArgs_avif(opts.quality)
+          : encodeArgs_avif(opts.quality, opts.avif_speed);
+      case "bmp":
+        return encodeArgs_bmp();
+      default:
+        return encodeArgs_jpg(opts.quality);
+    }
+  }
   
   public static ArrayList<String> encodeArgs_png(byte quality) {
     String[] qualities = new String[]{"none", "sub", "up", "avg", "paeth", "mixed"};
@@ -37,13 +59,13 @@ public class ffmpeg {
     return list;
   }
   
-  public static ArrayList<String> encodeArgs_bmp() {
+  private static ArrayList<String> encodeArgs_bmp() {
     var list = new ArrayList<String>();
     list.add("-c:v"); list.add("bmp");
     return list;
   }
 
-  public static ArrayList<String> encodeArgs_jpg(byte quality) {
+  private static ArrayList<String> encodeArgs_jpg(byte quality) {
     var list = new ArrayList<String>();
     byte quality_filtered = 1;
     //101-quality reverses the quality value so that 100 is highest quality and 1 is lowest
@@ -56,7 +78,7 @@ public class ffmpeg {
     return list;
   }
 
-  public static ArrayList<String> encodeArgs_avif(byte quality, byte speed) {
+  private static ArrayList<String> encodeArgs_avif(byte quality, byte speed) {
     var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true"});
     byte quality_filtered = 8;
     if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
@@ -66,7 +88,7 @@ public class ffmpeg {
     return list;
   }
 
-  public static ArrayList<String> encodeArgs_avif(byte quality) {
+  private static ArrayList<String> encodeArgs_avif(byte quality) {
     var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-usage", "realtime", "-row-mt", "true"});
     byte quality_filtered = 8;
     if (quality >= 0 && quality <= 63) {quality_filtered = quality;}
@@ -76,7 +98,7 @@ public class ffmpeg {
     return list;    
   }
 
-  public static String cropArgs(int w, int h, int x, int y) {
+  private static String cropArgs(int w, int h, int x, int y) {
     if (w <= 0 && h <= 0) {return "";}
    
     String[] args = new String[4];
@@ -96,12 +118,12 @@ public class ffmpeg {
     return full;
   }
 
-  public static String scaleArgs(float factor) {
+  private static String scaleArgs(float factor) {
     if (factor <= 0) {return "";}
     return "scale=iw*"+factor+":ih*"+factor;
   }
 
-  public static ArrayList<String> assembleFilters(String... filters) {
+  private static ArrayList<String> assembleFilters(String... filters) {
     var list = new ArrayList<String>();
     
     boolean hasFilters = false;

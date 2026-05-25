@@ -75,8 +75,8 @@ public class capture {
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
-    cmd.addAll(ffmpeg_extraArgs(opts));
-    cmd.addAll(ffmpeg_filterArgs(opts));
+    cmd.addAll(ffmpeg.getEncodingArgs(opts));
+    cmd.addAll(ffmpeg.getFilterArgs(opts));
     cmd.add(opts.file_path);
 
     Process p = process.runProcess(cmd);
@@ -102,7 +102,7 @@ public class capture {
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
     cmd.addAll(ffmpeg.encodeArgs_png((byte)5));
-    cmd.addAll(ffmpeg_filterArgs(opts));
+    cmd.addAll(ffmpeg.getFilterArgs(opts));
     cmd.add("-f"); cmd.add("image2");
     cmd.add("-");
 
@@ -133,8 +133,8 @@ public class capture {
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getWaylandArgs());
-    cmd.addAll(ffmpeg_extraArgs(opts));
-    cmd.addAll(ffmpeg_filterArgs(opts));    
+    cmd.addAll(ffmpeg.getEncodingArgs(opts));
+    cmd.addAll(ffmpeg.getFilterArgs(opts));    
     cmd.add(opts.file_path);
 
     Process p = process.runProcess(cmd);
@@ -152,8 +152,8 @@ public class capture {
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getFramebufferArgs());
-    cmd.addAll(ffmpeg_extraArgs(opts));
-    cmd.addAll(ffmpeg_filterArgs(opts));    
+    cmd.addAll(ffmpeg.getEncodingArgs(opts));
+    cmd.addAll(ffmpeg.getFilterArgs(opts));    
     cmd.add(opts.file_path);
 
     Process p = process.runProcess(cmd);
@@ -163,26 +163,5 @@ public class capture {
     if (result) stdout.print(fileSuccess);
     else stdout.print(fileFailed);
     return result;
-  }
-
-  private static ArrayList<String> ffmpeg_filterArgs(CaptureOpts opts) {
-    String arg_crop = ffmpeg.cropArgs(opts.crop[0], opts.crop[1], opts.crop[2], opts.crop[3]);
-    String arg_scale = ffmpeg.scaleArgs(opts.scale);
-    return ffmpeg.assembleFilters(arg_crop, arg_scale);
-  }
-
-  private static ArrayList<String> ffmpeg_extraArgs(CaptureOpts opts) {
-    switch(opts.format) {
-      case "png":
-        return ffmpeg.encodeArgs_png(opts.quality);
-      case "avif":
-        return opts.avif_fast
-          ? ffmpeg.encodeArgs_avif(opts.quality)
-          : ffmpeg.encodeArgs_avif(opts.quality, opts.avif_speed);
-      case "bmp":
-        return ffmpeg.encodeArgs_bmp();
-      default:
-        return ffmpeg.encodeArgs_jpg(opts.quality);
-    }
   }
 }

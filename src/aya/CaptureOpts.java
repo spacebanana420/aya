@@ -13,7 +13,15 @@ import java.time.LocalDate;
 //Stores screenshot settings to be used by capture.java
 //These settings are determined by the provided CLI arguments and Aya config file
 //CLI arguments take priority over the configuration file
-class CaptureOpts {
+public class CaptureOpts {
+  public String format = "png";
+  public int[] crop = new int[4];
+  public byte quality = -1;
+  public float scale = 0f;
+  
+  public byte avif_speed = 8;
+  public boolean avif_fast = false;
+  
   int delay = 0;
   boolean override_file = false;
   boolean open_image = false;
@@ -22,14 +30,6 @@ class CaptureOpts {
   String file_path = null;
   boolean save_file = false;
   boolean copy_to_clipboard = false;
-  
-  String format = "png";
-  int[] crop = new int[4];
-  byte quality = -1;
-  float scale = 0f;
-  
-  byte avif_speed = 8;
-  boolean avif_fast = false;
   
   boolean window_select = false;
   boolean region_select = false;
