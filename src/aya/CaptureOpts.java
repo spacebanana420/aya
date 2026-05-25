@@ -14,7 +14,6 @@ import java.time.LocalDate;
 //These settings are determined by the provided CLI arguments and Aya config file
 //CLI arguments take priority over the configuration file
 class CaptureOpts {
-  String ffmpeg_path = "ffmpeg";
   int delay = 0;
   boolean override_file = false;
   boolean open_image = false;
@@ -49,7 +48,6 @@ class CaptureOpts {
     Thread[] threads = new Thread[3];
     threads[0] = new Thread(() -> {
       this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
-      this.ffmpeg_path = config.getFFmpegPath(conf);
       this.capture_cursor = cli.hasArgument(args, "-c") || config.captureCursor(conf);
       this.open_image = cli.hasArgument(args, "-open");
     });

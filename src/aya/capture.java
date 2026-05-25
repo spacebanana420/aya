@@ -73,7 +73,7 @@ public class capture {
   //x11, FFmpeg both takes the screenshot and encodes it
   private static boolean x11_takeScreenshot_file(CaptureOpts opts) {
     var cmd = new ArrayList<String>();
-    cmd.add(opts.ffmpeg_path);
+    cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
     cmd.addAll(ffmpeg_extraArgs(opts));
     cmd.addAll(ffmpeg_filterArgs(opts));
@@ -99,7 +99,7 @@ public class capture {
   //In clipboard-only mode, the screenshot is encoded as PNG regardless of aya's settings
   private static boolean x11_takeScreenshot_clip(CaptureOpts opts) {
     var cmd = new ArrayList<String>();
-    cmd.add(opts.ffmpeg_path);
+    cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
     cmd.addAll(ffmpeg.encodeArgs_png((byte)5));
     cmd.addAll(ffmpeg_filterArgs(opts));
@@ -131,7 +131,7 @@ public class capture {
 
     if (!opts.save_file) return true;
     var cmd = new ArrayList<String>();
-    cmd.add(opts.ffmpeg_path);
+    cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getWaylandArgs());
     cmd.addAll(ffmpeg_extraArgs(opts));
     cmd.addAll(ffmpeg_filterArgs(opts));    
@@ -150,7 +150,7 @@ public class capture {
   //Captures a screenshot of the TTY framebuffer, Linux-only
   private static boolean tty_takeScreenshot(CaptureOpts opts) {
     var cmd = new ArrayList<String>();
-    cmd.add(opts.ffmpeg_path);
+    cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getFramebufferArgs());
     cmd.addAll(ffmpeg_extraArgs(opts));
     cmd.addAll(ffmpeg_filterArgs(opts));    

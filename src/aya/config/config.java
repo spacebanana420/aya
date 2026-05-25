@@ -25,27 +25,6 @@ public class config {
     return (value >= 0 && value <= 8) ? value : 8;
   }
   public static boolean getAvifMode(Config c) {return c.readSetting_bool("avif_fast_mode");}
-
-  public static String getFFmpegPath(Config c) {
-    String path = c.readSetting("ffmpeg_path");
-    if (path == null) {return "ffmpeg";}
-    var f = new File(path);
-    String error_base = "[Aya config] Error in value attribute \"ffmpeg_path\"\n";
-      
-    if (!f.isFile()) {
-      stdout.error(error_base + "The provided path does not lead to a file!");
-      return "ffmpeg";
-    }
-    if (!f.isAbsolute()) {
-      stdout.error(error_base + "The provided path is not an absolute path!");
-      return "ffmpeg";
-    }
-    if (!f.canExecute()) {
-      stdout.error(error_base + "The binary lacks the permission to be executed!");
-      return "ffmpeg";
-    }
-    return path;
-  }
   
   public static ArrayList<String> getImageViewer(Config c, String filename) {
     return c.readCommand("image_viewer_command", filename);
