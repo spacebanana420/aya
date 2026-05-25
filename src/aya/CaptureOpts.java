@@ -160,7 +160,7 @@ class CaptureOpts {
     String currentTime = LocalDate.now().toString();
     String directory = getDirectory(args, conf);
     String name =
-      (misc.isWorkingDirectory(directory)) ? "AyaScreenshot-"+currentTime
+      (directory == null) ? "AyaScreenshot-"+currentTime
       : directory + "AyaScreenshot-"+currentTime;
     int num = 0;
     String full = name + "-" + num + "." + image_format;
@@ -177,14 +177,19 @@ class CaptureOpts {
     if (dir == null) dir = config.getDirectory(conf);
     if (dir == null) {
       stdout.print_verbose("No custom screenshot directory was specified, defaulting to working directory");
-      return "";
+      return null;
     }
+    if (dir.equals("..")) return null; //Too ambiguous, better not accept this as a valid relative path
+    if (dir.length() == 0) return null;
+    if (dir.length() == 1 && dir.charAt(0) == '/') return dir;
+    
     String home = System.getProperty("user.home");
-    if (dir.equals("~")) {
+    if (dir.equals("~")) { //Home directory
       stdout.print_verbose("Interpreting the provided path " + dir + " as " + home);
       return home;
     }
-    
+
+    //Paths can start with ~ character to represent home as their starting point
     if (dir.length() > 2 && dir.charAt(0) == '~' && dir.charAt(1) == '/') {
       String new_dir = dir.replaceFirst("~/", home);
       File new_dir_f = new File(new_dir);
@@ -194,25 +199,20 @@ class CaptureOpts {
       }
     }
 
-    dir = addDirSlash(dir);
     File f = new File(dir);
     String error_base = "\nDefaulting to current working directory";
     if (!f.isDirectory()) {
       stdout.error("The specified directory located at " + dir + " is not a real directory" + error_base);
-      return "";
+      return null;
     }
     if (!f.canWrite()) {
       stdout.error("You lack the permission to write at the specified directory " + dir + error_base);
-      return "";
+      return null;
     }
-    return dir;
-  }
-  
-  private static String addDirSlash(String dir) {
-    if (dir.length() <= 1) return dir;
-    char final_char = dir.charAt(dir.length()-1);
-    if (final_char != '/' && final_char != '\\') {return dir + System.getProperty("file.separator");}
-    return dir;
+    
+    String fullPath = f.getAbsolutePath();
+    if (fullPath.charAt(fullPath.length()-1) != '/') return fullPath + '/'; //Directory will always end in a slash
+    return fullPath;
   }
 
   private static void runThreads(Thread[] threads) {

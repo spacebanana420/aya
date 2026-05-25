@@ -7,6 +7,7 @@ public class misc {
     catch (InterruptedException e) {e.printStackTrace();}
   }
 
+  //Check if a filename has a specific extension by iterating only the necessary amount of characters
   public static boolean hasExtension(String name, String extension) {
     if (name.length() <= extension.length() || extension.length() == 0) return false;
     
@@ -32,15 +33,5 @@ public class misc {
     var extension = new StringBuilder();
     for (int i = start; i < name.length(); i++) {extension.append(name.charAt(i));}
     return extension.toString();
-  }
-
-  public static boolean isWorkingDirectory(String dir) {
-    if (dir == null || dir.equals("")) return true;
-    if (dir.charAt(0) == '/') return false;
-    for (int i = 1; i < dir.length(); i++) {
-      char c = dir.charAt(i);
-      if (c != '.' && c != ' ' && c != '/' && c != '\\') return false;
-    }
-    return true;
   }
 }
