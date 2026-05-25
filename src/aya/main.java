@@ -7,10 +7,10 @@ import aya.ui.*;
 public class main {
   public static void main(String[] args) {
     setVerbosityLevel(args);
-    boolean copy_to_clipboard = cli.hasArgument(args, "-clip");
-    boolean save_to_file = cli.hasArgument(args, "-file");
-    String OS = System.getProperty("os.name").toLowerCase();
-    
+    if (args.length == 0) {
+      stdout.print(help.getSmallHelp());
+      return;
+    }    
     if (cli.hasArgument(args, "-h") || cli.hasArgument(args, "--help")) {
       stdout.print(help.getHelp());
       return;
@@ -23,7 +23,11 @@ public class main {
       stdout.print("Aya version " + help.VERSION);
       return;
     }
-    if (!copy_to_clipboard && !save_to_file) {
+    
+    Config conf = confio.openConfig();
+    CaptureOpts opts = new CaptureOpts(args, conf);
+    String OS = System.getProperty("os.name").toLowerCase();
+    if (!opts.save_file && !opts.copy_to_clipboard) {
       stdout.print(help.getSmallHelp());
       return;
     }
@@ -31,10 +35,9 @@ public class main {
       stdout.error("Aya does not support this operating system! Aya must run on a UNIX-like system!");
       return;
     }
-    Config conf = confio.openConfig();
     gui.setupGUI(args, conf);
     
-    boolean result = capture.takeScreenshot(args, conf, OS.equals("linux"), copy_to_clipboard, save_to_file);
+    boolean result = capture.takeScreenshot(opts, OS.equals("linux"));
     System.exit(result ? 0 : 1);
   }
 

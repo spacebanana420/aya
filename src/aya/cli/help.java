@@ -16,7 +16,6 @@ public class help {
       + "\n  * -h  --help             opens this menu"
       + "\n  * -v  --version          displays Aya's version"
       + "\n  * -t <delay>             sets the delay for screenshotting (in seconds)"
-      + "\n  * -d <path>              sets the directory to save the screenshot at, you can use ~ for the home directory"
       + "\n  * -y                     overwrites the image file if it already exists"
       + "\n  * -c                     includes the cursor in the screenshot"
       + "\n"

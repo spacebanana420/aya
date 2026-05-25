@@ -15,11 +15,14 @@ import java.time.LocalDate;
 //CLI arguments take priority over the configuration file
 class CaptureOpts {
   String ffmpeg_path = "ffmpeg";
-  String file_path = "";
   int delay = 0;
   boolean override_file = false;
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
+
+  String file_path = null;
+  boolean save_file = false;
+  boolean copy_to_clipboard = false;
   
   String format = "png";
   int[] crop = new int[4];
@@ -36,7 +39,14 @@ class CaptureOpts {
   boolean wayland_mode = false;
   boolean tty_mode = false;
 
+  //Initialize all variables from CLI arguments and config file
+  //Cancel if Aya wasn't instructed to save the screenshot file or copy to clipboard
   CaptureOpts(String[] args, Config conf) {
+    this.copy_to_clipboard = cli.hasArgument(args, "-clip");
+    String filePath = cli.getArgValue(args, "-file");
+    this.save_file = filePath != null;
+    if (!this.save_file && !this.copy_to_clipboard) return;
+    
     Thread[] threads = new Thread[3];
     threads[0] = new Thread(() -> {
       this.override_file = cli.hasArgument(args, "-y") || config.overrideFile(conf);
@@ -60,7 +70,7 @@ class CaptureOpts {
       this.format = getFormat(args, conf);
       this.quality = getQuality(args, conf);
       this.delay = getDelay(args, conf);
-      this.file_path = generateFilename(args, conf, this.format);
+      this.file_path = generateFilename(filePath, this.format);
     });
     runThreads(threads);
     
@@ -152,35 +162,38 @@ class CaptureOpts {
     return cli_speed;
   }
 
-  //Get the screenshot filename, either user-specified or generated
-  private static String generateFilename(String[] args, Config conf, String image_format) {
-    String argname = cli.getFilename(args, image_format);
-    if (argname != null) return argname;
-
+  //Get the screenshot filename, either user-specified or generated, containing a path optionally
+  private static String generateFilename(String fileName, String imageFormat) {
+    String directory = ""; //By default it's the working directory
     String currentTime = LocalDate.now().toString();
-    String directory = getDirectory(args, conf);
-    String name =
-      (directory == null) ? "AyaScreenshot-"+currentTime
-      : directory + "AyaScreenshot-"+currentTime;
-    int num = 0;
-    String full = name + "-" + num + "." + image_format;
+    
+    if (fileName != null) {
+      File f = new File(fileName);
+      if (f.isDirectory()) directory = convertDirectory(fileName); //User provided a directory but no filename
+      else if (misc.hasExtension(fileName, imageFormat)) return fileName; //User provided a filename, with or without path
+      else stdout.error("The given filename "+fileName+" does not have the file extension for the format "+imageFormat+", ignoring");
+    }
+    if (directory.length() == 0) stdout.print_verbose("No custom screenshot directory was specified, defaulting to working directory");
+    stdout.print_verbose("No valid filename was found, generating screenshot filename");
 
+    //Automatic filename generation
+    String name = directory + "AyaScreenshot-" + currentTime;
+    int num = 0;
+    String full = name + "-" + num + "." + imageFormat;
+
+    //If a screenshot with the generated name already exists, then increment the number
     while (new File(full).isFile()) {
       num++;
-      full = name + "-" + num + "." + image_format;
+      full = name + "-" + num + "." + imageFormat;
     }
     return full;    
   }
-  
-  private static String getDirectory(String[] args, Config conf) {
-    String dir = cli.getScreenshotDirectory(args);
-    if (dir == null) dir = config.getDirectory(conf);
-    if (dir == null) {
-      stdout.print_verbose("No custom screenshot directory was specified, defaulting to working directory");
-      return null;
-    }
-    if (dir.equals("..")) return null; //Too ambiguous, better not accept this as a valid relative path
-    if (dir.length() == 0) return null;
+
+  //Converts a path to a full path and makes sure it ends with a slash
+  //If the path is null (not specified by user), then just return an empty string
+  private static String convertDirectory(String dir) {
+    if (dir.length() == 0) return "";
+    if (dir.equals("..")) return ""; //Too ambiguous, better not accept this as a valid relative path
     if (dir.length() == 1 && dir.charAt(0) == '/') return dir;
     
     String home = System.getProperty("user.home");

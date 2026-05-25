@@ -17,13 +17,12 @@ public class capture {
   private static final String clipSuccess = "Screenshot copied to clipboard";
   private static final String clipFailed = "Failed to copy screenshot to clipboard";
   
-  public static boolean takeScreenshot(String[] args, Config conf, boolean supportsTTY, boolean clipboard_copy, boolean file_save) {
-    CaptureOpts opts = new CaptureOpts(args, conf);
+  public static boolean takeScreenshot(CaptureOpts opts, boolean supportsTTY) {
     if (opts.tty_mode) stdout.print_debug("Running in TTY mode");
     else if (opts.wayland_mode) stdout.print_debug("Running in Wayland mode");
     else stdout.print_debug("Running in X11 mode");
      
-    if (file_save && !opts.override_file && new File(opts.file_path).isFile()) {
+    if (opts.save_file && !opts.override_file && new File(opts.file_path).isFile()) {
       boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");
       if (!answer) return true;
     }
@@ -35,14 +34,14 @@ public class capture {
     stdout.print_verbose("Taking screenshot as file \"" + opts.file_path + "\"");
     boolean result;
     //Wayland mode
-    if (opts.wayland_mode) result = wayland_takeScreenshot(opts, clipboard_copy, file_save);
+    if (opts.wayland_mode) result = wayland_takeScreenshot(opts, opts.copy_to_clipboard, opts.save_file);
     //TTY mode (Linux)
     else if (opts.tty_mode) {
       if (!supportsTTY) {
         stdout.error("TTY screenshot is only supported on Linux!");
         return false;
       }
-      if (!file_save) {
+      if (!opts.save_file) {
         stdout.error("TTY screenshot mode does not support saving to clipboard!");
         return false;
       }
@@ -50,10 +49,10 @@ public class capture {
     }
     //X11 mode
     else {
-      result = file_save ? x11_takeScreenshot_file(opts, clipboard_copy) : x11_takeScreenshot_clip(opts);
+      result = opts.save_file ? x11_takeScreenshot_file(opts, opts.copy_to_clipboard) : x11_takeScreenshot_clip(opts);
     }
     if (!result) return false;
-    if (!file_save || !opts.open_image) return true;
+    if (!opts.save_file || !opts.open_image) return true;
     if (opts.tty_mode) {
       stdout.print("Image view is not supported in TTY mode, skipping.");
       return true;

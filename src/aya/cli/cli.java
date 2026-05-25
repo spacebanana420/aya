@@ -1,5 +1,6 @@
 package aya.cli;
 
+import java.io.File;
 import aya.misc;
 import aya.ui.stdout;
 
@@ -15,15 +16,6 @@ public class cli {
       return null;
     }
     return args[i+1];
-  }
-
-  public static String getFilename(String[] args, String extension) {
-    for (String arg : args) {
-      if (arg.charAt(0) != '-' && misc.hasExtension(arg, extension)) {
-        return arg;
-      }
-    }
-    return null;
   }
 
   public static int getArgInt(String[] args, String arg) {
@@ -46,8 +38,7 @@ public class cli {
       return -1;
     }
   }
-
-  public static String getScreenshotDirectory(String[] args) {return getArgValue(args, "-d");}
+  
   public static float getScreenshotScale(String[] args) {return getArgFloat(args, "-s");}
   public static byte getScreenshotQuality(String[] args) {return getArgByte(args, "-q", 100);}
   public static int getScreenshotDelay(String[] args) {return getArgInt(args, "-t");}
