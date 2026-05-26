@@ -2,7 +2,6 @@ package aya.config;
 
 import java.io.File;
 import java.util.ArrayList;
-import aya.ui.stdout;
 
 public class config {
   public static int getDelay(Config c) {
