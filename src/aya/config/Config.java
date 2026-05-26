@@ -34,7 +34,7 @@ public class Config {
       if (key.equals(this.keys.get(i))) {value_i = i; break;}
     }
     if (value_i == -1) {
-      stdout.error_verbose("The value for key " + key + " was not found as the key is not in the configuration!");
+      stdout.error_debug("The value for key " + key + " was not found as the key is not in the configuration!");
       return null;
     }
     return this.values.get(value_i);

@@ -56,6 +56,10 @@ public class stdout {
   public static void error_verbose(String message) {
     if (VERBOSITY_LEVEL > 1) {System.err.println(message);}
   }
+
+  public static void error_debug(String message) {
+    if (VERBOSITY_LEVEL > 2) {System.err.println(message);}
+  }
   
   public static String readInput(String message) {
     if (message != null && !message.isEmpty()) {
