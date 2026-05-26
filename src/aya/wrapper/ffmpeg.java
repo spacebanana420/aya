@@ -20,7 +20,7 @@ public class ffmpeg {
   }
   
   //In Wayland, Grim captures the scren and passes the resulting image to FFmpeg
-  public static ArrayList<String> getWaylandArgs() {return process.mkList(new String[]{"-y", "-i", "-"});}
+  public static ArrayList<String> getWaylandArgs() {return process.mkList("-y", "-i", "-");}
 
   //Linux framebuffer capture for TTY screenshot
   public static ArrayList<String> getFramebufferArgs() {
