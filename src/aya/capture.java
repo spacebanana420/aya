@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.io.File;
 
 //Handles the high-level logic for taking a screenshot and saving it
-//Implements the lower-level wrappers, CLI/config parsing, etc
+//Implements the lower-level wrappers, configuration, etc
 public class capture {
 
   //Common status/error messages that are used in multiple places here
@@ -18,10 +18,6 @@ public class capture {
   private static final String clipFailed = "Failed to copy screenshot to clipboard";
   
   public static boolean takeScreenshot(CaptureOpts opts, boolean supportsTTY) {
-    if (opts.tty_mode) stdout.print_debug("Running in TTY mode");
-    else if (opts.wayland_mode) stdout.print_debug("Running in Wayland mode");
-    else stdout.print_debug("Running in X11 mode");
-     
     if (opts.save_file && !opts.override_file && new File(opts.file_path).isFile()) {
       boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");
       if (!answer) return true;
@@ -51,27 +47,13 @@ public class capture {
     else result = opts.save_file ? x11_takeScreenshot_file(opts) : x11_takeScreenshot_clip(opts);
     if (!result) return false;
     if (!opts.save_file || !opts.open_image) return true;
-    if (opts.tty_mode) {
-      stdout.print("Image view is not supported in TTY mode, skipping.");
-      return true;
-    }
-
-    //Optionally open the image only if a file was successfully saved
-    if (opts.image_viewer_cmd == null) {
-      stdout.error("Error opening screenshot, image viewer command is missing!");
-      return false;
-    }
-    Process p = process.runProcess(opts.image_viewer_cmd);
-    process.awaitCompletion(p, opts.image_viewer_cmd.get(0));
-    if (!process.succeeded(p)) {
-      stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
-      return false;
-    }
-    return true;
+    return openImage(opts);
   }
 
   //x11, FFmpeg both takes the screenshot and encodes it
   private static boolean x11_takeScreenshot_file(CaptureOpts opts) {
+    stdout.print_debug("Running in X11 mode");
+    
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
@@ -98,6 +80,8 @@ public class capture {
   //x11, FFmpeg takes the screenshot and writes it to stdout, xclip is used to copy to clipboard
   //In clipboard-only mode, the screenshot is encoded as PNG regardless of aya's settings
   private static boolean x11_takeScreenshot_clip(CaptureOpts opts) {
+    stdout.print_debug("Running in X11 mode");
+    
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getCaptureArgs(opts.region_select, opts.capture_cursor));
@@ -120,6 +104,8 @@ public class capture {
   //For Wayland, Grim takes the screenshot and FFmpeg only encodes it for feature parity
   //Clipboard support uses wl-copy, in clipboard mode the image is PNG and slightly compressed
   private static boolean wayland_takeScreenshot(CaptureOpts opts) {
+    stdout.print_debug("Running in Wayland mode");
+    
     byte[] picture = wayland.captureScreen(opts.region_select, opts.capture_cursor, opts.copy_to_clipboard);
     if (picture == null) return false;
 
@@ -149,6 +135,8 @@ public class capture {
 
   //Captures a screenshot of the TTY framebuffer, Linux-only
   private static boolean tty_takeScreenshot(CaptureOpts opts) {
+    stdout.print_debug("Running in TTY mode");
+    
     var cmd = new ArrayList<String>();
     cmd.add("ffmpeg");
     cmd.addAll(ffmpeg.getFramebufferArgs());
@@ -163,5 +151,25 @@ public class capture {
     if (result) stdout.print(fileSuccess);
     else stdout.print(fileFailed);
     return result;
+  }
+
+  //The user can specify a command for opening images after saving them
+  private static boolean openImage(CaptureOpts opts) {
+    if (opts.tty_mode) {
+      stdout.print("Image view is not supported in TTY mode, skipping.");
+      return true;
+    }
+    //Optionally open the image only if a file was successfully saved
+    if (opts.image_viewer_cmd == null) {
+      stdout.error("Error opening screenshot, image viewer command is missing!");
+      return false;
+    }
+    Process p = process.runProcess(opts.image_viewer_cmd);
+    process.awaitCompletion(p, opts.image_viewer_cmd.get(0));
+    if (!process.succeeded(p)) {
+      stdout.error("Error opening screenshot, command is invalid or program is not present in system!");
+      return false;
+    }
+    return true;
   }
 }

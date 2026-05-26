@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.io.File;
 import java.time.LocalDate;
 
-//Stores screenshot settings to be used by capture.java
-//These settings are determined by the provided CLI arguments and Aya config file
+//Stores all kinds of program settings
+//These settings are determined by the provided CLI arguments and the Aya config file
 //CLI arguments take priority over the configuration file
 public class CaptureOpts {
   public String format = "png";

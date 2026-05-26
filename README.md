@@ -2,7 +2,10 @@
 Aya is a command-line screenshot tool for UNIX-like systems that can take screenshots on X11, Wayland and TTY (on Linux).
 
 ```sh
-space@Wakasagi ~/S/aya (main)> aya -file image.png
+space@Wakasagi ~/S/aya (main)> aya -file -p /path/to/image
+Screenshot saved successfully
+
+space@Wakasagi ~/S/aya (main)> aya -file -p image.png
 Screenshot saved successfully
 
 space@Wakasagi ~/S/aya (main)> aya -clip
