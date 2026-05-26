@@ -60,7 +60,8 @@ public class process {
     catch (InterruptedException e) {error_interruptedProcess(args[0]); return null;}
   }
 
-  public static ArrayList<String> mkList(String[] args) {
+  //Convenient for creating an ArrayList out of individual Strings
+  static ArrayList<String> mkList(String... args) {
     var list = new ArrayList<String>();
     for (String a : args) {list.add(a);}
     return list;

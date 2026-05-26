@@ -8,13 +8,13 @@ public class ffmpeg {
   //X11 screen capture
   public static ArrayList<String> getCaptureArgs(boolean select_region, boolean capture_cursor) {
     String cursor_value = (capture_cursor) ? "1" : "0";
-    var base_list = process.mkList(new String[]{"-y", "-f", "x11grab", "-draw_mouse", cursor_value});
+    var base_list = process.mkList("-y", "-f", "x11grab", "-draw_mouse", cursor_value);
     if (select_region) {
       base_list.add("-select_region");
       base_list.add("1");
     }
     
-    var final_list = process.mkList(new String[]{"-i", ":0.0", "-frames:v", "1"});
+    var final_list = process.mkList("-i", ":0.0", "-frames:v", "1");
     base_list.addAll(final_list);
     return base_list;
   }
@@ -24,7 +24,7 @@ public class ffmpeg {
 
   //Linux framebuffer capture for TTY screenshot
   public static ArrayList<String> getFramebufferArgs() {
-    return process.mkList(new String[]{"-y", "-f", "fbdev", "-i", "/dev/fb0", "-frames:v", "1", "-pix_fmt", "rgb0"});
+    return process.mkList("-y", "-f", "fbdev", "-i", "/dev/fb0", "-frames:v", "1", "-pix_fmt", "rgb0");
   }
 
   public static ArrayList<String> getFilterArgs(CaptureOpts opts) {
@@ -80,7 +80,7 @@ public class ffmpeg {
   }
 
   private static ArrayList<String> encodeArgs_avif(byte quality, byte speed) {
-    var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true"});
+    var list = process.mkList("-c:v", "libaom-av1", "-still-picture", "true", "-cpu-used", ""+speed, "-row-mt", "true");
     byte quality_filtered = 8;
     if (quality >= 0 && quality <= 63) quality_filtered = quality;
     else if (quality > -1) stdout.warnInvalidQuality("AVIF", 0, 63, 0);
@@ -90,7 +90,7 @@ public class ffmpeg {
   }
 
   private static ArrayList<String> encodeArgs_avif(byte quality) {
-    var list = process.mkList(new String[]{"-c:v", "libaom-av1", "-still-picture", "true", "-usage", "realtime", "-row-mt", "true"});
+    var list = process.mkList("-c:v", "libaom-av1", "-still-picture", "true", "-usage", "realtime", "-row-mt", "true");
     byte quality_filtered = 8;
     if (quality >= 0 && quality <= 63) quality_filtered = quality;
     else if (quality > -1) stdout.warnInvalidQuality("AVIF", 0, 63, 0);
