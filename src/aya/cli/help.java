@@ -66,9 +66,16 @@ public class help {
   public static String getQualityHelp() {
     return
       "[Image quality values]"
-      + "\n\n* PNG (lossless): 0 to 5\nHigher value results in more efficient compression and a smaller image at the cost of speed"
-      + "\n\n* JPG (lossy): 1 to 100\nHigher value results in better picture quality at the expense of file size"
-      + "\n\n* AVIF (lossless+lossy): 0 to 63\n0 enables lossless compression, while 1 to 63 uses lossy compression. Lower value results in better picture quality at the expense of file size"
+      + "When using the argument \"-q\", the value you can give it depends on your screenshot's format:"
+
+      + "\n\n* PNG (lossless): 0 to 5"
+      + "\nHigher value results in more efficient compression and a smaller image at the cost of speed"
+
+      + "\n\n* JPG (lossy): 1 to 100"
+      + "\nHigher value results in better picture quality at the expense of file size"
+
+      + "\n\n* AVIF (lossless+lossy): 0 to 63"
+      + "\n0 uses lossless compression, while 1 to 63 uses lossy compression. Lower value results in better picture quality at the expense of file size"
     ;
   }
 }

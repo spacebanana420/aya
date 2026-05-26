@@ -16,7 +16,8 @@ public class capture {
   private static final String fileFailed = "Failed to take screenshot";
   private static final String clipSuccess = "Screenshot copied to clipboard";
   private static final String clipFailed = "Failed to copy screenshot to clipboard";
-  
+
+  //By reading Aya's configuration, it takes decisions on what to do and how to take a screenshot
   public static boolean takeScreenshot(CaptureOpts opts, boolean supportsTTY) {
     if (opts.save_file && !opts.override_file && new File(opts.file_path).isFile()) {
       boolean answer = stdout.promptQuestion("The file in path " + opts.file_path + " already exists!\nOverride file? (y/N)");

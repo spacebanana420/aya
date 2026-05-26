@@ -15,14 +15,14 @@ import java.time.LocalDate;
 //CLI arguments take priority over the configuration file
 public class CaptureOpts {
   public String format = "png";
-  public int[] crop = new int[4];
-  public byte quality = -1;
+  public int[] crop = new int[4]; //Coordinates representing width, height, X, Y for FFmpeg crop filter
+  public byte quality = -1; //The meaning of this quality value depends on the image format, e.g PNG 0-5 or JPG 1-100
   public float scale = 0f;
   
   public byte avif_speed = 8;
   public boolean avif_fast = false;
   
-  int delay = 0;
+  int delay = 0; //Screenshot delay, measured in seconds
   boolean override_file = false;
   boolean open_image = false;
   ArrayList<String> image_viewer_cmd = null;
