@@ -1,30 +1,14 @@
 # Installing Aya
 
-Aya is a Java program and so it requires Java but it also has multiple external dependencies, most of which are optional depending on your setup.
+## Downloading and running Aya
 
-## Core requirements:
+After [installing the necessary and desired dependencies](doc/install.md), you can download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
-- UNIX-like operating system (such as Linux-based systems, FreeBSD, OpenBSD, etc)
-- Java 11 or newer
-- [FFmpeg](https://ffmpeg.org/)
+Once downloaded, you run Aya with the command `java -jar aya.jar`.
 
-### Additional requirements for X11 users:
-- xclip (optional, for copying the screenshot to clipboard)
-- xwininfo (optional, for window capture)
+To see a full list of options, run `java -jar aya.jar -h`.
 
-### Additional requirements for Wayland users:
-- grim
-- slurp (optional, for capturing a selection of the screen)
-- wl-clipboard (optional, for copying the screenshot to clipboard)
-
-### Additional requirements for TTY screen capture:
-- Linux is the only supported platform
-
-Install the necessary and desired dependencies from your Linux system's package manager and download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
-
-## Notes
-* Wayland support relies on `grim`, and so it only works on wl-roots compositors and Hyprland.
-* GUI mode only supports x11, so using it in Wayland might result in a blurry or pixelated menu, and requires xwayland to work.
+Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`. This config overrides Aya's default behavior for certain options, overriding defaults, but any CLI argument you pass to it will also override the respective config's settings.
 
 ## Installing Aya on your system
 

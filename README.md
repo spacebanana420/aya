@@ -23,14 +23,15 @@ It currently supports:
 
 ## How to use
 
-Install the [necessary and desired dependencies](doc/install.md) and download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
+Install the [necessary and desired dependencies](doc/setup.md) and download Aya's [latest release](https://github.com/spacebanana420/aya/releases) here.
 
 Once downloaded, you can run Aya with the command `java -jar aya.jar`.
 
 To see a full list of options, run `java -jar aya.jar -h`.
 
-Aya also makes use of a configuration file, located in `~/.config/aya/aya.conf`. This config overrides Aya's default behavior, but any CLI argument you pass to it will also override the respective config's settings.
+For information on running and installing Aya, [see here](doc/install.md)
 
 ## Documentation
+* [Setting up and installing Aya dependencies](doc/setup.md)
 * [Installing Aya](doc/install.md)
 * [Building Aya from source](doc/build.md)
